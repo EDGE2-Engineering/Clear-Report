@@ -77,6 +77,15 @@ const NewReportPage = () => {
         ],
         surveyReportNote: '',
         includeSurveyReportNote: false,
+        conclusions: [
+            { value: 'SPT values indicate that the soil strata up to a termination depth is [VALUE].' },
+            { value: 'The [VALUE] present in the soil strata is found to be [VALUE] in nature.' },
+            { value: 'Ground water table [VALUE] at the time of investigation in the bore hole.' }
+        ],
+        depthOfFoundation: '',
+        recommendationRock: false,
+        recommendationSoil: true,
+        sitePhotos: [],
         reportCreatedOn: new Date().toISOString().split('T')[0]
     });
     const [sitePhotoPreview, setSitePhotoPreview] = useState(null);
@@ -141,6 +150,32 @@ const NewReportPage = () => {
         }
     };
 
+    const handleConclusionChange = (index, value) => {
+        const newConclusions = [...formData.conclusions];
+        newConclusions[index].value = value;
+        setFormData(prev => ({
+            ...prev,
+            conclusions: newConclusions
+        }));
+    };
+
+    const addConclusion = () => {
+        setFormData(prev => ({
+            ...prev,
+            conclusions: [...prev.conclusions, { value: '' }]
+        }));
+    };
+
+    const removeConclusion = (index) => {
+        if (formData.conclusions.length > 1) {
+            const newConclusions = formData.conclusions.filter((_, i) => i !== index);
+            setFormData(prev => ({
+                ...prev,
+                conclusions: newConclusions
+            }));
+        }
+    };
+
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -154,6 +189,29 @@ const NewReportPage = () => {
             };
             reader.readAsDataURL(file);
         }
+    };
+
+    const handleSitePhotosAdd = (e) => {
+        const files = Array.from(e.target.files);
+        if (files) {
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    setFormData(prev => ({
+                        ...prev,
+                        sitePhotos: [...prev.sitePhotos, { id: Date.now() + Math.random(), file, preview: reader.result }]
+                    }));
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+    };
+
+    const removeSitePhoto = (id) => {
+        setFormData(prev => ({
+            ...prev,
+            sitePhotos: prev.sitePhotos.filter(photo => photo.id !== id)
+        }));
     };
 
     const handleSubmit = (e) => {
@@ -506,6 +564,120 @@ const NewReportPage = () => {
                                     </div>
                                 </div>
 
+                                {/* Section 4: Conclusions */}
+                                <div>
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">Conclusions</h3>
+                                    <div className="space-y-2">
+                                        {formData.conclusions.map((item, index) => (
+                                            <div key={index} className="flex gap-4 items-start bg-gray-50/50 p-0 rounded-md group">
+                                                <div className="flex-grow">
+                                                    <Textarea
+                                                        placeholder="Enter conclusion..."
+                                                        value={item.value}
+                                                        onChange={(e) => handleConclusionChange(index, e.target.value)}
+                                                        className="min-h-[60px] bg-white resize-y"
+                                                    />
+                                                </div>
+                                                <div className="flex-shrink-0 pt-2">
+                                                    {formData.conclusions.length > 1 && (
+                                                        <Button
+                                                            type="button"
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            onClick={() => removeConclusion(index)}
+                                                            className="text-red-500 hover:text-red-700 hover:bg-red-50 h-8 w-8 opacity-50 group-hover:opacity-100 transition-opacity"
+                                                        >
+                                                            <Trash2 className="w-4 h-4" />
+                                                        </Button>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        ))}
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={addConclusion}
+                                            className="mt-2 text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-green-50"
+                                        >
+                                            <Plus className="w-4 h-4 mr-2" /> Add Conclusion
+                                        </Button>
+                                    </div>
+                                </div>
+
+                                {/* Section 5: Depth of Foundation */}
+                                <div>
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100"> Depth of Foundation</h3>
+                                    <div className="space-y-2">
+                                        <Textarea
+                                            placeholder="The foundation depth for the proposed structure shall be a minimum depth of [VALUE]m from the existing ground level."
+                                            value={formData.depthOfFoundation}
+                                            onChange={(e) => handleChange(e)}
+                                            name="depthOfFoundation"
+                                            className="min-h-[60px] bg-white resize-y"
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Section 5: Recommendation Type For SBC */}
+                                <div>
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100"> Recommendation Type/s For SBC</h3>
+                                    <div className="flex items-center space-x-8 pt-2">
+                                        <div className="flex items-center space-x-2">
+                                            <Checkbox
+                                                id="rec-rock"
+                                                checked={formData.recommendationRock}
+                                                onCheckedChange={(checked) => setFormData(prev => ({ ...prev, recommendationRock: checked }))}
+                                            />
+                                            <Label htmlFor="rec-rock" className="cursor-pointer">Rock</Label>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                            <Checkbox
+                                                id="rec-soil"
+                                                checked={formData.recommendationSoil}
+                                                onCheckedChange={(checked) => setFormData(prev => ({ ...prev, recommendationSoil: checked }))}
+                                            />
+                                            <Label htmlFor="rec-soil" className="cursor-pointer">Soil</Label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Section 7: Site Photos */}
+                                <div>
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">Site Photos</h3>
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                        {formData.sitePhotos.map((photo) => (
+                                            <div key={photo.id} className="relative aspect-square rounded-lg overflow-hidden border border-gray-200 group">
+                                                <img src={photo.preview} alt="Site" className="w-full h-full object-cover" />
+                                                <Button
+                                                    type="button"
+                                                    variant="destructive"
+                                                    size="icon"
+                                                    onClick={() => removeSitePhoto(photo.id)}
+                                                    className="absolute top-2 right-2 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                >
+                                                    <Trash2 className="w-3 h-3" />
+                                                </Button>
+                                            </div>
+                                        ))}
+                                        <div
+                                            className="flex flex-col items-center justify-center aspect-square border-2 border-dashed border-gray-300 rounded-lg hover:border-primary hover:bg-primary/5 transition-colors cursor-pointer bg-gray-50"
+                                            onClick={() => document.getElementById('site-photos-upload').click()}
+                                        >
+                                            <Plus className="w-8 h-8 text-gray-400 mb-2" />
+                                            <span className="text-sm font-medium text-gray-500">Add Photo</span>
+                                        </div>
+                                        <Input
+                                            id="site-photos-upload"
+                                            type="file"
+                                            accept="image/*"
+                                            multiple
+                                            className="hidden"
+                                            onChange={handleSitePhotosAdd}
+                                        />
+                                    </div>
+                                </div>
+
                                 <div className="pt-6 flex justify-end">
                                     <Button type="submit" size="lg" className="bg-primary hover:bg-primary-dark text-white min-w-[150px]">
                                         <Save className="w-4 h-4 mr-2" /> Generate Report
@@ -516,10 +688,10 @@ const NewReportPage = () => {
                         </CardContent>
                     </Card>
                 </div>
-            </main>
+            </main >
 
             <Footer />
-        </div>
+        </div >
     );
 };
 
