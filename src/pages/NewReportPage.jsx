@@ -166,6 +166,85 @@ const NewReportPage = () => {
                 }
             ]
         ],
+
+        directShearResults: [
+            [
+                {
+                    shearBoxSize: '',
+                    depthOfSample: '',
+                    cValue: '',
+                    phiValue: '',
+                    stressReadings: [
+                        { normalStress: '', shearStress: '' }
+                    ]
+                }
+            ]
+        ],
+        pointLoadStrength: [
+            [
+                {
+                    depth: '',
+                    readings: [
+                        {
+                            loadAtFailure: '',
+                            d50: '',
+                            d: '',
+                            ucs: ''
+                        }
+                    ]
+                }
+            ]
+        ],
+        pointLoadStrengthLump: [
+            [
+                {
+                    depth: '',
+                    readings: [
+                        {
+                            loadAtFailure: '',
+                            d50: '',
+                            d: '',
+                            w: '',
+                            ucs: ''
+                        }
+                    ]
+                }
+            ]
+        ],
+        pointLoadStrengthLump: [
+            [
+                {
+                    depth: '',
+                    readings: [
+                        {
+                            loadAtFailure: '',
+                            d50: '',
+                            d: '',
+                            w: '',
+                            ucs: ''
+                        }
+                    ]
+                }
+            ]
+        ],
+        foundationRockFormations: [
+            {
+                rows: [
+                    {
+                        rock: '',
+                        strength: '',
+                        rqd: '',
+                        spacingDiscontinuity: '',
+                        conditionOfDiscontinuity: '',
+                        gwtCondition: '',
+                        discontinuityOrientation: '',
+                        rockGrade: '',
+                        inferredNetSbp: ''
+                    }
+                ],
+                recommendations: ''
+            }
+        ],
         reportCreatedOn: new Date().toISOString().split('T')[0]
     });
     const [sitePhotoPreview, setSitePhotoPreview] = useState(null);
@@ -703,6 +782,383 @@ const NewReportPage = () => {
             setFormData(prev => ({
                 ...prev,
                 subSoilProfile: newProfile
+            }));
+        }
+    };
+
+    const handleDirectShearChange = (levelIndex, testIndex, field, value) => {
+        const newResults = [...formData.directShearResults];
+        newResults[levelIndex][testIndex][field] = value;
+        setFormData(prev => ({
+            ...prev,
+            directShearResults: newResults
+        }));
+    };
+
+    const handleDirectShearStressChange = (levelIndex, testIndex, readingIndex, field, value) => {
+        const newResults = [...formData.directShearResults];
+        newResults[levelIndex][testIndex].stressReadings[readingIndex][field] = value;
+        setFormData(prev => ({
+            ...prev,
+            directShearResults: newResults
+        }));
+    };
+
+    const addDirectShearReading = (levelIndex, testIndex) => {
+        const newResults = [...formData.directShearResults];
+        newResults[levelIndex][testIndex].stressReadings.push({
+            normalStress: '',
+            shearStress: ''
+        });
+        setFormData(prev => ({
+            ...prev,
+            directShearResults: newResults
+        }));
+    };
+
+    const removeDirectShearReading = (levelIndex, testIndex, readingIndex) => {
+        if (formData.directShearResults[levelIndex][testIndex].stressReadings.length > 1) {
+            const newResults = [...formData.directShearResults];
+            newResults[levelIndex][testIndex].stressReadings = newResults[levelIndex][testIndex].stressReadings.filter((_, i) => i !== readingIndex);
+            setFormData(prev => ({
+                ...prev,
+                directShearResults: newResults
+            }));
+        }
+    };
+
+    const addDirectShearTest = (levelIndex) => {
+        const newResults = [...formData.directShearResults];
+        newResults[levelIndex].push({
+            shearBoxSize: '',
+            depthOfSample: '',
+            cValue: '',
+            phiValue: '',
+            stressReadings: [
+                { normalStress: '', shearStress: '' }
+            ]
+        });
+        setFormData(prev => ({
+            ...prev,
+            directShearResults: newResults
+        }));
+    };
+
+    const removeDirectShearTest = (levelIndex, testIndex) => {
+        if (formData.directShearResults[levelIndex].length > 1) {
+            const newResults = [...formData.directShearResults];
+            newResults[levelIndex] = newResults[levelIndex].filter((_, i) => i !== testIndex);
+            setFormData(prev => ({
+                ...prev,
+                directShearResults: newResults
+            }));
+        }
+    };
+
+    const addDirectShearLevel = () => {
+        setFormData(prev => ({
+            ...prev,
+            directShearResults: [...prev.directShearResults, [{
+                shearBoxSize: '',
+                depthOfSample: '',
+                cValue: '',
+                phiValue: '',
+                stressReadings: [
+                    { normalStress: '', shearStress: '' }
+                ]
+            }]]
+        }));
+    };
+
+    const removeDirectShearLevel = (levelIndex) => {
+        if (formData.directShearResults.length > 1) {
+            const newResults = formData.directShearResults.filter((_, i) => i !== levelIndex);
+            setFormData(prev => ({
+                ...prev,
+                directShearResults: newResults
+            }));
+        }
+    };
+
+    const handlePointLoadChange = (levelIndex, testIndex, field, value) => {
+        const newResults = [...formData.pointLoadStrength];
+        newResults[levelIndex][testIndex][field] = value;
+        setFormData(prev => ({
+            ...prev,
+            pointLoadStrength: newResults
+        }));
+    };
+
+    const handlePointLoadReadingChange = (levelIndex, testIndex, readingIndex, field, value) => {
+        const newResults = [...formData.pointLoadStrength];
+        newResults[levelIndex][testIndex].readings[readingIndex][field] = value;
+        setFormData(prev => ({
+            ...prev,
+            pointLoadStrength: newResults
+        }));
+    };
+
+    const addPointLoadReading = (levelIndex, testIndex) => {
+        const newResults = [...formData.pointLoadStrength];
+        newResults[levelIndex][testIndex].readings.push({
+            loadAtFailure: '',
+            d50: '',
+            d: '',
+            ucs: ''
+        });
+        setFormData(prev => ({
+            ...prev,
+            pointLoadStrength: newResults
+        }));
+    };
+
+    const removePointLoadReading = (levelIndex, testIndex, readingIndex) => {
+        if (formData.pointLoadStrength[levelIndex][testIndex].readings.length > 1) {
+            const newResults = [...formData.pointLoadStrength];
+            newResults[levelIndex][testIndex].readings = newResults[levelIndex][testIndex].readings.filter((_, i) => i !== readingIndex);
+            setFormData(prev => ({
+                ...prev,
+                pointLoadStrength: newResults
+            }));
+        }
+    };
+
+    const addPointLoadTest = (levelIndex) => {
+        const newResults = [...formData.pointLoadStrength];
+        newResults[levelIndex].push({
+            depth: '',
+            readings: [
+                {
+                    loadAtFailure: '',
+                    d50: '',
+                    d: '',
+                    ucs: ''
+                }
+            ]
+        });
+        setFormData(prev => ({
+            ...prev,
+            pointLoadStrength: newResults
+        }));
+    };
+
+    const removePointLoadTest = (levelIndex, testIndex) => {
+        if (formData.pointLoadStrength[levelIndex].length > 1) {
+            const newResults = [...formData.pointLoadStrength];
+            newResults[levelIndex] = newResults[levelIndex].filter((_, i) => i !== testIndex);
+            setFormData(prev => ({
+                ...prev,
+                pointLoadStrength: newResults
+            }));
+        }
+    };
+
+    const addPointLoadLevel = () => {
+        setFormData(prev => ({
+            ...prev,
+            pointLoadStrength: [...prev.pointLoadStrength, [{
+                depth: '',
+                readings: [
+                    {
+                        loadAtFailure: '',
+                        d50: '',
+                        d: '',
+                        ucs: ''
+                    }
+                ]
+            }]]
+        }));
+    };
+
+    const removePointLoadLevel = (levelIndex) => {
+        if (formData.pointLoadStrength.length > 1) {
+            const newResults = formData.pointLoadStrength.filter((_, i) => i !== levelIndex);
+            setFormData(prev => ({
+                ...prev,
+                pointLoadStrength: newResults
+            }));
+        }
+    };
+
+    const handlePointLoadLumpChange = (levelIndex, testIndex, field, value) => {
+        const newResults = [...formData.pointLoadStrengthLump];
+        newResults[levelIndex][testIndex][field] = value;
+        setFormData(prev => ({
+            ...prev,
+            pointLoadStrengthLump: newResults
+        }));
+    };
+
+    const handlePointLoadLumpReadingChange = (levelIndex, testIndex, readingIndex, field, value) => {
+        const newResults = [...formData.pointLoadStrengthLump];
+        newResults[levelIndex][testIndex].readings[readingIndex][field] = value;
+        setFormData(prev => ({
+            ...prev,
+            pointLoadStrengthLump: newResults
+        }));
+    };
+
+    const addPointLoadLumpReading = (levelIndex, testIndex) => {
+        const newResults = [...formData.pointLoadStrengthLump];
+        newResults[levelIndex][testIndex].readings.push({
+            loadAtFailure: '',
+            d50: '',
+            d: '',
+            w: '',
+            ucs: ''
+        });
+        setFormData(prev => ({
+            ...prev,
+            pointLoadStrengthLump: newResults
+        }));
+    };
+
+    const removePointLoadLumpReading = (levelIndex, testIndex, readingIndex) => {
+        if (formData.pointLoadStrengthLump[levelIndex][testIndex].readings.length > 1) {
+            const newResults = [...formData.pointLoadStrengthLump];
+            newResults[levelIndex][testIndex].readings = newResults[levelIndex][testIndex].readings.filter((_, i) => i !== readingIndex);
+            setFormData(prev => ({
+                ...prev,
+                pointLoadStrengthLump: newResults
+            }));
+        }
+    };
+
+    const addPointLoadLumpTest = (levelIndex) => {
+        const newResults = [...formData.pointLoadStrengthLump];
+        newResults[levelIndex].push({
+            depth: '',
+            readings: [
+                {
+                    loadAtFailure: '',
+                    d50: '',
+                    d: '',
+                    w: '',
+                    ucs: ''
+                }
+            ]
+        });
+        setFormData(prev => ({
+            ...prev,
+            pointLoadStrengthLump: newResults
+        }));
+    };
+
+    const removePointLoadLumpTest = (levelIndex, testIndex) => {
+        if (formData.pointLoadStrengthLump[levelIndex].length > 1) {
+            const newResults = [...formData.pointLoadStrengthLump];
+            newResults[levelIndex] = newResults[levelIndex].filter((_, i) => i !== testIndex);
+            setFormData(prev => ({
+                ...prev,
+                pointLoadStrengthLump: newResults
+            }));
+        }
+    };
+
+    const addPointLoadLumpLevel = () => {
+        setFormData(prev => ({
+            ...prev,
+            pointLoadStrengthLump: [...prev.pointLoadStrengthLump, [{
+                depth: '',
+                readings: [
+                    {
+                        loadAtFailure: '',
+                        d50: '',
+                        d: '',
+                        w: '',
+                        ucs: ''
+                    }
+                ]
+            }]]
+        }));
+    };
+
+    const removePointLoadLumpLevel = (levelIndex) => {
+        if (formData.pointLoadStrengthLump.length > 1) {
+            const newResults = formData.pointLoadStrengthLump.filter((_, i) => i !== levelIndex);
+            setFormData(prev => ({
+                ...prev,
+                pointLoadStrengthLump: newResults
+            }));
+        }
+    };
+
+    const handleFoundationRockRowChange = (levelIndex, rowIndex, field, value) => {
+        const newResults = [...formData.foundationRockFormations];
+        newResults[levelIndex].rows[rowIndex][field] = value;
+        setFormData(prev => ({
+            ...prev,
+            foundationRockFormations: newResults
+        }));
+    };
+
+    const handleFoundationRockRecommendationsChange = (levelIndex, value) => {
+        const newResults = [...formData.foundationRockFormations];
+        newResults[levelIndex].recommendations = value;
+        setFormData(prev => ({
+            ...prev,
+            foundationRockFormations: newResults
+        }));
+    };
+
+    const addFoundationRockRow = (levelIndex) => {
+        const newResults = [...formData.foundationRockFormations];
+        newResults[levelIndex].rows.push({
+            rock: '',
+            strength: '',
+            rqd: '',
+            spacingDiscontinuity: '',
+            conditionOfDiscontinuity: '',
+            gwtCondition: '',
+            discontinuityOrientation: '',
+            rockGrade: '',
+            inferredNetSbp: ''
+        });
+        setFormData(prev => ({
+            ...prev,
+            foundationRockFormations: newResults
+        }));
+    };
+
+    const removeFoundationRockRow = (levelIndex, rowIndex) => {
+        if (formData.foundationRockFormations[levelIndex].rows.length > 1) {
+            const newResults = [...formData.foundationRockFormations];
+            newResults[levelIndex].rows = newResults[levelIndex].rows.filter((_, i) => i !== rowIndex);
+            setFormData(prev => ({
+                ...prev,
+                foundationRockFormations: newResults
+            }));
+        }
+    };
+
+    const addFoundationRockLevel = () => {
+        setFormData(prev => ({
+            ...prev,
+            foundationRockFormations: [...prev.foundationRockFormations, {
+                rows: [
+                    {
+                        rock: '',
+                        strength: '',
+                        rqd: '',
+                        spacingDiscontinuity: '',
+                        conditionOfDiscontinuity: '',
+                        gwtCondition: '',
+                        discontinuityOrientation: '',
+                        rockGrade: '',
+                        inferredNetSbp: ''
+                    }
+                ],
+                recommendations: ''
+            }]
+        }));
+    };
+
+    const removeFoundationRockLevel = (levelIndex) => {
+        if (formData.foundationRockFormations.length > 1) {
+            const newResults = formData.foundationRockFormations.filter((_, i) => i !== levelIndex);
+            setFormData(prev => ({
+                ...prev,
+                foundationRockFormations: newResults
             }));
         }
     };
@@ -1701,13 +2157,13 @@ const NewReportPage = () => {
 
 
                                 {/* Section 13: Sub Soil Profile and Classifications */}
-                                <div>
+                                <div className='bg-cyan-50 p-6 rounded-lg'>
                                     <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">Sub Soil Profile and Classifications</h3>
                                     <div className="space-y-8">
                                         {formData.subSoilProfile.map((levelRows, levelIndex) => (
-                                            <div key={levelIndex} className="bg-orange-50 p-6 rounded-lg">
+                                            <div key={levelIndex} className="bg-gray-50 p-6 rounded-lg">
                                                 <div className="flex justify-between items-center mb-4">
-                                                    <h4 className="text-md font-semibold text-gray-700">Sub Soil Profile Level {levelIndex + 1}</h4>
+                                                    <h4 className="text-md font-semibold text-gray-700">Sub Soil Profile - Level {levelIndex + 1}</h4>
                                                     {formData.subSoilProfile.length > 1 && (
                                                         <Button
                                                             type="button"
@@ -1780,6 +2236,505 @@ const NewReportPage = () => {
                                                 className="w-full md:w-auto text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-purple-50"
                                             >
                                                 <Plus className="w-4 h-4 mr-2" /> Add Sub Soil Level
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Section 14: Direct Shear Results */}
+                                <div className="bg-yellow-50 p-6 rounded-lg">
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">Direct Shear Results</h3>
+                                    <div className="space-y-8">
+                                        {formData.directShearResults.map((levelTests, levelIndex) => (
+                                            <div key={levelIndex} className="bg-gray-50 p-6 rounded-lg">
+                                                <div className="flex justify-between items-center mb-4">
+                                                    <h4 className="text-md font-semibold text-gray-700">Direct Shear - Level {levelIndex + 1}</h4>
+                                                    {formData.directShearResults.length > 1 && (
+                                                        <Button
+                                                            type="button"
+                                                            variant="destructive"
+                                                            size="sm"
+                                                            onClick={() => removeDirectShearLevel(levelIndex)}
+                                                            className="bg-red-50 text-red-600 hover:bg-red-100 border border-red-200"
+                                                        >
+                                                            <Trash2 className="w-4 h-4 mr-2" /> Remove Level
+                                                        </Button>
+                                                    )}
+                                                </div>
+
+                                                <div className="space-y-6">
+                                                    {levelTests.map((test, testIndex) => (
+                                                        <div key={testIndex} className="bg-white p-4 rounded-lg border border-gray-200">
+                                                            <div className="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
+                                                                <h5 className="text-sm font-semibold text-gray-600">Direct Shear Test {testIndex + 1}</h5>
+                                                                {levelTests.length > 1 && (
+                                                                    <Button
+                                                                        type="button"
+                                                                        variant="ghost"
+                                                                        size="sm"
+                                                                        onClick={() => removeDirectShearTest(levelIndex, testIndex)}
+                                                                        className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                                                    >
+                                                                        <Trash2 className="w-4 h-4 mr-2" /> Remove Test
+                                                                    </Button>
+                                                                )}
+                                                            </div>
+                                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                                <div>
+                                                                    <Label className="block text-sm font-medium text-gray-700 mb-1">Shear Box Size (cm)</Label>
+                                                                    <Input
+                                                                        value={test.shearBoxSize}
+                                                                        onChange={(e) => handleDirectShearChange(levelIndex, testIndex, 'shearBoxSize', e.target.value)}
+                                                                        className="bg-white"
+                                                                    />
+                                                                </div>
+                                                                <div>
+                                                                    <Label className="block text-sm font-medium text-gray-700 mb-1">Depth of Sample (m)</Label>
+                                                                    <Input
+                                                                        value={test.depthOfSample}
+                                                                        onChange={(e) => handleDirectShearChange(levelIndex, testIndex, 'depthOfSample', e.target.value)}
+                                                                        className="bg-white"
+                                                                    />
+                                                                </div>
+                                                                <div>
+                                                                    <Label className="block text-sm font-medium text-gray-700 mb-1">C Value (kg/cm²)</Label>
+                                                                    <Input
+                                                                        value={test.cValue}
+                                                                        onChange={(e) => handleDirectShearChange(levelIndex, testIndex, 'cValue', e.target.value)}
+                                                                        className="bg-white"
+                                                                    />
+                                                                </div>
+                                                                <div>
+                                                                    <Label className="block text-sm font-medium text-gray-700 mb-1">Phi Value (degrees)</Label>
+                                                                    <Input
+                                                                        value={test.phiValue}
+                                                                        onChange={(e) => handleDirectShearChange(levelIndex, testIndex, 'phiValue', e.target.value)}
+                                                                        className="bg-white"
+                                                                    />
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="mt-6 border-t border-gray-100 pt-4">
+                                                                <h4 className="text-sm font-medium text-gray-700 mb-3">Stress Readings</h4>
+                                                                <div className="bg-gray-50 p-4 rounded-lg overflow-x-auto">
+                                                                    <table className="w-full text-sm text-left border-collapse min-w-[400px] rounded-lg">
+                                                                        <thead className="text-xs text-gray-700 uppercase bg-gray-100 border-b">
+                                                                            <tr>
+                                                                                <th className="px-3 py-3">Normal Stress (kg/cm²)</th>
+                                                                                <th className="px-3 py-3">Shear Stress (kg/cm²)</th>
+                                                                                <th className="px-3 py-3 w-[50px]"></th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            {test.stressReadings.map((reading, readingIndex) => (
+                                                                                <tr key={readingIndex} className="bg-white border-b hover:bg-gray-50/50">
+                                                                                    <td className="px-2 py-2"><Input value={reading.normalStress} onChange={(e) => handleDirectShearStressChange(levelIndex, testIndex, readingIndex, 'normalStress', e.target.value)} className="h-8" /></td>
+                                                                                    <td className="px-2 py-2"><Input value={reading.shearStress} onChange={(e) => handleDirectShearStressChange(levelIndex, testIndex, readingIndex, 'shearStress', e.target.value)} className="h-8" /></td>
+                                                                                    <td className="px-2 py-2 text-center">
+                                                                                        {test.stressReadings.length > 1 && (
+                                                                                            <Button
+                                                                                                type="button"
+                                                                                                variant="ghost"
+                                                                                                size="icon"
+                                                                                                onClick={() => removeDirectShearReading(levelIndex, testIndex, readingIndex)}
+                                                                                                className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50"
+                                                                                            >
+                                                                                                <Trash2 className="w-4 h-4" />
+                                                                                            </Button>
+                                                                                        )}
+                                                                                    </td>
+                                                                                </tr>
+                                                                            ))}
+                                                                        </tbody>
+                                                                    </table>
+                                                                    <div className="mt-4">
+                                                                        <Button
+                                                                            type="button"
+                                                                            variant="outline"
+                                                                            size="sm"
+                                                                            onClick={() => addDirectShearReading(levelIndex, testIndex)}
+                                                                            className="text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
+                                                                        >
+                                                                            <Plus className="w-4 h-4 mr-2" /> Add Stress Reading
+                                                                        </Button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                    <div className="flex justify-center pt-2">
+                                                        <Button
+                                                            type="button"
+                                                            variant="outline"
+                                                            size="sm"
+                                                            onClick={() => addDirectShearTest(levelIndex)}
+                                                            className="text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
+                                                        >
+                                                            <Plus className="w-4 h-4 mr-2" /> Add Direct Shear Test
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                        <div className="flex justify-center pt-4 border-t border-gray-100">
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                onClick={addDirectShearLevel}
+                                                className="w-full md:w-auto text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-purple-50"
+                                            >
+                                                <Plus className="w-4 h-4 mr-2" /> Add Direct Shear Level
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Section 15: Point Load Strength Index of Rock */}
+                                <div className="bg-lime-50 p-6 rounded-lg">
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">Point Load Strength Index of Rock</h3>
+                                    <div className="space-y-8">
+                                        {formData.pointLoadStrength.map((levelTests, levelIndex) => (
+                                            <div key={levelIndex} className="bg-lime-50 p-6 rounded-lg">
+                                                <div className="flex justify-between items-center mb-4">
+                                                    <h4 className="text-md font-semibold text-gray-700">Point Load - Level {levelIndex + 1}</h4>
+                                                    {formData.pointLoadStrength.length > 1 && (
+                                                        <Button
+                                                            type="button"
+                                                            variant="destructive"
+                                                            size="sm"
+                                                            onClick={() => removePointLoadLevel(levelIndex)}
+                                                            className="bg-red-50 text-red-600 hover:bg-red-100 border border-red-200"
+                                                        >
+                                                            <Trash2 className="w-4 h-4 mr-2" /> Remove Level
+                                                        </Button>
+                                                    )}
+                                                </div>
+
+                                                <div className="space-y-6">
+                                                    {levelTests.map((test, testIndex) => (
+                                                        <div key={testIndex} className="bg-white p-4 rounded-lg border border-gray-200">
+                                                            <div className="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
+                                                                <h5 className="text-sm font-semibold text-gray-600">Test {testIndex + 1}</h5>
+                                                                {levelTests.length > 1 && (
+                                                                    <Button
+                                                                        type="button"
+                                                                        variant="ghost"
+                                                                        size="sm"
+                                                                        onClick={() => removePointLoadTest(levelIndex, testIndex)}
+                                                                        className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                                                    >
+                                                                        <Trash2 className="w-4 h-4 mr-2" /> Remove Test
+                                                                    </Button>
+                                                                )}
+                                                            </div>
+                                                            <div className="mb-6 max-w-xs">
+                                                                <Label className="block text-sm font-medium text-gray-700 mb-1">Depth (m)</Label>
+                                                                <Input
+                                                                    value={test.depth}
+                                                                    onChange={(e) => handlePointLoadChange(levelIndex, testIndex, 'depth', e.target.value)}
+                                                                    className="bg-white"
+                                                                />
+                                                            </div>
+
+                                                            <div className="bg-gray-50 p-4 rounded-lg overflow-x-auto">
+                                                                <table className="w-full text-sm text-left border-collapse min-w-[600px] rounded-lg">
+                                                                    <thead className="text-xs text-gray-700 uppercase bg-gray-100 border-b">
+                                                                        <tr>
+                                                                            <th className="px-3 py-3">Load At Failure (kg)</th>
+                                                                            <th className="px-3 py-3">D 50 Value (mm)</th>
+                                                                            <th className="px-3 py-3">D Value (mm)</th>
+                                                                            <th className="px-3 py-3">UCS (kg/cm²)</th>
+                                                                            <th className="px-3 py-3 w-[50px]"></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {test.readings.map((item, readingIndex) => (
+                                                                            <tr key={readingIndex} className="bg-white border-b hover:bg-gray-50/50">
+                                                                                <td className="px-2 py-2"><Input value={item.loadAtFailure} onChange={(e) => handlePointLoadReadingChange(levelIndex, testIndex, readingIndex, 'loadAtFailure', e.target.value)} className="h-8" /></td>
+                                                                                <td className="px-2 py-2"><Input value={item.d50} onChange={(e) => handlePointLoadReadingChange(levelIndex, testIndex, readingIndex, 'd50', e.target.value)} className="h-8" /></td>
+                                                                                <td className="px-2 py-2"><Input value={item.d} onChange={(e) => handlePointLoadReadingChange(levelIndex, testIndex, readingIndex, 'd', e.target.value)} className="h-8" /></td>
+                                                                                <td className="px-2 py-2"><Input value={item.ucs} onChange={(e) => handlePointLoadReadingChange(levelIndex, testIndex, readingIndex, 'ucs', e.target.value)} className="h-8" /></td>
+                                                                                <td className="px-2 py-2 text-center">
+                                                                                    {test.readings.length > 1 && (
+                                                                                        <Button
+                                                                                            type="button"
+                                                                                            variant="ghost"
+                                                                                            size="icon"
+                                                                                            onClick={() => removePointLoadReading(levelIndex, testIndex, readingIndex)}
+                                                                                            className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50"
+                                                                                        >
+                                                                                            <Trash2 className="w-4 h-4" />
+                                                                                        </Button>
+                                                                                    )}
+                                                                                </td>
+                                                                            </tr>
+                                                                        ))}
+                                                                    </tbody>
+                                                                </table>
+                                                                <div className="mt-4">
+                                                                    <Button
+                                                                        type="button"
+                                                                        variant="outline"
+                                                                        size="sm"
+                                                                        onClick={() => addPointLoadReading(levelIndex, testIndex)}
+                                                                        className="text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
+                                                                    >
+                                                                        <Plus className="w-4 h-4 mr-2" /> Add Reading
+                                                                    </Button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                    <div className="flex justify-center pt-2">
+                                                        <Button
+                                                            type="button"
+                                                            variant="outline"
+                                                            size="sm"
+                                                            onClick={() => addPointLoadTest(levelIndex)}
+                                                            className="text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
+                                                        >
+                                                            <Plus className="w-4 h-4 mr-2" /> Add Point Load Test
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                        <div className="flex justify-center pt-4 border-t border-gray-100">
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                onClick={addPointLoadLevel}
+                                                className="w-full md:w-auto text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-purple-50"
+                                            >
+                                                <Plus className="w-4 h-4 mr-2" /> Add Point Load Level
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Section 16: Point Load Strength Index of Lump */}
+                                <div>
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">Point Load Strength Index of Lump</h3>
+                                    <div className="space-y-8">
+                                        {formData.pointLoadStrengthLump.map((levelTests, levelIndex) => (
+                                            <div key={levelIndex} className="bg-orange-50 p-6 rounded-lg">
+                                                <div className="flex justify-between items-center mb-4">
+                                                    <h4 className="text-md font-semibold text-gray-700">Point Load (Lump) - Level {levelIndex + 1}</h4>
+                                                    {formData.pointLoadStrengthLump.length > 1 && (
+                                                        <Button
+                                                            type="button"
+                                                            variant="destructive"
+                                                            size="sm"
+                                                            onClick={() => removePointLoadLumpLevel(levelIndex)}
+                                                            className="bg-red-50 text-red-600 hover:bg-red-100 border border-red-200"
+                                                        >
+                                                            <Trash2 className="w-4 h-4 mr-2" /> Remove Level
+                                                        </Button>
+                                                    )}
+                                                </div>
+
+                                                <div className="space-y-6">
+                                                    {levelTests.map((test, testIndex) => (
+                                                        <div key={testIndex} className="bg-white p-4 rounded-lg border border-gray-200">
+                                                            <div className="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
+                                                                <h5 className="text-sm font-semibold text-gray-600">Test {testIndex + 1}</h5>
+                                                                {levelTests.length > 1 && (
+                                                                    <Button
+                                                                        type="button"
+                                                                        variant="ghost"
+                                                                        size="sm"
+                                                                        onClick={() => removePointLoadLumpTest(levelIndex, testIndex)}
+                                                                        className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                                                    >
+                                                                        <Trash2 className="w-4 h-4 mr-2" /> Remove Test
+                                                                    </Button>
+                                                                )}
+                                                            </div>
+                                                            <div className="mb-6 max-w-xs">
+                                                                <Label className="block text-sm font-medium text-gray-700 mb-1">Depth (m)</Label>
+                                                                <Input
+                                                                    value={test.depth}
+                                                                    onChange={(e) => handlePointLoadLumpChange(levelIndex, testIndex, 'depth', e.target.value)}
+                                                                    className="bg-white"
+                                                                />
+                                                            </div>
+
+                                                            <div className="bg-gray-50 p-4 rounded-lg overflow-x-auto">
+                                                                <table className="w-full text-sm text-left border-collapse min-w-[600px] rounded-lg">
+                                                                    <thead className="text-xs text-gray-700 uppercase bg-gray-100 border-b">
+                                                                        <tr>
+                                                                            <th className="px-3 py-3">Load At Failure (kg)</th>
+                                                                            <th className="px-3 py-3">D 50 Value (mm)</th>
+                                                                            <th className="px-3 py-3">D Value (mm)</th>
+                                                                            <th className="px-3 py-3">W Value</th>
+                                                                            <th className="px-3 py-3">UCS (kg/cm²)</th>
+                                                                            <th className="px-3 py-3 w-[50px]"></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {test.readings.map((item, readingIndex) => (
+                                                                            <tr key={readingIndex} className="bg-white border-b hover:bg-gray-50/50">
+                                                                                <td className="px-2 py-2"><Input value={item.loadAtFailure} onChange={(e) => handlePointLoadLumpReadingChange(levelIndex, testIndex, readingIndex, 'loadAtFailure', e.target.value)} className="h-8" /></td>
+                                                                                <td className="px-2 py-2"><Input value={item.d50} onChange={(e) => handlePointLoadLumpReadingChange(levelIndex, testIndex, readingIndex, 'd50', e.target.value)} className="h-8" /></td>
+                                                                                <td className="px-2 py-2"><Input value={item.d} onChange={(e) => handlePointLoadLumpReadingChange(levelIndex, testIndex, readingIndex, 'd', e.target.value)} className="h-8" /></td>
+                                                                                <td className="px-2 py-2"><Input value={item.w} onChange={(e) => handlePointLoadLumpReadingChange(levelIndex, testIndex, readingIndex, 'w', e.target.value)} className="h-8" /></td>
+                                                                                <td className="px-2 py-2"><Input value={item.ucs} onChange={(e) => handlePointLoadLumpReadingChange(levelIndex, testIndex, readingIndex, 'ucs', e.target.value)} className="h-8" /></td>
+                                                                                <td className="px-2 py-2 text-center">
+                                                                                    {test.readings.length > 1 && (
+                                                                                        <Button
+                                                                                            type="button"
+                                                                                            variant="ghost"
+                                                                                            size="icon"
+                                                                                            onClick={() => removePointLoadLumpReading(levelIndex, testIndex, readingIndex)}
+                                                                                            className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50"
+                                                                                        >
+                                                                                            <Trash2 className="w-4 h-4" />
+                                                                                        </Button>
+                                                                                    )}
+                                                                                </td>
+                                                                            </tr>
+                                                                        ))}
+                                                                    </tbody>
+                                                                </table>
+                                                                <div className="mt-4">
+                                                                    <Button
+                                                                        type="button"
+                                                                        variant="outline"
+                                                                        size="sm"
+                                                                        onClick={() => addPointLoadLumpReading(levelIndex, testIndex)}
+                                                                        className="text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
+                                                                    >
+                                                                        <Plus className="w-4 h-4 mr-2" /> Add Reading
+                                                                    </Button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                    <div className="flex justify-center pt-2">
+                                                        <Button
+                                                            type="button"
+                                                            variant="outline"
+                                                            size="sm"
+                                                            onClick={() => addPointLoadLumpTest(levelIndex)}
+                                                            className="text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
+                                                        >
+                                                            <Plus className="w-4 h-4 mr-2" /> Add Point Load (Lump) Test
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                        <div className="flex justify-center pt-4 border-t border-gray-100">
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                onClick={addPointLoadLumpLevel}
+                                                className="w-full md:w-auto text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-purple-50"
+                                            >
+                                                <Plus className="w-4 h-4 mr-2" /> Add Point Load (Lump) Level
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Section 17: Foundation In Rock Formations */}
+                                <div>
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">Foundation In Rock Formations</h3>
+                                    <div className="space-y-8">
+                                        {formData.foundationRockFormations.map((levelData, levelIndex) => (
+                                            <div key={levelIndex} className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                                                <div className="flex justify-between items-center mb-4">
+                                                    <h4 className="text-md font-semibold text-gray-700">Foundation (Rock) - Level {levelIndex + 1}</h4>
+                                                    {formData.foundationRockFormations.length > 1 && (
+                                                        <Button
+                                                            type="button"
+                                                            variant="destructive"
+                                                            size="sm"
+                                                            onClick={() => removeFoundationRockLevel(levelIndex)}
+                                                            className="bg-red-50 text-red-600 hover:bg-red-100 border border-red-200"
+                                                        >
+                                                            <Trash2 className="w-4 h-4 mr-2" /> Remove Level
+                                                        </Button>
+                                                    )}
+                                                </div>
+
+                                                <div className="overflow-x-auto">
+                                                    <table className="w-full text-sm text-left border-collapse min-w-[1000px] rounded-lg">
+                                                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b">
+                                                            <tr>
+                                                                <th className="px-3 py-3">Rock</th>
+                                                                <th className="px-3 py-3">Strength</th>
+                                                                <th className="px-3 py-3">RQD</th>
+                                                                <th className="px-3 py-3">Spacing Discontinuity</th>
+                                                                <th className="px-3 py-3">Condition Of Discontinuity</th>
+                                                                <th className="px-3 py-3">GWT Condition</th>
+                                                                <th className="px-3 py-3">Discontinuity Orientation</th>
+                                                                <th className="px-3 py-3">Rock Grade</th>
+                                                                <th className="px-3 py-3">Inferred Net SBP</th>
+                                                                <th className="px-3 py-3 w-[50px]"></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {levelData.rows.map((item, rowIndex) => (
+                                                                <tr key={rowIndex} className="bg-white border-b hover:bg-gray-50/50">
+                                                                    <td className="px-2 py-2"><Input value={item.rock} onChange={(e) => handleFoundationRockRowChange(levelIndex, rowIndex, 'rock', e.target.value)} className="h-8" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.strength} onChange={(e) => handleFoundationRockRowChange(levelIndex, rowIndex, 'strength', e.target.value)} className="h-8" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.rqd} onChange={(e) => handleFoundationRockRowChange(levelIndex, rowIndex, 'rqd', e.target.value)} className="h-8" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.spacingDiscontinuity} onChange={(e) => handleFoundationRockRowChange(levelIndex, rowIndex, 'spacingDiscontinuity', e.target.value)} className="h-8" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.conditionOfDiscontinuity} onChange={(e) => handleFoundationRockRowChange(levelIndex, rowIndex, 'conditionOfDiscontinuity', e.target.value)} className="h-8" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.gwtCondition} onChange={(e) => handleFoundationRockRowChange(levelIndex, rowIndex, 'gwtCondition', e.target.value)} className="h-8" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.discontinuityOrientation} onChange={(e) => handleFoundationRockRowChange(levelIndex, rowIndex, 'discontinuityOrientation', e.target.value)} className="h-8" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.rockGrade} onChange={(e) => handleFoundationRockRowChange(levelIndex, rowIndex, 'rockGrade', e.target.value)} className="h-8" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.inferredNetSbp} onChange={(e) => handleFoundationRockRowChange(levelIndex, rowIndex, 'inferredNetSbp', e.target.value)} className="h-8" /></td>
+                                                                    <td className="px-2 py-2 text-center">
+                                                                        {levelData.rows.length > 1 && (
+                                                                            <Button
+                                                                                type="button"
+                                                                                variant="ghost"
+                                                                                size="icon"
+                                                                                onClick={() => removeFoundationRockRow(levelIndex, rowIndex)}
+                                                                                className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50"
+                                                                            >
+                                                                                <Trash2 className="w-4 h-4" />
+                                                                            </Button>
+                                                                        )}
+                                                                    </td>
+                                                                </tr>
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                    <div className="mt-4 border-b border-gray-100 pb-6 mb-6">
+                                                        <Button
+                                                            type="button"
+                                                            variant="outline"
+                                                            size="sm"
+                                                            onClick={() => addFoundationRockRow(levelIndex)}
+                                                            className="text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
+                                                        >
+                                                            <Plus className="w-4 h-4 mr-2" /> Add Row
+                                                        </Button>
+                                                    </div>
+
+                                                    <div className="max-w-4xl">
+                                                        <Label className="block text-sm font-medium text-gray-700 mb-1">Recommendations / Comments</Label>
+                                                        <Textarea
+                                                            value={levelData.recommendations}
+                                                            onChange={(e) => handleFoundationRockRecommendationsChange(levelIndex, e.target.value)}
+                                                            className="bg-white min-h-[100px]"
+                                                            placeholder="Enter recommendations or comments..."
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                        <div className="flex justify-center pt-4 border-t border-gray-100">
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                onClick={addFoundationRockLevel}
+                                                className="w-full md:w-auto text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-purple-50"
+                                            >
+                                                <Plus className="w-4 h-4 mr-2" /> Add Foundation (Rock) Level
                                             </Button>
                                         </div>
                                     </div>
