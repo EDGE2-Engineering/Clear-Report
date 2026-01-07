@@ -1698,7 +1698,7 @@ const NewReportPage = () => {
                                                                             </SelectContent>
                                                                         </Select>
                                                                     </td>
-                                                                    <td className="px-2 py-2"><Input value={log.soilType} onChange={(e) => handleBoreholeLogChange(levelIndex, logIndex, 'soilType', e.target.value)} className="h-8" /></td>
+                                                                    <td className="px-2 py-2"><Input value={log.soilType} onChange={(e) => handleBoreholeLogChange(levelIndex, logIndex, 'soilType', e.target.value)} className="h-8" placeholder="Soil Type" /></td>
                                                                     <td className="px-2 py-2 text-center">
                                                                         <div className="flex justify-center">
                                                                             <Checkbox
@@ -1716,10 +1716,10 @@ const NewReportPage = () => {
                                                                         <Input value={log.shearParameters?.cValue} onChange={(e) => handleBoreholeLogChange(levelIndex, logIndex, 'shearParameters.cValue', e.target.value)} className="h-8 mb-1" placeholder="C Value" />
                                                                         <Input value={log.shearParameters?.phiValue} onChange={(e) => handleBoreholeLogChange(levelIndex, logIndex, 'shearParameters.phiValue', e.target.value)} className="h-8" placeholder="Phi Value" />
                                                                     </td>
-                                                                    <td className="px-2 py-2"><Input value={log.coreLength} onChange={(e) => handleBoreholeLogChange(levelIndex, logIndex, 'coreLength', e.target.value)} className="h-8" /></td>
-                                                                    <td className="px-2 py-2"><Input value={log.coreRecovery} onChange={(e) => handleBoreholeLogChange(levelIndex, logIndex, 'coreRecovery', e.target.value)} className="h-8" /></td>
-                                                                    <td className="px-2 py-2"><Input value={log.rqd} onChange={(e) => handleBoreholeLogChange(levelIndex, logIndex, 'rqd', e.target.value)} className="h-8" /></td>
-                                                                    <td className="px-2 py-2"><Input value={log.sbc} onChange={(e) => handleBoreholeLogChange(levelIndex, logIndex, 'sbc', e.target.value)} className="h-8" /></td>
+                                                                    <td className="px-2 py-2"><Input value={log.coreLength} onChange={(e) => handleBoreholeLogChange(levelIndex, logIndex, 'coreLength', e.target.value)} className="h-8" placeholder="Core Length" /></td>
+                                                                    <td className="px-2 py-2"><Input value={log.coreRecovery} onChange={(e) => handleBoreholeLogChange(levelIndex, logIndex, 'coreRecovery', e.target.value)} className="h-8" placeholder="Recovery" /></td>
+                                                                    <td className="px-2 py-2"><Input value={log.rqd} onChange={(e) => handleBoreholeLogChange(levelIndex, logIndex, 'rqd', e.target.value)} className="h-8" placeholder="RQD" /></td>
+                                                                    <td className="px-2 py-2"><Input value={log.sbc} onChange={(e) => handleBoreholeLogChange(levelIndex, logIndex, 'sbc', e.target.value)} className="h-8" placeholder="SBC" /></td>
                                                                     <td className="px-2 py-2 text-center">
                                                                         {levelLogs.length > 1 && (
                                                                             <Button
@@ -1799,9 +1799,9 @@ const NewReportPage = () => {
                                                         <tbody>
                                                             {levelLogs.map((result, logIndex) => (
                                                                 <tr key={logIndex} className="bg-white border-b hover:bg-gray-50/50">
-                                                                    <td className="px-2 py-2"><Input value={result.depth} onChange={(e) => handleLabTestResultChange(levelIndex, logIndex, 'depth', e.target.value)} className="h-8" /></td>
-                                                                    <td className="px-2 py-2"><Input value={result.bulkDensity} onChange={(e) => handleLabTestResultChange(levelIndex, logIndex, 'bulkDensity', e.target.value)} className="h-8" /></td>
-                                                                    <td className="px-2 py-2"><Input value={result.moistureContent} onChange={(e) => handleLabTestResultChange(levelIndex, logIndex, 'moistureContent', e.target.value)} className="h-8" /></td>
+                                                                    <td className="px-2 py-2"><Input value={result.depth} onChange={(e) => handleLabTestResultChange(levelIndex, logIndex, 'depth', e.target.value)} className="h-8" placeholder="Depth" /></td>
+                                                                    <td className="px-2 py-2"><Input value={result.bulkDensity} onChange={(e) => handleLabTestResultChange(levelIndex, logIndex, 'bulkDensity', e.target.value)} className="h-8" placeholder="Bulk Density" /></td>
+                                                                    <td className="px-2 py-2"><Input value={result.moistureContent} onChange={(e) => handleLabTestResultChange(levelIndex, logIndex, 'moistureContent', e.target.value)} className="h-8" placeholder="Moisture Content" /></td>
                                                                     <td className="px-2 py-2">
                                                                         <Input value={result.grainSizeDistribution.gravel} onChange={(e) => handleLabTestResultChange(levelIndex, logIndex, 'grainSizeDistribution.gravel', e.target.value)} className="h-8 mb-1" placeholder="Gravel (%)" />
                                                                         <Input value={result.grainSizeDistribution.sand} onChange={(e) => handleLabTestResultChange(levelIndex, logIndex, 'grainSizeDistribution.sand', e.target.value)} className="h-8 mb-1" placeholder="Sand (%)" />
@@ -1812,8 +1812,8 @@ const NewReportPage = () => {
                                                                         <Input value={result.atterbergLimits.plasticLimit} onChange={(e) => handleLabTestResultChange(levelIndex, logIndex, 'atterbergLimits.plasticLimit', e.target.value)} className="h-8 mb-1" placeholder="Plastic Limit (%)" />
                                                                         <Input value={result.atterbergLimits.plasticityIndex} onChange={(e) => handleLabTestResultChange(levelIndex, logIndex, 'atterbergLimits.plasticityIndex', e.target.value)} className="h-8" placeholder="Plasticity Index (%)" />
                                                                     </td>
-                                                                    <td className="px-2 py-2"><Input value={result.specificGravity} onChange={(e) => handleLabTestResultChange(levelIndex, logIndex, 'specificGravity', e.target.value)} className="h-8" /></td>
-                                                                    <td className="px-2 py-2"><Input value={result.freeSwellIndex} onChange={(e) => handleLabTestResultChange(levelIndex, logIndex, 'freeSwellIndex', e.target.value)} className="h-8" /></td>
+                                                                    <td className="px-2 py-2"><Input value={result.specificGravity} onChange={(e) => handleLabTestResultChange(levelIndex, logIndex, 'specificGravity', e.target.value)} className="h-8" placeholder="Specific Gravity" /></td>
+                                                                    <td className="px-2 py-2"><Input value={result.freeSwellIndex} onChange={(e) => handleLabTestResultChange(levelIndex, logIndex, 'freeSwellIndex', e.target.value)} className="h-8" placeholder="FSI" /></td>
                                                                     <td className="px-2 py-2 text-center">
                                                                         {levelLogs.length > 1 && (
                                                                             <Button
@@ -2010,16 +2010,16 @@ const NewReportPage = () => {
                                                         <tbody>
                                                             {levelRows.map((item, rowIndex) => (
                                                                 <tr key={rowIndex} className="bg-white border-b hover:bg-gray-50/50">
-                                                                    <td className="px-2 py-2"><Input value={item.depth} onChange={(e) => handleGrainSizeAnalysisChange(levelIndex, rowIndex, 'depth', e.target.value)} className="h-8" /></td>
-                                                                    <td className="px-2 py-2"><Input value={item.sieve1} onChange={(e) => handleGrainSizeAnalysisChange(levelIndex, rowIndex, 'sieve1', e.target.value)} className="h-8" /></td>
-                                                                    <td className="px-2 py-2"><Input value={item.sieve2} onChange={(e) => handleGrainSizeAnalysisChange(levelIndex, rowIndex, 'sieve2', e.target.value)} className="h-8" /></td>
-                                                                    <td className="px-2 py-2"><Input value={item.sieve3} onChange={(e) => handleGrainSizeAnalysisChange(levelIndex, rowIndex, 'sieve3', e.target.value)} className="h-8" /></td>
-                                                                    <td className="px-2 py-2"><Input value={item.sieve4} onChange={(e) => handleGrainSizeAnalysisChange(levelIndex, rowIndex, 'sieve4', e.target.value)} className="h-8" /></td>
-                                                                    <td className="px-2 py-2"><Input value={item.sieve5} onChange={(e) => handleGrainSizeAnalysisChange(levelIndex, rowIndex, 'sieve5', e.target.value)} className="h-8" /></td>
-                                                                    <td className="px-2 py-2"><Input value={item.sieve6} onChange={(e) => handleGrainSizeAnalysisChange(levelIndex, rowIndex, 'sieve6', e.target.value)} className="h-8" /></td>
-                                                                    <td className="px-2 py-2"><Input value={item.sieve7} onChange={(e) => handleGrainSizeAnalysisChange(levelIndex, rowIndex, 'sieve7', e.target.value)} className="h-8" /></td>
-                                                                    <td className="px-2 py-2"><Input value={item.sieve8} onChange={(e) => handleGrainSizeAnalysisChange(levelIndex, rowIndex, 'sieve8', e.target.value)} className="h-8" /></td>
-                                                                    <td className="px-2 py-2"><Input value={item.sieve9} onChange={(e) => handleGrainSizeAnalysisChange(levelIndex, rowIndex, 'sieve9', e.target.value)} className="h-8" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.depth} onChange={(e) => handleGrainSizeAnalysisChange(levelIndex, rowIndex, 'depth', e.target.value)} className="h-8" placeholder="Depth" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.sieve1} onChange={(e) => handleGrainSizeAnalysisChange(levelIndex, rowIndex, 'sieve1', e.target.value)} className="h-8" placeholder="Value" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.sieve2} onChange={(e) => handleGrainSizeAnalysisChange(levelIndex, rowIndex, 'sieve2', e.target.value)} className="h-8" placeholder="Value" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.sieve3} onChange={(e) => handleGrainSizeAnalysisChange(levelIndex, rowIndex, 'sieve3', e.target.value)} className="h-8" placeholder="Value" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.sieve4} onChange={(e) => handleGrainSizeAnalysisChange(levelIndex, rowIndex, 'sieve4', e.target.value)} className="h-8" placeholder="Value" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.sieve5} onChange={(e) => handleGrainSizeAnalysisChange(levelIndex, rowIndex, 'sieve5', e.target.value)} className="h-8" placeholder="Value" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.sieve6} onChange={(e) => handleGrainSizeAnalysisChange(levelIndex, rowIndex, 'sieve6', e.target.value)} className="h-8" placeholder="Value" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.sieve7} onChange={(e) => handleGrainSizeAnalysisChange(levelIndex, rowIndex, 'sieve7', e.target.value)} className="h-8" placeholder="Value" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.sieve8} onChange={(e) => handleGrainSizeAnalysisChange(levelIndex, rowIndex, 'sieve8', e.target.value)} className="h-8" placeholder="Value" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.sieve9} onChange={(e) => handleGrainSizeAnalysisChange(levelIndex, rowIndex, 'sieve9', e.target.value)} className="h-8" placeholder="Value" /></td>
                                                                     <td className="px-2 py-2 text-center">
                                                                         {levelRows.length > 1 && (
                                                                             <Button
@@ -2099,8 +2099,8 @@ const NewReportPage = () => {
                                                         <tbody>
                                                             {levelRows.map((item, rowIndex) => (
                                                                 <tr key={rowIndex} className="bg-white border-b hover:bg-gray-50/50">
-                                                                    <td className="px-2 py-2"><Input value={item.depth} onChange={(e) => handleSBCDetailChange(levelIndex, rowIndex, 'depth', e.target.value)} className="h-8" /></td>
-                                                                    <td className="px-2 py-2"><Input value={item.footingDimension} onChange={(e) => handleSBCDetailChange(levelIndex, rowIndex, 'footingDimension', e.target.value)} className="h-8" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.depth} onChange={(e) => handleSBCDetailChange(levelIndex, rowIndex, 'depth', e.target.value)} className="h-8" placeholder="Depth" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.footingDimension} onChange={(e) => handleSBCDetailChange(levelIndex, rowIndex, 'footingDimension', e.target.value)} className="h-8" placeholder="Dimension" /></td>
                                                                     <td className="px-2 py-2 text-center">
                                                                         <div className="flex justify-center">
                                                                             <Checkbox
@@ -2109,7 +2109,7 @@ const NewReportPage = () => {
                                                                             />
                                                                         </div>
                                                                     </td>
-                                                                    <td className="px-2 py-2"><Input value={item.sbcValue} onChange={(e) => handleSBCDetailChange(levelIndex, rowIndex, 'sbcValue', e.target.value)} className="h-8" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.sbcValue} onChange={(e) => handleSBCDetailChange(levelIndex, rowIndex, 'sbcValue', e.target.value)} className="h-8" placeholder="SBC" /></td>
                                                                     <td className="px-2 py-2 text-center">
                                                                         {levelRows.length > 1 && (
                                                                             <Button
@@ -2188,12 +2188,13 @@ const NewReportPage = () => {
                                                         <tbody>
                                                             {levelRows.map((item, rowIndex) => (
                                                                 <tr key={rowIndex} className="bg-white border-b hover:bg-gray-50/50">
-                                                                    <td className="px-2 py-2"><Input value={item.depth} onChange={(e) => handleSubSoilProfileChange(levelIndex, rowIndex, 'depth', e.target.value)} className="h-8" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.depth} onChange={(e) => handleSubSoilProfileChange(levelIndex, rowIndex, 'depth', e.target.value)} className="h-8" placeholder="Depth" /></td>
                                                                     <td className="px-2 py-2">
                                                                         <Textarea
                                                                             value={item.description}
                                                                             onChange={(e) => handleSubSoilProfileChange(levelIndex, rowIndex, 'description', e.target.value)}
                                                                             className="min-h-[40px] py-1"
+                                                                            placeholder="Soil Description"
                                                                         />
                                                                     </td>
                                                                     <td className="px-2 py-2 text-center">
@@ -2286,6 +2287,7 @@ const NewReportPage = () => {
                                                                         value={test.shearBoxSize}
                                                                         onChange={(e) => handleDirectShearChange(levelIndex, testIndex, 'shearBoxSize', e.target.value)}
                                                                         className="bg-white"
+                                                                        placeholder="e.g. 6.0"
                                                                     />
                                                                 </div>
                                                                 <div>
@@ -2294,6 +2296,7 @@ const NewReportPage = () => {
                                                                         value={test.depthOfSample}
                                                                         onChange={(e) => handleDirectShearChange(levelIndex, testIndex, 'depthOfSample', e.target.value)}
                                                                         className="bg-white"
+                                                                        placeholder="Depth"
                                                                     />
                                                                 </div>
                                                                 <div>
@@ -2302,6 +2305,7 @@ const NewReportPage = () => {
                                                                         value={test.cValue}
                                                                         onChange={(e) => handleDirectShearChange(levelIndex, testIndex, 'cValue', e.target.value)}
                                                                         className="bg-white"
+                                                                        placeholder="C Value"
                                                                     />
                                                                 </div>
                                                                 <div>
@@ -2310,6 +2314,7 @@ const NewReportPage = () => {
                                                                         value={test.phiValue}
                                                                         onChange={(e) => handleDirectShearChange(levelIndex, testIndex, 'phiValue', e.target.value)}
                                                                         className="bg-white"
+                                                                        placeholder="Phi"
                                                                     />
                                                                 </div>
                                                             </div>
@@ -2328,8 +2333,8 @@ const NewReportPage = () => {
                                                                         <tbody>
                                                                             {test.stressReadings.map((reading, readingIndex) => (
                                                                                 <tr key={readingIndex} className="bg-white border-b hover:bg-gray-50/50">
-                                                                                    <td className="px-2 py-2"><Input value={reading.normalStress} onChange={(e) => handleDirectShearStressChange(levelIndex, testIndex, readingIndex, 'normalStress', e.target.value)} className="h-8" /></td>
-                                                                                    <td className="px-2 py-2"><Input value={reading.shearStress} onChange={(e) => handleDirectShearStressChange(levelIndex, testIndex, readingIndex, 'shearStress', e.target.value)} className="h-8" /></td>
+                                                                                    <td className="px-2 py-2"><Input value={reading.normalStress} onChange={(e) => handleDirectShearStressChange(levelIndex, testIndex, readingIndex, 'normalStress', e.target.value)} className="h-8" placeholder="Stress" /></td>
+                                                                                    <td className="px-2 py-2"><Input value={reading.shearStress} onChange={(e) => handleDirectShearStressChange(levelIndex, testIndex, readingIndex, 'shearStress', e.target.value)} className="h-8" placeholder="Stress" /></td>
                                                                                     <td className="px-2 py-2 text-center">
                                                                                         {test.stressReadings.length > 1 && (
                                                                                             <Button
@@ -2433,6 +2438,7 @@ const NewReportPage = () => {
                                                                     value={test.depth}
                                                                     onChange={(e) => handlePointLoadChange(levelIndex, testIndex, 'depth', e.target.value)}
                                                                     className="bg-white"
+                                                                    placeholder="Depth"
                                                                 />
                                                             </div>
 
@@ -2450,10 +2456,10 @@ const NewReportPage = () => {
                                                                     <tbody>
                                                                         {test.readings.map((item, readingIndex) => (
                                                                             <tr key={readingIndex} className="bg-white border-b hover:bg-gray-50/50">
-                                                                                <td className="px-2 py-2"><Input value={item.loadAtFailure} onChange={(e) => handlePointLoadReadingChange(levelIndex, testIndex, readingIndex, 'loadAtFailure', e.target.value)} className="h-8" /></td>
-                                                                                <td className="px-2 py-2"><Input value={item.d50} onChange={(e) => handlePointLoadReadingChange(levelIndex, testIndex, readingIndex, 'd50', e.target.value)} className="h-8" /></td>
-                                                                                <td className="px-2 py-2"><Input value={item.d} onChange={(e) => handlePointLoadReadingChange(levelIndex, testIndex, readingIndex, 'd', e.target.value)} className="h-8" /></td>
-                                                                                <td className="px-2 py-2"><Input value={item.ucs} onChange={(e) => handlePointLoadReadingChange(levelIndex, testIndex, readingIndex, 'ucs', e.target.value)} className="h-8" /></td>
+                                                                                <td className="px-2 py-2"><Input value={item.loadAtFailure} onChange={(e) => handlePointLoadReadingChange(levelIndex, testIndex, readingIndex, 'loadAtFailure', e.target.value)} className="h-8" placeholder="Load" /></td>
+                                                                                <td className="px-2 py-2"><Input value={item.d50} onChange={(e) => handlePointLoadReadingChange(levelIndex, testIndex, readingIndex, 'd50', e.target.value)} className="h-8" placeholder="d50" /></td>
+                                                                                <td className="px-2 py-2"><Input value={item.d} onChange={(e) => handlePointLoadReadingChange(levelIndex, testIndex, readingIndex, 'd', e.target.value)} className="h-8" placeholder="d" /></td>
+                                                                                <td className="px-2 py-2"><Input value={item.ucs} onChange={(e) => handlePointLoadReadingChange(levelIndex, testIndex, readingIndex, 'ucs', e.target.value)} className="h-8" placeholder="UCS" /></td>
                                                                                 <td className="px-2 py-2 text-center">
                                                                                     {test.readings.length > 1 && (
                                                                                         <Button
@@ -2556,6 +2562,7 @@ const NewReportPage = () => {
                                                                     value={test.depth}
                                                                     onChange={(e) => handlePointLoadLumpChange(levelIndex, testIndex, 'depth', e.target.value)}
                                                                     className="bg-white"
+                                                                    placeholder="Depth"
                                                                 />
                                                             </div>
 
@@ -2574,11 +2581,11 @@ const NewReportPage = () => {
                                                                     <tbody>
                                                                         {test.readings.map((item, readingIndex) => (
                                                                             <tr key={readingIndex} className="bg-white border-b hover:bg-gray-50/50">
-                                                                                <td className="px-2 py-2"><Input value={item.loadAtFailure} onChange={(e) => handlePointLoadLumpReadingChange(levelIndex, testIndex, readingIndex, 'loadAtFailure', e.target.value)} className="h-8" /></td>
-                                                                                <td className="px-2 py-2"><Input value={item.d50} onChange={(e) => handlePointLoadLumpReadingChange(levelIndex, testIndex, readingIndex, 'd50', e.target.value)} className="h-8" /></td>
-                                                                                <td className="px-2 py-2"><Input value={item.d} onChange={(e) => handlePointLoadLumpReadingChange(levelIndex, testIndex, readingIndex, 'd', e.target.value)} className="h-8" /></td>
-                                                                                <td className="px-2 py-2"><Input value={item.w} onChange={(e) => handlePointLoadLumpReadingChange(levelIndex, testIndex, readingIndex, 'w', e.target.value)} className="h-8" /></td>
-                                                                                <td className="px-2 py-2"><Input value={item.ucs} onChange={(e) => handlePointLoadLumpReadingChange(levelIndex, testIndex, readingIndex, 'ucs', e.target.value)} className="h-8" /></td>
+                                                                                <td className="px-2 py-2"><Input value={item.loadAtFailure} onChange={(e) => handlePointLoadLumpReadingChange(levelIndex, testIndex, readingIndex, 'loadAtFailure', e.target.value)} className="h-8" placeholder="Load" /></td>
+                                                                                <td className="px-2 py-2"><Input value={item.d50} onChange={(e) => handlePointLoadLumpReadingChange(levelIndex, testIndex, readingIndex, 'd50', e.target.value)} className="h-8" placeholder="d50" /></td>
+                                                                                <td className="px-2 py-2"><Input value={item.d} onChange={(e) => handlePointLoadLumpReadingChange(levelIndex, testIndex, readingIndex, 'd', e.target.value)} className="h-8" placeholder="d" /></td>
+                                                                                <td className="px-2 py-2"><Input value={item.w} onChange={(e) => handlePointLoadLumpReadingChange(levelIndex, testIndex, readingIndex, 'w', e.target.value)} className="h-8" placeholder="w" /></td>
+                                                                                <td className="px-2 py-2"><Input value={item.ucs} onChange={(e) => handlePointLoadLumpReadingChange(levelIndex, testIndex, readingIndex, 'ucs', e.target.value)} className="h-8" placeholder="UCS" /></td>
                                                                                 <td className="px-2 py-2 text-center">
                                                                                     {test.readings.length > 1 && (
                                                                                         <Button
@@ -2677,15 +2684,15 @@ const NewReportPage = () => {
                                                         <tbody>
                                                             {levelData.rows.map((item, rowIndex) => (
                                                                 <tr key={rowIndex} className="bg-white border-b hover:bg-gray-50/50">
-                                                                    <td className="px-2 py-2"><Input value={item.rock} onChange={(e) => handleFoundationRockRowChange(levelIndex, rowIndex, 'rock', e.target.value)} className="h-8" /></td>
-                                                                    <td className="px-2 py-2"><Input value={item.strength} onChange={(e) => handleFoundationRockRowChange(levelIndex, rowIndex, 'strength', e.target.value)} className="h-8" /></td>
-                                                                    <td className="px-2 py-2"><Input value={item.rqd} onChange={(e) => handleFoundationRockRowChange(levelIndex, rowIndex, 'rqd', e.target.value)} className="h-8" /></td>
-                                                                    <td className="px-2 py-2"><Input value={item.spacingDiscontinuity} onChange={(e) => handleFoundationRockRowChange(levelIndex, rowIndex, 'spacingDiscontinuity', e.target.value)} className="h-8" /></td>
-                                                                    <td className="px-2 py-2"><Input value={item.conditionOfDiscontinuity} onChange={(e) => handleFoundationRockRowChange(levelIndex, rowIndex, 'conditionOfDiscontinuity', e.target.value)} className="h-8" /></td>
-                                                                    <td className="px-2 py-2"><Input value={item.gwtCondition} onChange={(e) => handleFoundationRockRowChange(levelIndex, rowIndex, 'gwtCondition', e.target.value)} className="h-8" /></td>
-                                                                    <td className="px-2 py-2"><Input value={item.discontinuityOrientation} onChange={(e) => handleFoundationRockRowChange(levelIndex, rowIndex, 'discontinuityOrientation', e.target.value)} className="h-8" /></td>
-                                                                    <td className="px-2 py-2"><Input value={item.rockGrade} onChange={(e) => handleFoundationRockRowChange(levelIndex, rowIndex, 'rockGrade', e.target.value)} className="h-8" /></td>
-                                                                    <td className="px-2 py-2"><Input value={item.inferredNetSbp} onChange={(e) => handleFoundationRockRowChange(levelIndex, rowIndex, 'inferredNetSbp', e.target.value)} className="h-8" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.rock} onChange={(e) => handleFoundationRockRowChange(levelIndex, rowIndex, 'rock', e.target.value)} className="h-8" placeholder="Rock" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.strength} onChange={(e) => handleFoundationRockRowChange(levelIndex, rowIndex, 'strength', e.target.value)} className="h-8" placeholder="Strength" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.rqd} onChange={(e) => handleFoundationRockRowChange(levelIndex, rowIndex, 'rqd', e.target.value)} className="h-8" placeholder="RQD" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.spacingDiscontinuity} onChange={(e) => handleFoundationRockRowChange(levelIndex, rowIndex, 'spacingDiscontinuity', e.target.value)} className="h-8" placeholder="Spacing" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.conditionOfDiscontinuity} onChange={(e) => handleFoundationRockRowChange(levelIndex, rowIndex, 'conditionOfDiscontinuity', e.target.value)} className="h-8" placeholder="Condition" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.gwtCondition} onChange={(e) => handleFoundationRockRowChange(levelIndex, rowIndex, 'gwtCondition', e.target.value)} className="h-8" placeholder="GWT" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.discontinuityOrientation} onChange={(e) => handleFoundationRockRowChange(levelIndex, rowIndex, 'discontinuityOrientation', e.target.value)} className="h-8" placeholder="Orient." /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.rockGrade} onChange={(e) => handleFoundationRockRowChange(levelIndex, rowIndex, 'rockGrade', e.target.value)} className="h-8" placeholder="Grade" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.inferredNetSbp} onChange={(e) => handleFoundationRockRowChange(levelIndex, rowIndex, 'inferredNetSbp', e.target.value)} className="h-8" placeholder="SBP" /></td>
                                                                     <td className="px-2 py-2 text-center">
                                                                         {levelData.rows.length > 1 && (
                                                                             <Button
