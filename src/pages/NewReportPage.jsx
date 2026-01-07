@@ -35,10 +35,6 @@ const NewReportPage = () => {
         siteAddress: '',
         surveyDate: '',
         groundWaterTable: '',
-        sbcValue1: '',
-        sbcValue2: '',
-        sbcValue3: '',
-        sbcValue4: '',
         isCodes: [
             { key: 'Natural water content', value: 'IS:2720 - (Part 2) - 1973' },
             { key: 'Grain size analysis', value: 'IS:2720 - (Part 4) - 1985' },
@@ -83,24 +79,30 @@ const NewReportPage = () => {
             { value: 'Ground water table [VALUE] at the time of investigation in the bore hole.' }
         ],
         depthOfFoundation: '',
-        recommendationRock: false,
-        recommendationSoil: true,
+        recommendationTypes: {
+            rock: false,
+            soil: true
+        },
         sitePhotos: [],
-        boreholeLogs: [{
-            depth: '',
-            natureOfSampling: '',
-            soilType: '',
-            waterTable: false,
-            spt1: '',
-            spt2: '',
-            spt3: '',
-            shearParameterCValue: '',
-            shearParameterPhiValue: '',
-            coreLength: '',
-            coreRecovery: '',
-            rqd: '',
-            sbc: ''
-        }],
+        boreholeLogs: [
+            [{
+                depth: '',
+                natureOfSampling: '',
+                soilType: '',
+                waterTable: false,
+                spt1: '',
+                spt2: '',
+                spt3: '',
+                shearParameters: {
+                    cValue: '',
+                    phiValue: ''
+                },
+                coreLength: '',
+                coreRecovery: '',
+                rqd: '',
+                sbc: ''
+            }]
+        ],
         reportCreatedOn: new Date().toISOString().split('T')[0]
     });
     const [sitePhotoPreview, setSitePhotoPreview] = useState(null);
@@ -229,19 +231,66 @@ const NewReportPage = () => {
         }));
     };
 
-    const handleBoreholeLogChange = (index, field, value) => {
+    const handleBoreholeLogChange = (levelIndex, logIndex, field, value) => {
         const newLogs = [...formData.boreholeLogs];
-        newLogs[index][field] = value;
+
+        // Handle nested fields like 'shearParameters.cValue'
+        if (field.includes('.')) {
+            const [parent, child] = field.split('.');
+            newLogs[levelIndex][logIndex][parent] = {
+                ...newLogs[levelIndex][logIndex][parent],
+                [child]: value
+            };
+        } else {
+            newLogs[levelIndex][logIndex][field] = value;
+        }
+
         setFormData(prev => ({
             ...prev,
             boreholeLogs: newLogs
         }));
     };
 
-    const addBoreholeLog = () => {
+    const addBoreholeLog = (levelIndex) => {
+        const newLogs = [...formData.boreholeLogs];
+        newLogs[levelIndex].push({
+            depth: '',
+            natureOfSampling: '',
+            soilType: '',
+            waterTable: false,
+            spt1: '',
+            spt2: '',
+            spt3: '',
+            shearParameters: {
+                cValue: '',
+                phiValue: ''
+            },
+            coreLength: '',
+            coreRecovery: '',
+            rqd: '',
+            sbc: ''
+        });
         setFormData(prev => ({
             ...prev,
-            boreholeLogs: [...prev.boreholeLogs, {
+            boreholeLogs: newLogs
+        }));
+    };
+
+    const removeBoreholeLog = (levelIndex, logIndex) => {
+        if (formData.boreholeLogs[levelIndex].length > 1) {
+            const newLogs = [...formData.boreholeLogs];
+            newLogs[levelIndex] = newLogs[levelIndex].filter((_, i) => i !== logIndex);
+            setFormData(prev => ({
+                ...prev,
+                boreholeLogs: newLogs
+            }));
+        }
+    };
+
+    const addLevel = () => {
+        setFormData(prev => ({
+            ...prev,
+            boreholeLogs: [...prev.boreholeLogs, [{
                 depth: '',
                 natureOfSampling: '',
                 soilType: '',
@@ -249,19 +298,21 @@ const NewReportPage = () => {
                 spt1: '',
                 spt2: '',
                 spt3: '',
-                shearParameterCValue: '',
-                shearParameterPhiValue: '',
+                shearParameters: {
+                    cValue: '',
+                    phiValue: ''
+                },
                 coreLength: '',
                 coreRecovery: '',
                 rqd: '',
                 sbc: ''
-            }]
+            }]]
         }));
     };
 
-    const removeBoreholeLog = (index) => {
+    const removeLevel = (levelIndex) => {
         if (formData.boreholeLogs.length > 1) {
-            const newLogs = formData.boreholeLogs.filter((_, i) => i !== index);
+            const newLogs = formData.boreholeLogs.filter((_, i) => i !== levelIndex);
             setFormData(prev => ({
                 ...prev,
                 boreholeLogs: newLogs
@@ -681,16 +732,28 @@ const NewReportPage = () => {
                                         <div className="flex items-center space-x-2">
                                             <Checkbox
                                                 id="rec-rock"
-                                                checked={formData.recommendationRock}
-                                                onCheckedChange={(checked) => setFormData(prev => ({ ...prev, recommendationRock: checked }))}
+                                                checked={formData.recommendationTypes.rock}
+                                                onCheckedChange={(checked) => setFormData(prev => ({
+                                                    ...prev,
+                                                    recommendationTypes: {
+                                                        ...prev.recommendationTypes,
+                                                        rock: checked
+                                                    }
+                                                }))}
                                             />
                                             <Label htmlFor="rec-rock" className="cursor-pointer">Rock</Label>
                                         </div>
                                         <div className="flex items-center space-x-2">
                                             <Checkbox
                                                 id="rec-soil"
-                                                checked={formData.recommendationSoil}
-                                                onCheckedChange={(checked) => setFormData(prev => ({ ...prev, recommendationSoil: checked }))}
+                                                checked={formData.recommendationTypes.soil}
+                                                onCheckedChange={(checked) => setFormData(prev => ({
+                                                    ...prev,
+                                                    recommendationTypes: {
+                                                        ...prev.recommendationTypes,
+                                                        soil: checked
+                                                    }
+                                                }))}
                                             />
                                             <Label htmlFor="rec-soil" className="cursor-pointer">Soil</Label>
                                         </div>
@@ -736,96 +799,124 @@ const NewReportPage = () => {
                                 {/* Section 8: Borehole Logs */}
                                 <div>
                                     <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">Borehole Logs</h3>
-                                    <div className="overflow-x-auto border border-gray-200 rounded-lg">
-                                        <table className="w-full text-sm text-left">
-                                            <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b">
-                                                <tr>
-                                                    <th className="px-3 py-3 min-w-[100px]">Depth (m)</th>
-                                                    <th className="px-3 py-3 min-w-[150px]">Nature of Sampling</th>
-                                                    <th className="px-3 py-3 min-w-[150px]">Soil Type</th>
-                                                    <th className="px-3 py-3 min-w-[100px]">Water Table</th>
-                                                    <th className="px-3 py-3 min-w-[150px]">SPT Depth at Intervals</th>
-                                                    <th className="px-3 py-3 min-w-[120px]">Shear Params</th>
-                                                    <th className="px-3 py-3 min-w-[100px]">Core Length</th>
-                                                    <th className="px-3 py-3 min-w-[120px]">Core Recovery %</th>
-                                                    <th className="px-3 py-3 min-w-[100px]">RQD %</th>
-                                                    <th className="px-3 py-3 min-w-[100px]">SBC Value</th>
-                                                    <th className="px-3 py-3 w-[50px]"></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {formData.boreholeLogs.map((log, index) => (
-                                                    <tr key={index} className="bg-white border-b hover:bg-gray-50/50">
-                                                        <td className="px-2 py-2"><Input value={log.depth} onChange={(e) => handleBoreholeLogChange(index, 'depth', e.target.value)} className="h-8" /></td>
-                                                        <td className="px-2 py-2">
-                                                            <Select
-                                                                value={log.natureOfSampling}
-                                                                onValueChange={(value) => handleBoreholeLogChange(index, 'natureOfSampling', value)}
-                                                            >
-                                                                <SelectTrigger className="h-8">
-                                                                    <SelectValue placeholder="Select" />
-                                                                </SelectTrigger>
-                                                                <SelectContent>
-                                                                    <SelectItem value="CR">CR</SelectItem>
-                                                                    <SelectItem value="DS">DS</SelectItem>
-                                                                    <SelectItem value="UDS">UDS</SelectItem>
-                                                                    <SelectItem value="DS/UDS">DS/UDS</SelectItem>
-                                                                    <SelectItem value="TP">TP</SelectItem>
-                                                                    <SelectItem value="SPT">SPT</SelectItem>
-                                                                </SelectContent>
-                                                            </Select>
-                                                        </td>
-                                                        <td className="px-2 py-2"><Input value={log.soilType} onChange={(e) => handleBoreholeLogChange(index, 'soilType', e.target.value)} className="h-8" /></td>
-                                                        <td className="px-2 py-2 text-center">
-                                                            <div className="flex justify-center">
-                                                                <Checkbox
-                                                                    checked={log.waterTable}
-                                                                    onCheckedChange={(checked) => handleBoreholeLogChange(index, 'waterTable', checked)}
-                                                                />
-                                                            </div>
-                                                        </td>
-                                                        <td className="px-2 py-2">
-                                                            <Input value={log.spt1} onChange={(e) => handleBoreholeLogChange(index, 'spt1', e.target.value)} className="h-8 mb-1" placeholder="SPT at 15cm" />
-                                                            <Input value={log.spt2} onChange={(e) => handleBoreholeLogChange(index, 'spt2', e.target.value)} className="h-8 mb-1" placeholder="SPT at 30cm" />
-                                                            <Input value={log.spt3} onChange={(e) => handleBoreholeLogChange(index, 'spt3', e.target.value)} className="h-8" placeholder="SPT at 45cm" />
-                                                        </td>
-
-                                                        <td className="px-2 py-2">
-                                                            <Input value={log.shearParameterCValue} onChange={(e) => handleBoreholeLogChange(index, 'shearParameterCValue', e.target.value)} className="h-8" placeholder="C Value" />
-                                                            <Input value={log.shearParameterPhiValue} onChange={(e) => handleBoreholeLogChange(index, 'shearParameterPhiValue', e.target.value)} className="h-8" placeholder="Phi Value" />
-                                                        </td>
-
-                                                        <td className="px-2 py-2"><Input value={log.coreLength} onChange={(e) => handleBoreholeLogChange(index, 'coreLength', e.target.value)} className="h-8" /></td>
-                                                        <td className="px-2 py-2"><Input value={log.coreRecovery} onChange={(e) => handleBoreholeLogChange(index, 'coreRecovery', e.target.value)} className="h-8" /></td>
-                                                        <td className="px-2 py-2"><Input value={log.rqd} onChange={(e) => handleBoreholeLogChange(index, 'rqd', e.target.value)} className="h-8" /></td>
-                                                        <td className="px-2 py-2"><Input value={log.sbc} onChange={(e) => handleBoreholeLogChange(index, 'sbc', e.target.value)} className="h-8" /></td>
-                                                        <td className="px-2 py-2 text-center">
-                                                            {formData.boreholeLogs.length > 1 && (
-                                                                <Button
-                                                                    type="button"
-                                                                    variant="ghost"
-                                                                    size="icon"
-                                                                    onClick={() => removeBoreholeLog(index)}
-                                                                    className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50"
-                                                                >
-                                                                    <Trash2 className="w-4 h-4" />
-                                                                </Button>
-                                                            )}
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
+                                    <div className="space-y-8">
+                                        {formData.boreholeLogs.map((levelLogs, levelIndex) => (
+                                            <div key={levelIndex} className="bg-gray-50/50 p-4 rounded-lg border border-gray-200">
+                                                <div className="flex justify-between items-center mb-4">
+                                                    <h4 className="text-md font-semibold text-gray-700">Borehole Log - Level {levelIndex + 1}</h4>
+                                                    {formData.boreholeLogs.length > 1 && (
+                                                        <Button
+                                                            type="button"
+                                                            variant="destructive"
+                                                            size="sm"
+                                                            onClick={() => removeLevel(levelIndex)}
+                                                            className="bg-red-50 text-red-600 hover:bg-red-100 border border-red-200"
+                                                        >
+                                                            <Trash2 className="w-4 h-4 mr-2" /> Remove Level
+                                                        </Button>
+                                                    )}
+                                                </div>
+                                                <div className="overflow-x-auto border border-gray-200 rounded-lg bg-white mb-4">
+                                                    <table className="w-full text-sm text-left">
+                                                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b">
+                                                            <tr>
+                                                                <th className="px-3 py-3 min-w-[100px]">Depth (m)</th>
+                                                                <th className="px-3 py-3 min-w-[150px]">Nature of Sampling</th>
+                                                                <th className="px-3 py-3 min-w-[150px]">Soil Type</th>
+                                                                <th className="px-3 py-3 min-w-[100px]">Water Table</th>
+                                                                <th className="px-3 py-3 min-w-[150px]">SPT Depth at Intervals</th>
+                                                                <th className="px-3 py-3 min-w-[120px]">Shear Params</th>
+                                                                <th className="px-3 py-3 min-w-[100px]">Core Length</th>
+                                                                <th className="px-3 py-3 min-w-[120px]">Core Recovery %</th>
+                                                                <th className="px-3 py-3 min-w-[100px]">RQD %</th>
+                                                                <th className="px-3 py-3 min-w-[100px]">SBC Value</th>
+                                                                <th className="px-3 py-3 w-[50px]"></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {levelLogs.map((log, logIndex) => (
+                                                                <tr key={logIndex} className="bg-white border-b hover:bg-gray-50/50">
+                                                                    <td className="px-2 py-2"><Input value={log.depth} onChange={(e) => handleBoreholeLogChange(levelIndex, logIndex, 'depth', e.target.value)} className="h-8" /></td>
+                                                                    <td className="px-2 py-2">
+                                                                        <Select
+                                                                            value={log.natureOfSampling}
+                                                                            onValueChange={(value) => handleBoreholeLogChange(levelIndex, logIndex, 'natureOfSampling', value)}
+                                                                        >
+                                                                            <SelectTrigger className="h-8">
+                                                                                <SelectValue placeholder="Select" />
+                                                                            </SelectTrigger>
+                                                                            <SelectContent>
+                                                                                <SelectItem value="CR">CR</SelectItem>
+                                                                                <SelectItem value="DS">DS</SelectItem>
+                                                                                <SelectItem value="UDS">UDS</SelectItem>
+                                                                                <SelectItem value="DS/UDS">DS/UDS</SelectItem>
+                                                                                <SelectItem value="TP">TP</SelectItem>
+                                                                                <SelectItem value="SPT">SPT</SelectItem>
+                                                                            </SelectContent>
+                                                                        </Select>
+                                                                    </td>
+                                                                    <td className="px-2 py-2"><Input value={log.soilType} onChange={(e) => handleBoreholeLogChange(levelIndex, logIndex, 'soilType', e.target.value)} className="h-8" /></td>
+                                                                    <td className="px-2 py-2 text-center">
+                                                                        <div className="flex justify-center">
+                                                                            <Checkbox
+                                                                                checked={log.waterTable}
+                                                                                onCheckedChange={(checked) => handleBoreholeLogChange(levelIndex, logIndex, 'waterTable', checked)}
+                                                                            />
+                                                                        </div>
+                                                                    </td>
+                                                                    <td className="px-2 py-2">
+                                                                        <Input value={log.spt1} onChange={(e) => handleBoreholeLogChange(levelIndex, logIndex, 'spt1', e.target.value)} className="h-8 mb-1" placeholder="SPT at 15cm" />
+                                                                        <Input value={log.spt2} onChange={(e) => handleBoreholeLogChange(levelIndex, logIndex, 'spt2', e.target.value)} className="h-8 mb-1" placeholder="SPT at 30cm" />
+                                                                        <Input value={log.spt3} onChange={(e) => handleBoreholeLogChange(levelIndex, logIndex, 'spt3', e.target.value)} className="h-8" placeholder="SPT at 45cm" />
+                                                                    </td>
+                                                                    <td className="px-2 py-2">
+                                                                        <Input value={log.shearParameters?.cValue} onChange={(e) => handleBoreholeLogChange(levelIndex, logIndex, 'shearParameters.cValue', e.target.value)} className="h-8 mb-1" placeholder="C Value" />
+                                                                        <Input value={log.shearParameters?.phiValue} onChange={(e) => handleBoreholeLogChange(levelIndex, logIndex, 'shearParameters.phiValue', e.target.value)} className="h-8" placeholder="Phi Value" />
+                                                                    </td>
+                                                                    <td className="px-2 py-2"><Input value={log.coreLength} onChange={(e) => handleBoreholeLogChange(levelIndex, logIndex, 'coreLength', e.target.value)} className="h-8" /></td>
+                                                                    <td className="px-2 py-2"><Input value={log.coreRecovery} onChange={(e) => handleBoreholeLogChange(levelIndex, logIndex, 'coreRecovery', e.target.value)} className="h-8" /></td>
+                                                                    <td className="px-2 py-2"><Input value={log.rqd} onChange={(e) => handleBoreholeLogChange(levelIndex, logIndex, 'rqd', e.target.value)} className="h-8" /></td>
+                                                                    <td className="px-2 py-2"><Input value={log.sbc} onChange={(e) => handleBoreholeLogChange(levelIndex, logIndex, 'sbc', e.target.value)} className="h-8" /></td>
+                                                                    <td className="px-2 py-2 text-center">
+                                                                        {levelLogs.length > 1 && (
+                                                                            <Button
+                                                                                type="button"
+                                                                                variant="ghost"
+                                                                                size="icon"
+                                                                                onClick={() => removeBoreholeLog(levelIndex, logIndex)}
+                                                                                className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50"
+                                                                            >
+                                                                                <Trash2 className="w-4 h-4" />
+                                                                            </Button>
+                                                                        )}
+                                                                    </td>
+                                                                </tr>
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <Button
+                                                    type="button"
+                                                    variant="outline"
+                                                    size="sm"
+                                                    onClick={() => addBoreholeLog(levelIndex)}
+                                                    className="text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
+                                                >
+                                                    <Plus className="w-4 h-4 mr-2" /> Add Log to Level {levelIndex + 1}
+                                                </Button>
+                                            </div>
+                                        ))}
+                                        <div className="flex justify-center pt-4 border-t border-gray-100">
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                onClick={addLevel}
+                                                className="w-full md:w-auto text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-green-50"
+                                            >
+                                                <Plus className="w-4 h-4 mr-2" /> Add Borehole Log Level
+                                            </Button>
+                                        </div>
                                     </div>
-                                    <Button
-                                        type="button"
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={addBoreholeLog}
-                                        className="mt-2 text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-green-50"
-                                    >
-                                        <Plus className="w-4 h-4 mr-2" /> Add Borehole Log
-                                    </Button>
                                 </div>
 
                                 <div className="pt-6 flex justify-end">
