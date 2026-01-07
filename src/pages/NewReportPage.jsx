@@ -86,6 +86,21 @@ const NewReportPage = () => {
         recommendationRock: false,
         recommendationSoil: true,
         sitePhotos: [],
+        boreholeLogs: [{
+            depth: '',
+            natureOfSampling: '',
+            soilType: '',
+            waterTable: false,
+            spt1: '',
+            spt2: '',
+            spt3: '',
+            shearParameterCValue: '',
+            shearParameterPhiValue: '',
+            coreLength: '',
+            coreRecovery: '',
+            rqd: '',
+            sbc: ''
+        }],
         reportCreatedOn: new Date().toISOString().split('T')[0]
     });
     const [sitePhotoPreview, setSitePhotoPreview] = useState(null);
@@ -212,6 +227,46 @@ const NewReportPage = () => {
             ...prev,
             sitePhotos: prev.sitePhotos.filter(photo => photo.id !== id)
         }));
+    };
+
+    const handleBoreholeLogChange = (index, field, value) => {
+        const newLogs = [...formData.boreholeLogs];
+        newLogs[index][field] = value;
+        setFormData(prev => ({
+            ...prev,
+            boreholeLogs: newLogs
+        }));
+    };
+
+    const addBoreholeLog = () => {
+        setFormData(prev => ({
+            ...prev,
+            boreholeLogs: [...prev.boreholeLogs, {
+                depth: '',
+                natureOfSampling: '',
+                soilType: '',
+                waterTable: false,
+                spt1: '',
+                spt2: '',
+                spt3: '',
+                shearParameterCValue: '',
+                shearParameterPhiValue: '',
+                coreLength: '',
+                coreRecovery: '',
+                rqd: '',
+                sbc: ''
+            }]
+        }));
+    };
+
+    const removeBoreholeLog = (index) => {
+        if (formData.boreholeLogs.length > 1) {
+            const newLogs = formData.boreholeLogs.filter((_, i) => i !== index);
+            setFormData(prev => ({
+                ...prev,
+                boreholeLogs: newLogs
+            }));
+        }
     };
 
     const handleSubmit = (e) => {
@@ -676,6 +731,101 @@ const NewReportPage = () => {
                                             onChange={handleSitePhotosAdd}
                                         />
                                     </div>
+                                </div>
+
+                                {/* Section 8: Borehole Logs */}
+                                <div>
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">Borehole Logs</h3>
+                                    <div className="overflow-x-auto border border-gray-200 rounded-lg">
+                                        <table className="w-full text-sm text-left">
+                                            <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b">
+                                                <tr>
+                                                    <th className="px-3 py-3 min-w-[100px]">Depth (m)</th>
+                                                    <th className="px-3 py-3 min-w-[150px]">Nature of Sampling</th>
+                                                    <th className="px-3 py-3 min-w-[150px]">Soil Type</th>
+                                                    <th className="px-3 py-3 min-w-[100px]">Water Table</th>
+                                                    <th className="px-3 py-3 min-w-[150px]">SPT Depth at Intervals</th>
+                                                    <th className="px-3 py-3 min-w-[120px]">Shear Params</th>
+                                                    <th className="px-3 py-3 min-w-[100px]">Core Length</th>
+                                                    <th className="px-3 py-3 min-w-[120px]">Core Recovery %</th>
+                                                    <th className="px-3 py-3 min-w-[100px]">RQD %</th>
+                                                    <th className="px-3 py-3 min-w-[100px]">SBC Value</th>
+                                                    <th className="px-3 py-3 w-[50px]"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {formData.boreholeLogs.map((log, index) => (
+                                                    <tr key={index} className="bg-white border-b hover:bg-gray-50/50">
+                                                        <td className="px-2 py-2"><Input value={log.depth} onChange={(e) => handleBoreholeLogChange(index, 'depth', e.target.value)} className="h-8" /></td>
+                                                        <td className="px-2 py-2">
+                                                            <Select
+                                                                value={log.natureOfSampling}
+                                                                onValueChange={(value) => handleBoreholeLogChange(index, 'natureOfSampling', value)}
+                                                            >
+                                                                <SelectTrigger className="h-8">
+                                                                    <SelectValue placeholder="Select" />
+                                                                </SelectTrigger>
+                                                                <SelectContent>
+                                                                    <SelectItem value="CR">CR</SelectItem>
+                                                                    <SelectItem value="DS">DS</SelectItem>
+                                                                    <SelectItem value="UDS">UDS</SelectItem>
+                                                                    <SelectItem value="DS/UDS">DS/UDS</SelectItem>
+                                                                    <SelectItem value="TP">TP</SelectItem>
+                                                                    <SelectItem value="SPT">SPT</SelectItem>
+                                                                </SelectContent>
+                                                            </Select>
+                                                        </td>
+                                                        <td className="px-2 py-2"><Input value={log.soilType} onChange={(e) => handleBoreholeLogChange(index, 'soilType', e.target.value)} className="h-8" /></td>
+                                                        <td className="px-2 py-2 text-center">
+                                                            <div className="flex justify-center">
+                                                                <Checkbox
+                                                                    checked={log.waterTable}
+                                                                    onCheckedChange={(checked) => handleBoreholeLogChange(index, 'waterTable', checked)}
+                                                                />
+                                                            </div>
+                                                        </td>
+                                                        <td className="px-2 py-2">
+                                                            <Input value={log.spt1} onChange={(e) => handleBoreholeLogChange(index, 'spt1', e.target.value)} className="h-8 mb-1" placeholder="SPT at 15cm" />
+                                                            <Input value={log.spt2} onChange={(e) => handleBoreholeLogChange(index, 'spt2', e.target.value)} className="h-8 mb-1" placeholder="SPT at 30cm" />
+                                                            <Input value={log.spt3} onChange={(e) => handleBoreholeLogChange(index, 'spt3', e.target.value)} className="h-8" placeholder="SPT at 45cm" />
+                                                        </td>
+
+                                                        <td className="px-2 py-2">
+                                                            <Input value={log.shearParameterCValue} onChange={(e) => handleBoreholeLogChange(index, 'shearParameterCValue', e.target.value)} className="h-8" placeholder="C Value" />
+                                                            <Input value={log.shearParameterPhiValue} onChange={(e) => handleBoreholeLogChange(index, 'shearParameterPhiValue', e.target.value)} className="h-8" placeholder="Phi Value" />
+                                                        </td>
+
+                                                        <td className="px-2 py-2"><Input value={log.coreLength} onChange={(e) => handleBoreholeLogChange(index, 'coreLength', e.target.value)} className="h-8" /></td>
+                                                        <td className="px-2 py-2"><Input value={log.coreRecovery} onChange={(e) => handleBoreholeLogChange(index, 'coreRecovery', e.target.value)} className="h-8" /></td>
+                                                        <td className="px-2 py-2"><Input value={log.rqd} onChange={(e) => handleBoreholeLogChange(index, 'rqd', e.target.value)} className="h-8" /></td>
+                                                        <td className="px-2 py-2"><Input value={log.sbc} onChange={(e) => handleBoreholeLogChange(index, 'sbc', e.target.value)} className="h-8" /></td>
+                                                        <td className="px-2 py-2 text-center">
+                                                            {formData.boreholeLogs.length > 1 && (
+                                                                <Button
+                                                                    type="button"
+                                                                    variant="ghost"
+                                                                    size="icon"
+                                                                    onClick={() => removeBoreholeLog(index)}
+                                                                    className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50"
+                                                                >
+                                                                    <Trash2 className="w-4 h-4" />
+                                                                </Button>
+                                                            )}
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={addBoreholeLog}
+                                        className="mt-2 text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-green-50"
+                                    >
+                                        <Plus className="w-4 h-4 mr-2" /> Add Borehole Log
+                                    </Button>
                                 </div>
 
                                 <div className="pt-6 flex justify-end">
