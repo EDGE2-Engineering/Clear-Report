@@ -3,10 +3,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Navigation, Phone, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useSiteContent } from '@/lib/useSiteContent';
+import { initialSiteContent } from '@/data/siteContent';
 
 const MapSection = () => {
-  const { content } = useSiteContent();
+  const content = initialSiteContent;
 
   const handleDirections = () => {
     if (content.global?.googleMapsUrl) {

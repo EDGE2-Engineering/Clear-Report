@@ -5,15 +5,13 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import HeroSection from '@/components/HeroSection';
 import ProductCard from '@/components/ProductCard';
-import DynamicSection from '@/components/DynamicSection';
+
 import { useProducts } from '@/contexts/ProductsContext';
-import { useSiteContent } from '@/lib/useSiteContent';
+
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 
 const HomePage = () => {
-  const { getPageSections } = useSiteContent();
-  const pageSections = getPageSections('home');
   const { products } = useProducts();  // Hook for products
   const [activeCategory, setActiveCategory] = useState('All');
 

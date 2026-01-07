@@ -6,22 +6,20 @@ import Footer from '@/components/Footer';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Settings, LayoutDashboard, Home, FileText, LogOut, Save, Loader2, UserCog } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import AdminContentManager from '@/components/admin/AdminContentManager';
+
 import AdminProductsManager from '@/components/admin/AdminProductsManager';
 
 import AdminSettings from '@/components/admin/AdminSettings';
 import AdminLogin from '@/components/admin/AdminLogin';
 import { useToast } from '@/components/ui/use-toast';
-import { useSiteSettings } from '@/contexts/SiteSettingsContext';
+
 import { supabase } from '@/lib/customSupabaseClient';
 
 const AdminPage = () => {
-  const [mainTab, setMainTab] = useState('content');
+  const [mainTab, setMainTab] = useState('products');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [checkingAuth, setCheckingAuth] = useState(true);
 
-  // Use context for saving content
-  const { saveAllSettings, isSaving, hasUnsavedChanges } = useSiteSettings();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -52,9 +50,7 @@ const AdminPage = () => {
     toast({ title: "Logged Out", description: "See you next time." });
   };
 
-  const handleGlobalSave = async () => {
-    await saveAllSettings();
-  };
+
 
   if (checkingAuth) {
     return (
@@ -95,24 +91,7 @@ const AdminPage = () => {
               Logged in as Admin
             </div>
 
-            {/* Save Button - Only shown for 'content' tab where context saving is needed */}
-            {mainTab === 'content' && (
-              <Button
-                onClick={handleGlobalSave}
-                disabled={isSaving}
-                className={`min-w-[150px] shadow-sm transition-all active:scale-95 ${hasUnsavedChanges ? 'bg-amber-600 hover:bg-amber-700' : 'bg-green-600 hover:bg-green-700'} text-white`}
-              >
-                {isSaving ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Saving...
-                  </>
-                ) : (
-                  <>
-                    <Save className="w-4 h-4 mr-2" /> {hasUnsavedChanges ? 'Save Changes' : 'All Saved'}
-                  </>
-                )}
-              </Button>
-            )}
+
 
             <Button variant="outline" size="sm" onClick={handleLogout} className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-100">
               <LogOut className="w-4 h-4 mr-2" /> Logout
@@ -130,7 +109,7 @@ const AdminPage = () => {
               onChange={(e) => setMainTab(e.target.value)}
               className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 font-medium focus:ring-2 focus:ring-primary focus:border-primary transition-all shadow-sm outline-none appearance-none"
             >
-              <option value="content">Site Settings</option>
+
               <option value="products">Reports</option>
 
               <option value="settings">Security</option>
@@ -145,12 +124,7 @@ const AdminPage = () => {
           {/* Desktop View: Tabs List */}
           <div className="hidden md:flex justify-center">
             <TabsList className="bg-white p-1 border border-gray-200 rounded-xl shadow-sm h-auto inline-flex">
-              <TabsTrigger
-                value="content"
-                className="px-6 py-3 rounded-xl data-[state=active]:bg-primary data-[state=active]:text-white transition-all flex items-center gap-2"
-              >
-                <LayoutDashboard className="w-4 h-4" /> Site Settings
-              </TabsTrigger>
+
               <TabsTrigger
                 value="products"
                 className="px-6 py-3 rounded-xl data-[state=active]:bg-primary data-[state=active]:text-white transition-all flex items-center gap-2"
@@ -167,9 +141,7 @@ const AdminPage = () => {
             </TabsList>
           </div>
 
-          <TabsContent value="content" className="focus-visible:outline-none animate-in fade-in slide-in-from-bottom-2 duration-500">
-            <AdminContentManager />
-          </TabsContent>
+
 
           <TabsContent value="products" className="focus-visible:outline-none animate-in fade-in slide-in-from-bottom-2 duration-500">
             <AdminProductsManager />

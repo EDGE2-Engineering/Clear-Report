@@ -3,14 +3,14 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Home, Building2, Info, Phone, MapPin, BookOpen, Lock, ClipboardCheck } from 'lucide-react';
-import { useSiteContent } from '@/lib/useSiteContent';
+import { initialSiteContent } from '@/data/siteContent';
 
 
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const { content } = useSiteContent();
+  const content = initialSiteContent;
 
 
   const navItems = [

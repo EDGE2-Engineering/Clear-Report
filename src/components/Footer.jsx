@@ -2,11 +2,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Building2, MapPin, Phone, Mail, Navigation, ClipboardCheck } from 'lucide-react';
-import { useSiteContent } from '@/lib/useSiteContent';
+import { initialSiteContent } from '@/data/siteContent';
 import { Button } from '@/components/ui/button';
 
 const Footer = () => {
-  const { content } = useSiteContent();
+  const content = initialSiteContent;
 
   const handleDirections = () => {
     if (content.global?.googleMapsUrl) {

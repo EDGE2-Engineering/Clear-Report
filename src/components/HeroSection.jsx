@@ -2,12 +2,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { MapPin } from 'lucide-react';
+import { initialSiteContent } from '@/data/siteContent';
 import { usePageImages } from '@/lib/usePageImages';
-import { useSiteContent } from '@/lib/useSiteContent';
 
 const HeroSection = () => {
   const { images } = usePageImages();
-  const { content } = useSiteContent();
+  const content = initialSiteContent;
   const bgImage = images.home?.heroBackground;
 
   return (

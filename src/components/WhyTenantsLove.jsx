@@ -2,10 +2,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Shield, Zap, Users, Home, Car, CheckCircle2 } from 'lucide-react'; // Removed Phone, Mail
-import { useSiteContent } from '@/lib/useSiteContent';
+import { initialSiteContent } from '@/data/siteContent';
 
 const WhyTenantsLove = () => {
-  const { content } = useSiteContent();
+  const content = initialSiteContent;
 
   const features = [
     {
@@ -55,7 +55,7 @@ const WhyTenantsLove = () => {
             {content.home?.whyChooseSubtitle}
           </p>
         </motion.div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {features.map((feature, index) => (
             <motion.div
