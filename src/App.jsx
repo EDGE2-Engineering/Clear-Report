@@ -1,11 +1,12 @@
 import React from 'react';
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import ProtectedRoute from '@/components/ProtectedRoute';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { Toaster } from '@/components/ui/toaster';
 import { ProductsProvider } from '@/contexts/ProductsContext';
 
 
-import HomePage from '@/pages/HomePage';
+
 import ProductDetailPage from '@/pages/ProductDetailPage';
 
 
@@ -26,11 +27,25 @@ function App() {
           </Helmet>
           <div className="min-h-screen bg-[#F5F1ED]">
             <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/product/:id" element={<ProductDetailPage />} />
-
-              <Route path="/admin" element={<AdminPage />} />
-              <Route path="/new-report" element={<NewReportPage />} />
+              <Route path="/" element={<AdminPage />} />
+              <Route
+                path="/new-report"
+                element={
+                  <ProtectedRoute>
+                    <NewReportPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/product/:id"
+                element={
+                  <ProtectedRoute>
+                    <ProductDetailPage />
+                  </ProtectedRoute>
+                }
+              />
+              {/* Redirect old admin route to root */}
+              <Route path="/admin" element={<Navigate to="/" replace />} />
             </Routes>
             <FloatingButtons />
             <Toaster />

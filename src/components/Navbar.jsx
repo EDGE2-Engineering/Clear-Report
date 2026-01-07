@@ -14,11 +14,7 @@ const Navbar = () => {
 
 
   const navItems = [
-    { path: '/', label: 'Home', icon: Home },
-
-
-
-    { path: '/admin', label: 'Admin', icon: Lock },
+    { path: '/', label: 'Admin', icon: Lock },
     { path: '/new-report', label: 'New Report', icon: ClipboardCheck }
   ];
 
