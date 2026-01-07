@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Home, Building2, Info, Phone, MapPin, BookOpen, Lock, ClipboardCheck } from 'lucide-react';
+import { Menu, X, Lock, ClipboardCheck } from 'lucide-react';
 import { initialSiteContent } from '@/data/siteContent';
 
 

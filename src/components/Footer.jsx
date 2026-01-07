@@ -1,23 +1,16 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Building2, MapPin, Phone, Mail, Navigation, ClipboardCheck } from 'lucide-react';
+import { MapPin, Phone, Mail, ClipboardCheck } from 'lucide-react';
 import { initialSiteContent } from '@/data/siteContent';
-import { Button } from '@/components/ui/button';
 
 const Footer = () => {
   const content = initialSiteContent;
 
-  const handleDirections = () => {
-    if (content.global?.googleMapsUrl) {
-      window.open(content.global.googleMapsUrl, '_blank');
-    }
-  };
-
   return (
     <footer className="bg-gray-900 text-white py-12 border-t border-gray-800">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <div>
             <div className="flex items-center space-x-2 mb-4">
               <ClipboardCheck className="w-8 h-8" />
@@ -26,18 +19,6 @@ const Footer = () => {
             <p className="text-gray-400 mb-4 text-sm leading-relaxed">
               {content.global?.footerAbout}
             </p>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-bold mb-4 text-primary">Quick Links</h3>
-            <nav className="space-y-2 text-sm">
-              <Link to="/" className="block text-gray-400 hover:text-white transition-colors">
-                Home
-              </Link>
-
-
-
-            </nav>
           </div>
 
           <div>
@@ -54,17 +35,6 @@ const Footer = () => {
               <div className="flex items-center">
                 <Mail className="w-5 h-5 mr-3 text-primary flex-shrink-0" />
                 <span className="text-gray-400">{content.global?.contactEmail}</span>
-              </div>
-              <div className="pt-2">
-                <Button
-                  onClick={handleDirections}
-                  variant="outline"
-                  size="sm"
-                  className="text-white border-white/20 hover:bg-white/10 hover:text-white"
-                >
-                  <Navigation className="w-4 h-4 mr-2" />
-                  Get Directions
-                </Button>
               </div>
             </div>
           </div>

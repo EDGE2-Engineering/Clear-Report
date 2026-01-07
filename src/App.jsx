@@ -13,7 +13,7 @@ import ProductDetailPage from '@/pages/ProductDetailPage';
 import AdminPage from '@/pages/AdminPage';
 import NewReportPage from '@/pages/NewReportPage';
 
-import FloatingButtons from '@/components/FloatingButtons';
+
 
 function App() {
   return (
@@ -47,7 +47,6 @@ function App() {
               {/* Redirect old admin route to root */}
               <Route path="/admin" element={<Navigate to="/" replace />} />
             </Routes>
-            <FloatingButtons />
             <Toaster />
           </div>
         </Router>
