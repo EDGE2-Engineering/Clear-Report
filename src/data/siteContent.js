@@ -1,21 +1,21 @@
 
 export const initialSiteContent = {
   global: {
-    siteName: "EDGE2 MTR Reports",
+    siteName: "EDGE2 - MTR",
     contactPhone: "+919999999999",
     contactEmail: "edge2mtr@gmail.com",
-    address: "EDGE2 MTR, Karnataka",
+    address: "EDGE2 - MTR, Karnataka",
     googleMapsUrl: "https://www.google.com/maps/dir/",
     footerAbout: "Your trusted source for pure, certified organic products. From A2 Desi Cow Ghee to cold-pressed oils, we bring nature's best to your home."
   },
   home: {
-    heroTitle: "EDGE2 MTR",
+    heroTitle: "EDGE2 - MTR",
     heroSubtitle: "Wholesome Automated Reports, Straight From The System!",
     whyChooseTitle: "Why Choose EDGE2 MTR?",
     whyChooseSubtitle: "We don't just generate reports; we provide wholesome automated insights and ensure that you get the best quality data."
   },
   about: {
-    title: "About EDGE2 MTR",
+    title: "About EDGE2 - MTR",
     subtitle: "Bringing you the purest organic essentials, directly from nature to your table.",
     features: [
       "100% Organic Certified",

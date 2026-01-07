@@ -2,13 +2,13 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { ArrowLeft, ShoppingBag, Info, CheckCircle2, Ban } from 'lucide-react';
+import { ArrowLeft, Info, CheckCircle2, Ban } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ImageGallery from '@/components/ImageGallery';
 import { Button } from '@/components/ui/button';
 import { useProducts } from '@/contexts/ProductsContext';
-import { useCart } from '@/contexts/CartContext';
+
 import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
 
@@ -16,13 +16,11 @@ const ProductDetailPage = () => {
     const { id } = useParams();
     const { toast } = useToast();
     const { products } = useProducts();
-    const { addToCart } = useCart();
+
 
     const product = products.find(p => p.id === id);
 
-    const handleAddToCart = () => {
-        addToCart(product);
-    };
+
 
     if (!products || products.length === 0) {
         return (
@@ -118,15 +116,6 @@ const ProductDetailPage = () => {
                         </div>
 
                         <div className="flex gap-4">
-                            <Button
-                                size="lg"
-                                onClick={handleAddToCart}
-                                disabled={!isInStock}
-                                className="flex-1 bg-primary hover:bg-primary-dark text-white"
-                            >
-                                <ShoppingBag className="w-5 h-5 mr-2" />
-                                {isInStock ? 'Add to Cart' : 'Out of Stock'}
-                            </Button>
                             <Button size="lg" variant="outline" className="flex-1">
                                 Contact for Bulk Order
                             </Button>

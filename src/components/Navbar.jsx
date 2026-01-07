@@ -2,17 +2,16 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Home, Building2, Info, Phone, MapPin, BookOpen, Lock, ShoppingBag, ClipboardCheck } from 'lucide-react';
+import { Menu, X, Home, Building2, Info, Phone, MapPin, BookOpen, Lock, ClipboardCheck } from 'lucide-react';
 import { useSiteContent } from '@/lib/useSiteContent';
 
-import { useCart } from '@/contexts/CartContext';
+
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const { content } = useSiteContent();
-  const { getCartCount } = useCart();
-  const cartCount = getCartCount();
+
 
   const navItems = [
     { path: '/', label: 'Home', icon: Home },
@@ -55,25 +54,11 @@ const Navbar = () => {
               </Link>
             ))}
 
-            <Link to="/cart" className="relative p-2 text-gray-700 hover:text-primary transition-colors">
-              <ShoppingBag className="w-5 h-5" />
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                  {cartCount}
-                </span>
-              )}
-            </Link>
+
           </div>
 
           <div className="flex items-center md:hidden gap-4">
-            <Link to="/cart" className="relative text-gray-700">
-              <ShoppingBag className="w-6 h-6" />
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-2 bg-primary text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                  {cartCount}
-                </span>
-              )}
-            </Link>
+
             <button
               className="text-gray-700"
               onClick={() => setIsOpen(!isOpen)}
