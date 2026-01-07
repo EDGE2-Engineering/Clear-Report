@@ -148,6 +148,24 @@ const NewReportPage = () => {
                 }
             ]
         ],
+        sbcDetails: [
+            [
+                {
+                    depth: '',
+                    footingDimension: '',
+                    useForReport: false,
+                    sbcValue: ''
+                }
+            ]
+        ],
+        subSoilProfile: [
+            [
+                {
+                    depth: '',
+                    description: ''
+                }
+            ]
+        ],
         reportCreatedOn: new Date().toISOString().split('T')[0]
     });
     const [sitePhotoPreview, setSitePhotoPreview] = useState(null);
@@ -577,6 +595,114 @@ const NewReportPage = () => {
             setFormData(prev => ({
                 ...prev,
                 grainSizeAnalysis: newAnalysis
+            }));
+        }
+    };
+
+    const handleSBCDetailChange = (levelIndex, rowIndex, field, value) => {
+        const newDetails = [...formData.sbcDetails];
+        newDetails[levelIndex][rowIndex][field] = value;
+        setFormData(prev => ({
+            ...prev,
+            sbcDetails: newDetails
+        }));
+    };
+
+    const addSBCDetailRow = (levelIndex) => {
+        const newDetails = [...formData.sbcDetails];
+        newDetails[levelIndex].push({
+            depth: '',
+            footingDimension: '',
+            useForReport: false,
+            sbcValue: ''
+        });
+        setFormData(prev => ({
+            ...prev,
+            sbcDetails: newDetails
+        }));
+    };
+
+    const removeSBCDetailRow = (levelIndex, rowIndex) => {
+        if (formData.sbcDetails[levelIndex].length > 1) {
+            const newDetails = [...formData.sbcDetails];
+            newDetails[levelIndex] = newDetails[levelIndex].filter((_, i) => i !== rowIndex);
+            setFormData(prev => ({
+                ...prev,
+                sbcDetails: newDetails
+            }));
+        }
+    };
+
+    const addSBCLevel = () => {
+        setFormData(prev => ({
+            ...prev,
+            sbcDetails: [...prev.sbcDetails, [{
+                depth: '',
+                footingDimension: '',
+                useForReport: false,
+                sbcValue: ''
+            }]]
+        }));
+    };
+
+    const removeSBCLevel = (levelIndex) => {
+        if (formData.sbcDetails.length > 1) {
+            const newDetails = formData.sbcDetails.filter((_, i) => i !== levelIndex);
+            setFormData(prev => ({
+                ...prev,
+                sbcDetails: newDetails
+            }));
+        }
+    };
+
+    const handleSubSoilProfileChange = (levelIndex, rowIndex, field, value) => {
+        const newProfile = [...formData.subSoilProfile];
+        newProfile[levelIndex][rowIndex][field] = value;
+        setFormData(prev => ({
+            ...prev,
+            subSoilProfile: newProfile
+        }));
+    };
+
+    const addSubSoilProfileRow = (levelIndex) => {
+        const newProfile = [...formData.subSoilProfile];
+        newProfile[levelIndex].push({
+            depth: '',
+            description: ''
+        });
+        setFormData(prev => ({
+            ...prev,
+            subSoilProfile: newProfile
+        }));
+    };
+
+    const removeSubSoilProfileRow = (levelIndex, rowIndex) => {
+        if (formData.subSoilProfile[levelIndex].length > 1) {
+            const newProfile = [...formData.subSoilProfile];
+            newProfile[levelIndex] = newProfile[levelIndex].filter((_, i) => i !== rowIndex);
+            setFormData(prev => ({
+                ...prev,
+                subSoilProfile: newProfile
+            }));
+        }
+    };
+
+    const addSubSoilLevel = () => {
+        setFormData(prev => ({
+            ...prev,
+            subSoilProfile: [...prev.subSoilProfile, [{
+                depth: '',
+                description: ''
+            }]]
+        }));
+    };
+
+    const removeSubSoilLevel = (levelIndex) => {
+        if (formData.subSoilProfile.length > 1) {
+            const newProfile = formData.subSoilProfile.filter((_, i) => i !== levelIndex);
+            setFormData(prev => ({
+                ...prev,
+                subSoilProfile: newProfile
             }));
         }
     };
@@ -1172,7 +1298,7 @@ const NewReportPage = () => {
                                                 type="button"
                                                 variant="outline"
                                                 onClick={addLevel}
-                                                className="w-full md:w-auto text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-green-50"
+                                                className="w-full md:w-auto text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-gray-50"
                                             >
                                                 <Plus className="w-4 h-4 mr-2" /> Add Borehole Log Level
                                             </Button>
@@ -1266,7 +1392,7 @@ const NewReportPage = () => {
                                                 type="button"
                                                 variant="outline"
                                                 onClick={addLabTestLevel}
-                                                className="w-full md:w-auto text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-green-50"
+                                                className="w-full md:w-auto text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-gray-50"
                                             >
                                                 <Plus className="w-4 h-4 mr-2" /> Add Lab Test Level
                                             </Button>
@@ -1380,7 +1506,7 @@ const NewReportPage = () => {
                                                 type="button"
                                                 variant="outline"
                                                 onClick={addChemicalAnalysisLevel}
-                                                className="w-full md:w-auto text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-purple-50"
+                                                className="w-full md:w-auto text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-gray-50"
                                             >
                                                 <Plus className="w-4 h-4 mr-2" /> Add Chemical Analysis Level
                                             </Button>
@@ -1409,7 +1535,7 @@ const NewReportPage = () => {
                                                     )}
                                                 </div>
                                                 <div className="overflow-x-auto">
-                                                    <table className="w-full text-sm text-left border-collapse min-w-[1200px]">
+                                                    <table className="w-full text-sm text-left border-collapse min-w-[1200px] rounded-lg">
                                                         <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b">
                                                             <tr>
                                                                 <th className="px-3 py-3 w-[100px]">Depth (m)</th>
@@ -1475,9 +1601,185 @@ const NewReportPage = () => {
                                                 type="button"
                                                 variant="outline"
                                                 onClick={addGrainSizeAnalysisLevel}
-                                                className="w-full md:w-auto text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-purple-50"
+                                                className="w-full md:w-auto text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-gray-50"
                                             >
                                                 <Plus className="w-4 h-4 mr-2" /> Add Grain Size Analysis Level
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Section 12: SBC Details */}
+                                <div className="bg-blue-50 p-6 rounded-lg">
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">SBC Details</h3>
+                                    <div className="space-y-8">
+                                        {formData.sbcDetails.map((levelRows, levelIndex) => (
+                                            <div key={levelIndex} className="bg-gray-50 p-6 rounded-lg border border-gray-100">
+                                                <div className="flex justify-between items-center mb-4">
+                                                    <h4 className="text-md font-semibold text-gray-700">SBC Details - Level {levelIndex + 1}</h4>
+                                                    {formData.sbcDetails.length > 1 && (
+                                                        <Button
+                                                            type="button"
+                                                            variant="destructive"
+                                                            size="sm"
+                                                            onClick={() => removeSBCLevel(levelIndex)}
+                                                            className="bg-red-50 text-red-600 hover:bg-red-100 border border-red-200"
+                                                        >
+                                                            <Trash2 className="w-4 h-4 mr-2" /> Remove Level
+                                                        </Button>
+                                                    )}
+                                                </div>
+                                                <div className="bg-white p-4 rounded-lg border border-gray-200 overflow-x-auto">
+                                                    <table className="w-full text-sm text-left border-collapse min-w-[600px] rounded-lg">
+                                                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b">
+                                                            <tr>
+                                                                <th className="px-3 py-3 w-[150px]">Depth (m)</th>
+                                                                <th className="px-3 py-3 min-w-[200px]">Footing Dimension</th>
+                                                                <th className="px-3 py-3 w-[150px] text-center">Use for report?</th>
+                                                                <th className="px-3 py-3 min-w-[200px]">SBC Value</th>
+                                                                <th className="px-3 py-3 w-[50px]"></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {levelRows.map((item, rowIndex) => (
+                                                                <tr key={rowIndex} className="bg-white border-b hover:bg-gray-50/50">
+                                                                    <td className="px-2 py-2"><Input value={item.depth} onChange={(e) => handleSBCDetailChange(levelIndex, rowIndex, 'depth', e.target.value)} className="h-8" /></td>
+                                                                    <td className="px-2 py-2"><Input value={item.footingDimension} onChange={(e) => handleSBCDetailChange(levelIndex, rowIndex, 'footingDimension', e.target.value)} className="h-8" /></td>
+                                                                    <td className="px-2 py-2 text-center">
+                                                                        <div className="flex justify-center">
+                                                                            <Checkbox
+                                                                                checked={item.useForReport}
+                                                                                onCheckedChange={(checked) => handleSBCDetailChange(levelIndex, rowIndex, 'useForReport', checked)}
+                                                                            />
+                                                                        </div>
+                                                                    </td>
+                                                                    <td className="px-2 py-2"><Input value={item.sbcValue} onChange={(e) => handleSBCDetailChange(levelIndex, rowIndex, 'sbcValue', e.target.value)} className="h-8" /></td>
+                                                                    <td className="px-2 py-2 text-center">
+                                                                        {levelRows.length > 1 && (
+                                                                            <Button
+                                                                                type="button"
+                                                                                variant="ghost"
+                                                                                size="icon"
+                                                                                onClick={() => removeSBCDetailRow(levelIndex, rowIndex)}
+                                                                                className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50"
+                                                                            >
+                                                                                <Trash2 className="w-4 h-4" />
+                                                                            </Button>
+                                                                        )}
+                                                                    </td>
+                                                                </tr>
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                    <div className="mt-4">
+                                                        <Button
+                                                            type="button"
+                                                            variant="outline"
+                                                            size="sm"
+                                                            onClick={() => addSBCDetailRow(levelIndex)}
+                                                            className="text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
+                                                        >
+                                                            <Plus className="w-4 h-4 mr-2" /> Add SBC Detail
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+
+                                        <div className="flex justify-center pt-4 border-t border-gray-100">
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                onClick={addSBCLevel}
+                                                className="w-full md:w-auto text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-gray-50"
+                                            >
+                                                <Plus className="w-4 h-4 mr-2" /> Add SBC Level
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                {/* Section 13: Sub Soil Profile and Classifications */}
+                                <div>
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">Sub Soil Profile and Classifications</h3>
+                                    <div className="space-y-8">
+                                        {formData.subSoilProfile.map((levelRows, levelIndex) => (
+                                            <div key={levelIndex} className="bg-orange-50 p-6 rounded-lg">
+                                                <div className="flex justify-between items-center mb-4">
+                                                    <h4 className="text-md font-semibold text-gray-700">Sub Soil Profile Level {levelIndex + 1}</h4>
+                                                    {formData.subSoilProfile.length > 1 && (
+                                                        <Button
+                                                            type="button"
+                                                            variant="destructive"
+                                                            size="sm"
+                                                            onClick={() => removeSubSoilLevel(levelIndex)}
+                                                            className="bg-red-50 text-red-600 hover:bg-red-100 border border-red-200"
+                                                        >
+                                                            <Trash2 className="w-4 h-4 mr-2" /> Remove Level
+                                                        </Button>
+                                                    )}
+                                                </div>
+                                                <div className="bg-white p-4 rounded-lg border border-gray-200 overflow-x-auto">
+                                                    <table className="w-full text-sm text-left border-collapse min-w-[600px] rounded-lg">
+                                                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b">
+                                                            <tr>
+                                                                <th className="px-3 py-3 w-[150px]">Depth (m)</th>
+                                                                <th className="px-3 py-3 min-w-[300px]">Soil Description</th>
+                                                                <th className="px-3 py-3 w-[50px]"></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {levelRows.map((item, rowIndex) => (
+                                                                <tr key={rowIndex} className="bg-white border-b hover:bg-gray-50/50">
+                                                                    <td className="px-2 py-2"><Input value={item.depth} onChange={(e) => handleSubSoilProfileChange(levelIndex, rowIndex, 'depth', e.target.value)} className="h-8" /></td>
+                                                                    <td className="px-2 py-2">
+                                                                        <Textarea
+                                                                            value={item.description}
+                                                                            onChange={(e) => handleSubSoilProfileChange(levelIndex, rowIndex, 'description', e.target.value)}
+                                                                            className="min-h-[40px] py-1"
+                                                                        />
+                                                                    </td>
+                                                                    <td className="px-2 py-2 text-center">
+                                                                        {levelRows.length > 1 && (
+                                                                            <Button
+                                                                                type="button"
+                                                                                variant="ghost"
+                                                                                size="icon"
+                                                                                onClick={() => removeSubSoilProfileRow(levelIndex, rowIndex)}
+                                                                                className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50"
+                                                                            >
+                                                                                <Trash2 className="w-4 h-4" />
+                                                                            </Button>
+                                                                        )}
+                                                                    </td>
+                                                                </tr>
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                    <div className="mt-4">
+                                                        <Button
+                                                            type="button"
+                                                            variant="outline"
+                                                            size="sm"
+                                                            onClick={() => addSubSoilProfileRow(levelIndex)}
+                                                            className="text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
+                                                        >
+                                                            <Plus className="w-4 h-4 mr-2" /> Add Sub Soil Profile Row
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+
+                                        <div className="flex justify-center pt-4 border-t border-gray-100">
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                onClick={addSubSoilLevel}
+                                                className="w-full md:w-auto text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-purple-50"
+                                            >
+                                                <Plus className="w-4 h-4 mr-2" /> Add Sub Soil Level
                                             </Button>
                                         </div>
                                     </div>
