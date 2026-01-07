@@ -10,6 +10,7 @@ import ProductDetailPage from '@/pages/ProductDetailPage';
 
 
 import AdminPage from '@/pages/AdminPage';
+import NewReportPage from '@/pages/NewReportPage';
 
 import FloatingButtons from '@/components/FloatingButtons';
 
@@ -29,6 +30,7 @@ function App() {
               <Route path="/product/:id" element={<ProductDetailPage />} />
 
               <Route path="/admin" element={<AdminPage />} />
+              <Route path="/new-report" element={<NewReportPage />} />
             </Routes>
             <FloatingButtons />
             <Toaster />
