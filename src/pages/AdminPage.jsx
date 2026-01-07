@@ -11,6 +11,7 @@ import AdminProductsManager from '@/components/admin/AdminProductsManager';
 
 import AdminSettings from '@/components/admin/AdminSettings';
 import AdminLogin from '@/components/admin/AdminLogin';
+import UpdatePassword from '@/components/admin/UpdatePassword';
 import { useToast } from '@/components/ui/use-toast';
 
 import { supabase } from '@/lib/customSupabaseClient';
@@ -19,6 +20,7 @@ const AdminPage = () => {
   const [mainTab, setMainTab] = useState('products');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [checkingAuth, setCheckingAuth] = useState(true);
+  const [isPasswordRecovery, setIsPasswordRecovery] = useState(false);
 
   const { toast } = useToast();
 
@@ -31,14 +33,15 @@ const AdminPage = () => {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        setIsPasswordRecovery(true);
+      }
       setIsAuthenticated(!!session);
     });
 
     return () => subscription.unsubscribe();
   }, []);
-
-  // Removed legacy checkLocalAuth
 
   const handleLoginSuccess = () => {
     // Session state is handled by the subscription above
@@ -57,6 +60,17 @@ const AdminPage = () => {
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
+    );
+  }
+
+  if (isPasswordRecovery) {
+    return (
+      <>
+        <Helmet>
+          <title>Reset Password | EDGE2 MTR</title>
+        </Helmet>
+        <UpdatePassword />
+      </>
     );
   }
 
