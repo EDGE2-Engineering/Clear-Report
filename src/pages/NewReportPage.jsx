@@ -248,10 +248,10 @@ const NewReportPage = () => {
                         rockGrade: '',
                         inferredNetSbp: ''
                     }
-                ],
-                recommendations: ''
+                ]
             }
         ],
+        recommendations: '',
         reportCreatedOn: new Date().toISOString().split('T')[0]
     });
     const [sitePhotoPreview, setSitePhotoPreview] = useState(null);
@@ -1099,12 +1099,10 @@ const NewReportPage = () => {
         }));
     };
 
-    const handleFoundationRockRecommendationsChange = (levelIndex, value) => {
-        const newResults = [...formData.foundationRockFormations];
-        newResults[levelIndex].recommendations = value;
+    const handleRecommendationsChange = (value) => {
         setFormData(prev => ({
             ...prev,
-            foundationRockFormations: newResults
+            recommendations: value
         }));
     };
 
@@ -1154,8 +1152,7 @@ const NewReportPage = () => {
                         rockGrade: '',
                         inferredNetSbp: ''
                     }
-                ],
-                recommendations: ''
+                ]
             }]
         }));
     };
@@ -1203,7 +1200,7 @@ const NewReportPage = () => {
                     reportRequestJson: JSON.stringify(formData)
                 };
                 const filledHtml = fillTemplate(htmlContent, data);
-                
+
                 // console.log(filledHtml);
                 console.log(formData);
 
@@ -2750,17 +2747,7 @@ const NewReportPage = () => {
                                                 >
                                                     <Plus className="w-4 h-4 mr-2" /> Add Row
                                                 </Button>
-                                                <div className="my-6 border-b border-gray-100"></div>
 
-                                                <div className="max-w-4xg">
-                                                    <Label className="block text-sm font-medium text-gray-700 mb-1">Recommendations / Comments</Label>
-                                                    <Textarea
-                                                        value={levelData.recommendations}
-                                                        onChange={(e) => handleFoundationRockRecommendationsChange(levelIndex, e.target.value)}
-                                                        className="bg-white min-h-[100px]"
-                                                        placeholder="Enter recommendations or comments..."
-                                                    />
-                                                </div>
                                             </div>
 
                                         ))}
@@ -2774,6 +2761,19 @@ const NewReportPage = () => {
                                                 <Plus className="w-4 h-4 mr-2" /> Add Foundation (Rock) Level
                                             </Button>
                                         </div>
+                                    </div>
+                                </div>
+
+                                {/* Section 18: Recommendations / Comments */}
+                                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">Recommendations / Comments</h3>
+                                    <div className="max-w-4xg">
+                                        <Textarea
+                                            value={formData.recommendations}
+                                            onChange={(e) => handleRecommendationsChange(e.target.value)}
+                                            className="bg-white min-h-[100px]"
+                                            placeholder="Enter recommendations or comments..."
+                                        />
                                     </div>
                                 </div>
 
