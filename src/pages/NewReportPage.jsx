@@ -18,6 +18,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { AlertCircle, Save, Plus, Trash2 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
+import reportTemplateHtml from '@/templates/report-template.html?raw'
 
 
 function fillTemplate(template, data) {
@@ -1185,30 +1186,45 @@ const NewReportPage = () => {
 
         let htmlContent;
 
-        fetch('/report-template.html')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to load HTML file');
-                }
-                return response.text();
-            })
-            .then(html => {
-                htmlContent = html;
-                // console.log(htmlContent);
+        // fetch('/report-template.html')
+        //     .then(response => {
+        //         if (!response.ok) {
+        //             throw new Error('Failed to load HTML file');
+        //         }
+        //         return response.text();
+        //     })
+        //     .then(html => {
+        //         htmlContent = html;
+        //         // console.log(htmlContent);
 
-                const data = {
-                    reportRequestJson: JSON.stringify(formData)
-                };
-                const filledHtml = fillTemplate(htmlContent, data);
+        //         const data = {
+        //             reportRequestJson: JSON.stringify(formData)
+        //         };
+        //         const filledHtml = fillTemplate(htmlContent, data);
 
-                // console.log(filledHtml);
-                console.log(formData);
+        //         // console.log(filledHtml);
+        //         console.log(formData);
 
-                const blob = new Blob([filledHtml], { type: 'text/html' });
-                const url = URL.createObjectURL(blob);
-                window.open(url, '_blank');
-            })
-            .catch(err => console.error(err));
+        //         const blob = new Blob([filledHtml], { type: 'text/html' });
+        //         const url = URL.createObjectURL(blob);
+        //         window.open(url, '_blank');
+        //     })
+        //     .catch(err => console.error(err));
+
+        htmlContent = reportTemplateHtml;
+        // console.log(htmlContent);
+
+        const data = {
+            reportRequestJson: JSON.stringify(formData)
+        };
+        const filledHtml = fillTemplate(htmlContent, data);
+
+        // console.log(filledHtml);
+        console.log(formData);
+
+        const blob = new Blob([filledHtml], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
 
     };
 
