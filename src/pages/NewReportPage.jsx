@@ -1198,11 +1198,12 @@ const NewReportPage = () => {
             .then(html => {
                 htmlContent = html;
                 // console.log(htmlContent);
+
                 const data = {
-                    siteAddress: formData.siteAddress,
                     reportRequestJson: JSON.stringify(formData)
                 };
                 const filledHtml = fillTemplate(htmlContent, data);
+                
                 // console.log(filledHtml);
                 console.log(formData);
 

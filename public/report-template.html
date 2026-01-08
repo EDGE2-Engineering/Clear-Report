@@ -5,6 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <link id='favicon-elem' rel="EDGE Icon" type="image/ico"/>
 <head>
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
     <style type="text/css">
         body {
             width: 100%;
@@ -583,6 +584,10 @@ __site_survey_report__
 __images_page__
 
 <script type="text/javascript">
+
+    $(document).ready(function () {
+        console.log("Document is ready");
+    });
     // let rr = {{reportRequestJson}};
     let rr = {
     "projectType": "tower",
