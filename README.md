@@ -1,4 +1,4 @@
-# ShivaDhamaResidency
+# EDGE2 MTR
 
 - Create a Supabase project
 - Run `setup.sql` on Supabase. Go to your Supabase project -> SQL Editor -> Run SQL
