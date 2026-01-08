@@ -1165,7 +1165,7 @@ const NewReportPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Form Submitted:', formData);
+        console.log('Form Data JSON:', JSON.stringify(formData, null, 2));
 
         // Simulating API call/submission
         toast({
@@ -1604,7 +1604,7 @@ const NewReportPage = () => {
                                 </div>
 
                                 {/* Section 7: Site Photos */}
-                                <div>
+                                <div className="bg-gray-50/50 p-6 rounded-lg border border-gray-200">
                                     <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">Site Photos</h3>
                                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                         {formData.sitePhotos.map((photo) => (
@@ -1640,11 +1640,11 @@ const NewReportPage = () => {
                                 </div>
 
                                 {/* Section 8: Borehole Logs */}
-                                <div className="bg-green-50/50 p-4 rounded-lg border border-gray-200">
+                                <div className="bg-gray-50/50 p-6 rounded-lg border border-gray-200">
                                     <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">Borehole Logs</h3>
                                     <div className="space-y-8">
                                         {formData.boreholeLogs.map((levelLogs, levelIndex) => (
-                                            <div key={levelIndex} className="bg-gray-50/50 p-4 rounded-lg border border-gray-200">
+                                            <div key={levelIndex} className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
                                                 <div className="flex justify-between items-center mb-4">
                                                     <h4 className="text-md font-semibold text-gray-700">Borehole Log - Level {levelIndex + 1}</h4>
                                                     {formData.boreholeLogs.length > 1 && (
@@ -1661,7 +1661,7 @@ const NewReportPage = () => {
                                                 </div>
                                                 <div className="overflow-x-auto border border-gray-200 rounded-lg bg-white mb-4">
                                                     <table className="w-full text-sm text-left">
-                                                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b">
+                                                        <thead className="text-xs text-gray-700 uppercase bg-gray-100 border-b">
                                                             <tr>
                                                                 <th className="px-3 py-3 min-w-[100px]">Depth (m)</th>
                                                                 <th className="px-3 py-3 min-w-[150px]">Nature of Sampling</th>
@@ -1743,7 +1743,7 @@ const NewReportPage = () => {
                                                     variant="outline"
                                                     size="sm"
                                                     onClick={() => addBoreholeLog(levelIndex)}
-                                                    className="text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
+                                                    className="text-primary border-dashed border-gray-300 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
                                                 >
                                                     <Plus className="w-4 h-4 mr-2" /> Add Log to Level {levelIndex + 1}
                                                 </Button>
@@ -1754,7 +1754,7 @@ const NewReportPage = () => {
                                                 type="button"
                                                 variant="outline"
                                                 onClick={addLevel}
-                                                className="w-full md:w-auto text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-gray-50"
+                                                className="w-full md:w-auto text-primary border-dashed border-gray-300 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
                                             >
                                                 <Plus className="w-4 h-4 mr-2" /> Add Borehole Log Level
                                             </Button>
@@ -1763,11 +1763,11 @@ const NewReportPage = () => {
                                 </div>
 
                                 {/* Section 9: Laboratory Test Results */}
-                                <div className="bg-blue-50/50 p-4 rounded-lg border border-gray-200">
+                                <div className="bg-gray-50/50 p-6 rounded-lg border border-gray-200">
                                     <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">Laboratory Test Results</h3>
                                     <div className="space-y-8">
                                         {formData.labTestResults.map((levelLogs, levelIndex) => (
-                                            <div key={levelIndex} className="bg-gray-50/50 p-4 rounded-lg border border-gray-200">
+                                            <div key={levelIndex} className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
                                                 <div className="flex justify-between items-center mb-4">
                                                     <h4 className="text-md font-semibold text-gray-700">Lab Test Result - Level {levelIndex + 1}</h4>
                                                     {formData.labTestResults.length > 1 && (
@@ -1784,7 +1784,7 @@ const NewReportPage = () => {
                                                 </div>
                                                 <div className="overflow-x-auto border border-gray-200 rounded-lg bg-white mb-4">
                                                     <table className="w-full text-sm text-left">
-                                                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b">
+                                                        <thead className="text-xs text-gray-700 uppercase bg-gray-100 border-b">
                                                             <tr>
                                                                 <th className="px-3 py-3 min-w-[100px]">Depth (m)</th>
                                                                 <th className="px-3 py-3 min-w-[150px]">Bulk Density</th>
@@ -1837,7 +1837,7 @@ const NewReportPage = () => {
                                                     variant="outline"
                                                     size="sm"
                                                     onClick={() => addLabTestLog(levelIndex)}
-                                                    className="text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
+                                                    className="text-primary border-dashed border-gray-300 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
                                                 >
                                                     <Plus className="w-4 h-4 mr-2" /> Add Lab Test Reading
                                                 </Button>
@@ -1848,7 +1848,7 @@ const NewReportPage = () => {
                                                 type="button"
                                                 variant="outline"
                                                 onClick={addLabTestLevel}
-                                                className="w-full md:w-auto text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-gray-50"
+                                                className="w-full md:w-auto text-primary border-dashed border-gray-300 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
                                             >
                                                 <Plus className="w-4 h-4 mr-2" /> Add Lab Test Level
                                             </Button>
@@ -1857,11 +1857,11 @@ const NewReportPage = () => {
                                 </div>
 
                                 {/* Section 10: Chemical Analysis */}
-                                <div className="bg-orange-50 p-6 rounded-lg">
+                                <div className="bg-gray-50/50 p-6 rounded-lg border border-gray-200">
                                     <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">Chemical Analysis</h3>
                                     <div className="space-y-8">
                                         {formData.chemicalAnalysis.map((item, index) => (
-                                            <div key={index} className="bg-gray-50/50 p-4 rounded-lg border border-gray-200">
+                                            <div key={index} className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
                                                 <div className="flex justify-between items-center mb-4">
                                                     <h4 className="text-md font-semibold text-gray-700">Chemical Analysis - Level {index + 1}</h4>
                                                     {formData.chemicalAnalysis.length > 1 && (
@@ -1948,7 +1948,7 @@ const NewReportPage = () => {
                                                             variant="outline"
                                                             size="sm"
                                                             onClick={() => addChemicalAnalysisKey(index)}
-                                                            className="mt-2 text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white h-8 text-xs"
+                                                            className="mt-2 text-primary border-dashed border-gray-300 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white h-8 text-xs"
                                                         >
                                                             <Plus className="w-3 h-3 mr-2" /> Add Key
                                                         </Button>
@@ -1962,7 +1962,7 @@ const NewReportPage = () => {
                                                 type="button"
                                                 variant="outline"
                                                 onClick={addChemicalAnalysisLevel}
-                                                className="w-full md:w-auto text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-gray-50"
+                                                className="w-full md:w-auto text-primary border-dashed border-gray-300 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
                                             >
                                                 <Plus className="w-4 h-4 mr-2" /> Add Chemical Analysis Level
                                             </Button>
@@ -1971,11 +1971,11 @@ const NewReportPage = () => {
                                 </div>
 
                                 {/* Section 11: Grain Size Analysis */}
-                                <div className="bg-yellow-50 p-6 rounded-lg">
+                                <div className="bg-gray-50/50 p-6 rounded-lg border border-gray-200">
                                     <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">Grain Size Analysis</h3>
                                     <div className="space-y-8">
                                         {formData.grainSizeAnalysis.map((levelRows, levelIndex) => (
-                                            <div key={levelIndex} className="bg-white p-4 rounded-lg border border-gray-200">
+                                            <div key={levelIndex} className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
                                                 <div className="flex justify-between items-center mb-4">
                                                     <h4 className="text-md font-semibold text-gray-700">Grain Size Analysis - Level {levelIndex + 1}</h4>
                                                     {formData.grainSizeAnalysis.length > 1 && (
@@ -1990,9 +1990,9 @@ const NewReportPage = () => {
                                                         </Button>
                                                     )}
                                                 </div>
-                                                <div className="overflow-x-auto">
-                                                    <table className="w-full text-sm text-left border-collapse min-w-[1200px] rounded-lg">
-                                                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b">
+                                                <div className="overflow-x-auto border border-gray-200 rounded-lg bg-white mb-4">
+                                                    <table className="w-full text-sm text-left border-collapse min-w-[1200px]">
+                                                        <thead className="text-xs text-gray-700 uppercase bg-gray-100 border-b">
                                                             <tr>
                                                                 <th className="px-3 py-3 w-[100px]">Depth (m)</th>
                                                                 <th className="px-3 py-3 min-w-[100px]">Sieve 1</th>
@@ -2037,18 +2037,16 @@ const NewReportPage = () => {
                                                             ))}
                                                         </tbody>
                                                     </table>
-                                                    <div className="mt-4">
-                                                        <Button
-                                                            type="button"
-                                                            variant="outline"
-                                                            size="sm"
-                                                            onClick={() => addGrainSizeAnalysisRow(levelIndex)}
-                                                            className="text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
-                                                        >
-                                                            <Plus className="w-4 h-4 mr-2" /> Add Grain Size Analysis Row
-                                                        </Button>
-                                                    </div>
                                                 </div>
+                                                <Button
+                                                    type="button"
+                                                    variant="outline"
+                                                    size="sm"
+                                                    onClick={() => addGrainSizeAnalysisRow(levelIndex)}
+                                                    className="text-primary border-dashed border-gray-300 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
+                                                >
+                                                    <Plus className="w-4 h-4 mr-2" /> Add Grain Size Analysis Row
+                                                </Button>
                                             </div>
                                         ))}
 
@@ -2057,7 +2055,7 @@ const NewReportPage = () => {
                                                 type="button"
                                                 variant="outline"
                                                 onClick={addGrainSizeAnalysisLevel}
-                                                className="w-full md:w-auto text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-gray-50"
+                                                className="w-full md:w-auto text-primary border-dashed border-gray-300 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
                                             >
                                                 <Plus className="w-4 h-4 mr-2" /> Add Grain Size Analysis Level
                                             </Button>
@@ -2066,11 +2064,11 @@ const NewReportPage = () => {
                                 </div>
 
                                 {/* Section 12: SBC Details */}
-                                <div className="bg-blue-50 p-6 rounded-lg">
+                                <div className="bg-gray-50/50 p-6 rounded-lg border border-gray-200">
                                     <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">SBC Details</h3>
                                     <div className="space-y-8">
                                         {formData.sbcDetails.map((levelRows, levelIndex) => (
-                                            <div key={levelIndex} className="bg-gray-50 p-6 rounded-lg border border-gray-100">
+                                            <div key={levelIndex} className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
                                                 <div className="flex justify-between items-center mb-4">
                                                     <h4 className="text-md font-semibold text-gray-700">SBC Details - Level {levelIndex + 1}</h4>
                                                     {formData.sbcDetails.length > 1 && (
@@ -2085,9 +2083,9 @@ const NewReportPage = () => {
                                                         </Button>
                                                     )}
                                                 </div>
-                                                <div className="bg-white p-4 rounded-lg border border-gray-200 overflow-x-auto">
+                                                <div className="bg-white rounded-lg border border-gray-200 overflow-x-auto">
                                                     <table className="w-full text-sm text-left border-collapse min-w-[600px] rounded-lg">
-                                                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b">
+                                                        <thead className="text-xs text-gray-700 uppercase bg-gray-100 border-b">
                                                             <tr>
                                                                 <th className="px-3 py-3 w-[150px]">Depth (m)</th>
                                                                 <th className="px-3 py-3 min-w-[200px]">Footing Dimension</th>
@@ -2133,7 +2131,7 @@ const NewReportPage = () => {
                                                             variant="outline"
                                                             size="sm"
                                                             onClick={() => addSBCDetailRow(levelIndex)}
-                                                            className="text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
+                                                            className="text-primary border-dashed border-gray-300 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
                                                         >
                                                             <Plus className="w-4 h-4 mr-2" /> Add SBC Detail
                                                         </Button>
@@ -2147,7 +2145,7 @@ const NewReportPage = () => {
                                                 type="button"
                                                 variant="outline"
                                                 onClick={addSBCLevel}
-                                                className="w-full md:w-auto text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-gray-50"
+                                                className="w-full md:w-auto text-primary border-dashed border-gray-300 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
                                             >
                                                 <Plus className="w-4 h-4 mr-2" /> Add SBC Level
                                             </Button>
@@ -2157,11 +2155,11 @@ const NewReportPage = () => {
 
 
                                 {/* Section 13: Sub Soil Profile and Classifications */}
-                                <div className='bg-cyan-50 p-6 rounded-lg'>
+                                <div className="bg-gray-50/50 p-6 rounded-lg border border-gray-200">
                                     <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">Sub Soil Profile and Classifications</h3>
                                     <div className="space-y-8">
                                         {formData.subSoilProfile.map((levelRows, levelIndex) => (
-                                            <div key={levelIndex} className="bg-gray-50 p-6 rounded-lg">
+                                            <div key={levelIndex} className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
                                                 <div className="flex justify-between items-center mb-4">
                                                     <h4 className="text-md font-semibold text-gray-700">Sub Soil Profile - Level {levelIndex + 1}</h4>
                                                     {formData.subSoilProfile.length > 1 && (
@@ -2176,9 +2174,9 @@ const NewReportPage = () => {
                                                         </Button>
                                                     )}
                                                 </div>
-                                                <div className="bg-white p-4 rounded-lg border border-gray-200 overflow-x-auto">
-                                                    <table className="w-full text-sm text-left border-collapse min-w-[600px] rounded-lg">
-                                                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b">
+                                                <div className="overflow-x-auto border border-gray-200 rounded-lg bg-white mb-4">
+                                                    <table className="w-full text-sm text-left border-collapse min-w-[600px]">
+                                                        <thead className="text-xs text-gray-700 uppercase bg-gray-100 border-b">
                                                             <tr>
                                                                 <th className="px-3 py-3 w-[150px]">Depth (m)</th>
                                                                 <th className="px-3 py-3 min-w-[300px]">Soil Description</th>
@@ -2214,18 +2212,16 @@ const NewReportPage = () => {
                                                             ))}
                                                         </tbody>
                                                     </table>
-                                                    <div className="mt-4">
-                                                        <Button
-                                                            type="button"
-                                                            variant="outline"
-                                                            size="sm"
-                                                            onClick={() => addSubSoilProfileRow(levelIndex)}
-                                                            className="text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
-                                                        >
-                                                            <Plus className="w-4 h-4 mr-2" /> Add Sub Soil Profile Row
-                                                        </Button>
-                                                    </div>
                                                 </div>
+                                                <Button
+                                                    type="button"
+                                                    variant="outline"
+                                                    size="sm"
+                                                    onClick={() => addSubSoilProfileRow(levelIndex)}
+                                                    className="text-primary border-dashed border-gray-300 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
+                                                >
+                                                    <Plus className="w-4 h-4 mr-2" /> Add Sub Soil Profile Row
+                                                </Button>
                                             </div>
                                         ))}
 
@@ -2234,7 +2230,7 @@ const NewReportPage = () => {
                                                 type="button"
                                                 variant="outline"
                                                 onClick={addSubSoilLevel}
-                                                className="w-full md:w-auto text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-purple-50"
+                                                className="w-full md:w-auto text-primary border-dashed border-gray-300 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
                                             >
                                                 <Plus className="w-4 h-4 mr-2" /> Add Sub Soil Level
                                             </Button>
@@ -2243,11 +2239,11 @@ const NewReportPage = () => {
                                 </div>
 
                                 {/* Section 14: Direct Shear Results */}
-                                <div className="bg-yellow-50 p-6 rounded-lg">
+                                <div className="bg-gray-50/50 p-6 rounded-lg border border-gray-200">
                                     <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">Direct Shear Results</h3>
                                     <div className="space-y-8">
                                         {formData.directShearResults.map((levelTests, levelIndex) => (
-                                            <div key={levelIndex} className="bg-gray-50 p-6 rounded-lg">
+                                            <div key={levelIndex} className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
                                                 <div className="flex justify-between items-center mb-4">
                                                     <h4 className="text-md font-semibold text-gray-700">Direct Shear - Level {levelIndex + 1}</h4>
                                                     {formData.directShearResults.length > 1 && (
@@ -2321,8 +2317,8 @@ const NewReportPage = () => {
 
                                                             <div className="mt-6 border-t border-gray-100 pt-4">
                                                                 <h4 className="text-sm font-medium text-gray-700 mb-3">Stress Readings</h4>
-                                                                <div className="bg-gray-50 p-4 rounded-lg overflow-x-auto">
-                                                                    <table className="w-full text-sm text-left border-collapse min-w-[400px] rounded-lg">
+                                                                <div className="overflow-x-auto border border-gray-200 rounded-lg bg-white mb-4">
+                                                                    <table className="w-full text-sm text-left border-collapse min-w-[400px]">
                                                                         <thead className="text-xs text-gray-700 uppercase bg-gray-100 border-b">
                                                                             <tr>
                                                                                 <th className="px-3 py-3">Normal Stress (kg/cm²)</th>
@@ -2352,18 +2348,16 @@ const NewReportPage = () => {
                                                                             ))}
                                                                         </tbody>
                                                                     </table>
-                                                                    <div className="mt-4">
-                                                                        <Button
-                                                                            type="button"
-                                                                            variant="outline"
-                                                                            size="sm"
-                                                                            onClick={() => addDirectShearReading(levelIndex, testIndex)}
-                                                                            className="text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
-                                                                        >
-                                                                            <Plus className="w-4 h-4 mr-2" /> Add Stress Reading
-                                                                        </Button>
-                                                                    </div>
                                                                 </div>
+                                                                <Button
+                                                                    type="button"
+                                                                    variant="outline"
+                                                                    size="sm"
+                                                                    onClick={() => addDirectShearReading(levelIndex, testIndex)}
+                                                                    className="text-primary border-dashed border-gray-300 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
+                                                                >
+                                                                    <Plus className="w-4 h-4 mr-2" /> Add Stress Reading
+                                                                </Button>
                                                             </div>
                                                         </div>
                                                     ))}
@@ -2386,7 +2380,7 @@ const NewReportPage = () => {
                                                 type="button"
                                                 variant="outline"
                                                 onClick={addDirectShearLevel}
-                                                className="w-full md:w-auto text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-purple-50"
+                                                className="w-full md:w-auto text-primary border-dashed border-gray-300 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
                                             >
                                                 <Plus className="w-4 h-4 mr-2" /> Add Direct Shear Level
                                             </Button>
@@ -2395,11 +2389,11 @@ const NewReportPage = () => {
                                 </div>
 
                                 {/* Section 15: Point Load Strength Index of Rock */}
-                                <div className="bg-lime-50 p-6 rounded-lg">
+                                <div className="bg-gray-50/50 p-6 rounded-lg border border-gray-200">
                                     <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">Point Load Strength Index of Rock</h3>
                                     <div className="space-y-8">
                                         {formData.pointLoadStrength.map((levelTests, levelIndex) => (
-                                            <div key={levelIndex} className="bg-lime-50 p-6 rounded-lg">
+                                            <div key={levelIndex} className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
                                                 <div className="flex justify-between items-center mb-4">
                                                     <h4 className="text-md font-semibold text-gray-700">Point Load - Level {levelIndex + 1}</h4>
                                                     {formData.pointLoadStrength.length > 1 && (
@@ -2442,8 +2436,8 @@ const NewReportPage = () => {
                                                                 />
                                                             </div>
 
-                                                            <div className="bg-gray-50 p-4 rounded-lg overflow-x-auto">
-                                                                <table className="w-full text-sm text-left border-collapse min-w-[600px] rounded-lg">
+                                                            <div className="overflow-x-auto border border-gray-200 rounded-lg bg-white mb-4">
+                                                                <table className="w-full text-sm text-left border-collapse min-w-[600px]">
                                                                     <thead className="text-xs text-gray-700 uppercase bg-gray-100 border-b">
                                                                         <tr>
                                                                             <th className="px-3 py-3">Load At Failure (kg)</th>
@@ -2477,18 +2471,16 @@ const NewReportPage = () => {
                                                                         ))}
                                                                     </tbody>
                                                                 </table>
-                                                                <div className="mt-4">
-                                                                    <Button
-                                                                        type="button"
-                                                                        variant="outline"
-                                                                        size="sm"
-                                                                        onClick={() => addPointLoadReading(levelIndex, testIndex)}
-                                                                        className="text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
-                                                                    >
-                                                                        <Plus className="w-4 h-4 mr-2" /> Add Reading
-                                                                    </Button>
-                                                                </div>
                                                             </div>
+                                                            <Button
+                                                                type="button"
+                                                                variant="outline"
+                                                                size="sm"
+                                                                onClick={() => addPointLoadReading(levelIndex, testIndex)}
+                                                                className="text-primary border-dashed border-gray-300 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
+                                                            >
+                                                                <Plus className="w-4 h-4 mr-2" /> Add Reading
+                                                            </Button>
                                                         </div>
                                                     ))}
                                                     <div className="flex justify-center pt-2">
@@ -2510,7 +2502,7 @@ const NewReportPage = () => {
                                                 type="button"
                                                 variant="outline"
                                                 onClick={addPointLoadLevel}
-                                                className="w-full md:w-auto text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-purple-50"
+                                                className="w-full md:w-auto text-primary border-dashed border-gray-300 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
                                             >
                                                 <Plus className="w-4 h-4 mr-2" /> Add Point Load Level
                                             </Button>
@@ -2519,11 +2511,11 @@ const NewReportPage = () => {
                                 </div>
 
                                 {/* Section 16: Point Load Strength Index of Lump */}
-                                <div>
+                                <div className="bg-gray-50/50 p-6 rounded-lg border border-gray-200">
                                     <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">Point Load Strength Index of Lump</h3>
                                     <div className="space-y-8">
                                         {formData.pointLoadStrengthLump.map((levelTests, levelIndex) => (
-                                            <div key={levelIndex} className="bg-orange-50 p-6 rounded-lg">
+                                            <div key={levelIndex} className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
                                                 <div className="flex justify-between items-center mb-4">
                                                     <h4 className="text-md font-semibold text-gray-700">Point Load (Lump) - Level {levelIndex + 1}</h4>
                                                     {formData.pointLoadStrengthLump.length > 1 && (
@@ -2566,8 +2558,8 @@ const NewReportPage = () => {
                                                                 />
                                                             </div>
 
-                                                            <div className="bg-gray-50 p-4 rounded-lg overflow-x-auto">
-                                                                <table className="w-full text-sm text-left border-collapse min-w-[600px] rounded-lg">
+                                                            <div className="overflow-x-auto border border-gray-200 rounded-lg bg-white mb-4">
+                                                                <table className="w-full text-sm text-left border-collapse min-w-[600px]">
                                                                     <thead className="text-xs text-gray-700 uppercase bg-gray-100 border-b">
                                                                         <tr>
                                                                             <th className="px-3 py-3">Load At Failure (kg)</th>
@@ -2603,18 +2595,16 @@ const NewReportPage = () => {
                                                                         ))}
                                                                     </tbody>
                                                                 </table>
-                                                                <div className="mt-4">
-                                                                    <Button
-                                                                        type="button"
-                                                                        variant="outline"
-                                                                        size="sm"
-                                                                        onClick={() => addPointLoadLumpReading(levelIndex, testIndex)}
-                                                                        className="text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
-                                                                    >
-                                                                        <Plus className="w-4 h-4 mr-2" /> Add Reading
-                                                                    </Button>
-                                                                </div>
                                                             </div>
+                                                            <Button
+                                                                type="button"
+                                                                variant="outline"
+                                                                size="sm"
+                                                                onClick={() => addPointLoadLumpReading(levelIndex, testIndex)}
+                                                                className="text-primary border-dashed border-gray-300 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
+                                                            >
+                                                                <Plus className="w-4 h-4 mr-2" /> Add Reading
+                                                            </Button>
                                                         </div>
                                                     ))}
                                                     <div className="flex justify-center pt-2">
@@ -2636,7 +2626,7 @@ const NewReportPage = () => {
                                                 type="button"
                                                 variant="outline"
                                                 onClick={addPointLoadLumpLevel}
-                                                className="w-full md:w-auto text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-purple-50"
+                                                className="w-full md:w-auto text-primary border-dashed border-gray-300 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
                                             >
                                                 <Plus className="w-4 h-4 mr-2" /> Add Point Load (Lump) Level
                                             </Button>
@@ -2645,11 +2635,11 @@ const NewReportPage = () => {
                                 </div>
 
                                 {/* Section 17: Foundation In Rock Formations */}
-                                <div>
+                                <div className="bg-gray-50/50 p-6 rounded-lg border border-gray-200">
                                     <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">Foundation In Rock Formations</h3>
                                     <div className="space-y-8">
                                         {formData.foundationRockFormations.map((levelData, levelIndex) => (
-                                            <div key={levelIndex} className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                                            <div key={levelIndex} className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                                                 <div className="flex justify-between items-center mb-4">
                                                     <h4 className="text-md font-semibold text-gray-700">Foundation (Rock) - Level {levelIndex + 1}</h4>
                                                     {formData.foundationRockFormations.length > 1 && (
@@ -2665,9 +2655,9 @@ const NewReportPage = () => {
                                                     )}
                                                 </div>
 
-                                                <div className="overflow-x-auto">
-                                                    <table className="w-full text-sm text-left border-collapse min-w-[1000px] rounded-lg">
-                                                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b">
+                                                <div className="overflow-x-auto border border-gray-200 rounded-lg bg-white mb-4">
+                                                    <table className="w-full text-sm text-left border-collapse min-w-[1000px]">
+                                                        <thead className="text-xs text-gray-700 uppercase bg-gray-100 border-b">
                                                             <tr>
                                                                 <th className="px-3 py-3">Rock</th>
                                                                 <th className="px-3 py-3">Strength</th>
@@ -2710,36 +2700,36 @@ const NewReportPage = () => {
                                                             ))}
                                                         </tbody>
                                                     </table>
-                                                    <div className="mt-4 border-b border-gray-100 pb-6 mb-6">
-                                                        <Button
-                                                            type="button"
-                                                            variant="outline"
-                                                            size="sm"
-                                                            onClick={() => addFoundationRockRow(levelIndex)}
-                                                            className="text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
-                                                        >
-                                                            <Plus className="w-4 h-4 mr-2" /> Add Row
-                                                        </Button>
-                                                    </div>
+                                                </div>
+                                                <Button
+                                                    type="button"
+                                                    variant="outline"
+                                                    size="sm"
+                                                    onClick={() => addFoundationRockRow(levelIndex)}
+                                                    className="text-primary border-dashed border-gray-300 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
+                                                >
+                                                    <Plus className="w-4 h-4 mr-2" /> Add Row
+                                                </Button>
+                                                <div className="my-6 border-b border-gray-100"></div>
 
-                                                    <div className="max-w-4xl">
-                                                        <Label className="block text-sm font-medium text-gray-700 mb-1">Recommendations / Comments</Label>
-                                                        <Textarea
-                                                            value={levelData.recommendations}
-                                                            onChange={(e) => handleFoundationRockRecommendationsChange(levelIndex, e.target.value)}
-                                                            className="bg-white min-h-[100px]"
-                                                            placeholder="Enter recommendations or comments..."
-                                                        />
-                                                    </div>
+                                                <div className="max-w-4xg">
+                                                    <Label className="block text-sm font-medium text-gray-700 mb-1">Recommendations / Comments</Label>
+                                                    <Textarea
+                                                        value={levelData.recommendations}
+                                                        onChange={(e) => handleFoundationRockRecommendationsChange(levelIndex, e.target.value)}
+                                                        className="bg-white min-h-[100px]"
+                                                        placeholder="Enter recommendations or comments..."
+                                                    />
                                                 </div>
                                             </div>
+
                                         ))}
                                         <div className="flex justify-center pt-4 border-t border-gray-100">
                                             <Button
                                                 type="button"
                                                 variant="outline"
                                                 onClick={addFoundationRockLevel}
-                                                className="w-full md:w-auto text-primary border-dashed border-primary/50 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-purple-50"
+                                                className="w-full md:w-auto text-primary border-dashed border-gray-300 hover:bg-primary/5 hover:text-primary-dark hover:border-primary bg-white"
                                             >
                                                 <Plus className="w-4 h-4 mr-2" /> Add Foundation (Rock) Level
                                             </Button>
