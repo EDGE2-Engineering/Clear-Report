@@ -328,6 +328,8 @@
             object-fit: contain;
             justify-content: center;
         }
+
+
         #frontsheet-table-data table,
         #frontsheet-table-data td {
             text-align: left;
@@ -339,6 +341,11 @@
             font-weight: bold;
         }
 
+        .contents-table td,
+        .contents-table th {
+            border-bottom: 1px solid black;
+            padding: 2px 5px;
+        }
     </style>
 </head>
 
@@ -348,7 +355,7 @@
             <div class="page-data">
                 <center>
                     <span style="font-size: 20px; color: #29299a;">
-                        Geo-Technical Investigation Report for <br/> Construction of <span id="projectType"></span> at
+                        Geo-Technical Investigation Report for <br /> Construction of <span id="projectType"></span> at
                         <br /><span id="siteAddress" style="font-size: 15px;"></span>
                     </span><br /><br />
                     <span style="font-size: 18px">Submitted to</span><br /><br />
@@ -358,15 +365,14 @@
                     <!--                <img class="client-logo-img" src="__clientlogoimg__" alt=""/><br/>-->
                     <img class="client-logo-img" src="__clientlogoimg__" alt="" /><br /><br />
                     <div class="frontsheet-table-container" id="frontsheet-table-data">
-                       
+
                     </div>
-                    
+
                     <div class="frontsheet-company-footer-container">
                         <div style="font-size: 15px; margin: 3mm; font-weight: bold;">Report Prepared By</div>
                         <div class="company-mini">
-                            <img class="frontsheet-edge-logo-img"
-                                id="edge-logo" src=""
-                                alt="Edge2 Logo" width="10px" /><br />
+                            <img class="frontsheet-edge-logo-img" id="edge-logo" src="" alt="Edge2 Logo"
+                                width="10px" /><br />
                             <strong>Edge2 Engineering Solutions India Pvt. Ltd.</strong><br>
                             Geo-technical Investigation • Material Testing • Structural Health & Stability • NDT •
                             Restoration & Rehabilitation • PMC & QA<br>
@@ -374,7 +380,7 @@
                                 Website: www.edge2.in
                             </small><br>
                             <small>
-                                📞 +91 98809 73810 / 080 5005 6086 
+                                📞 +91 98809 73810 / 080 5005 6086
                             </small><br>
                             <small>
                                 Email: info@edge2.in | reports@edge2.in
@@ -383,7 +389,7 @@
                                 PAN: AACCE1702A | GSTIN: 29AACCE1702A1ZD
                             </small>
                         </div>
-                        <hr/>
+                        <hr />
                         <!-- <div class="frontsheet-company-footer-text1">
                             <b>Services offered:</b> Geo-technical Investigation, Construction Material Testing,
                             Non-destructive Test on
@@ -391,10 +397,12 @@
                         </div> -->
                         <table>
                             <tr>
-                                <td style="font-size: 13px;"><span style="color: maroon">Registered Office and Laboratory:</span><br />Edge2
+                                <td style="font-size: 13px;"><span style="color: maroon">Registered Office and
+                                        Laboratory:</span><br />Edge2
                                     Engineering Solutions India Pvt. Ltd.<br />ISO 9001:2015 Certified<br />(Certificate
                                     No:
-                                    IN12701A)<br />Shivaganga Arcade, B35/130, 6th Cross, 6th Block, Vishweshwaraiah Layout, Ullal Upanagar, Bengaluru, Karnataka - 560056
+                                    IN12701A)<br />Shivaganga Arcade, B35/130, 6th Cross, 6th Block, Vishweshwaraiah
+                                    Layout, Ullal Upanagar, Bengaluru, Karnataka - 560056
                                 </td>
                             </tr>
                         </table>
@@ -404,7 +412,7 @@
                                     <img style="width: 50px;" id="iso-logo-1" src="">
                                 </td>
                                 <td style="text-align: center;">
-                                    <img style="width: 50px" id="iso-logo-2" src=""/>
+                                    <img style="width: 50px" id="iso-logo-2" src="" />
                                 </td>
                             </tr>
                         </table>
@@ -418,153 +426,164 @@
         </div>
     </div>
 
-        <div class="page-wrapper">
+    <div class="page-wrapper">
         <div class="container">
             <div class="page-data">
-                <table style="border: 0px solid black; border-collapse: collapse; width:100%;">
+                <table class="contents-table" style="border-collapse: collapse; width:100%;">
                     <tbody>
-                    <tr>
-                        <th style="text-align: center;">Contents</th>
-                        <th>Page Nos.</th>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">1.&nbsp;Introduction</td>
-                        <td align="center">1</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">2.&nbsp;Location of the Project site</td>
-                        <td align="center">1</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">3.&nbsp;Objectives and Scope of Work</td>
-                        <td align="center">1</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.1 Objectives</td>
-                        <td align="center">1</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.2 Scope of Work</td>
-                        <td align="center">1</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.2.1 Field
-                            Investigations
-                        </td>
-                        <td align="center">3</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.2.2 Laboratory
-                            Testing
-                        </td>
-                        <td align="center">3</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.3 Report</td>
-                        <td align="center">2</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">4.&nbsp;Schedule of Investigations</td>
-                        <td align="center">2</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.1&nbsp;Field Investigations</td>
-                        <td align="center">2</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2&nbsp;Standard Penetration Test</td>
-                        <td align="center">2</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.3&nbsp;Disturbed / Representative Soil Samples
-                            (DS/RS)
-                        </td>
-                        <td align="center">3</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.4&nbsp;Ground Topography, Geology of the Area
-                            and Sub-soil Details
-                        </td>
-                        <td align="center">3</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">5.&nbsp;Results and Discussions</td>
-                        <td align="center">3</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.1&nbsp;Soil Profile and Classification</td>
-                        <td align="center">3</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.2&nbsp;Standard Penetration Number</td>
-                        <td align="center">4</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.3&nbsp;Atterberg Limits</td>
-                        <td align="center">4</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.4&nbsp;Specific Gravity</td>
-                        <td align="center">4</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.5&nbsp;Shear Parameters</td>
-                        <td align="center">4</td>
-                    </tr>
-                    <tr style="">
-                        <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.6&nbsp;Free Swell Index</td>
-                        <td align="center">5</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.7&nbsp;Chemical Analysis of Soil Sample</td>
-                        <td align="center">5</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.8&nbsp;Water Table</td>
-                        <td align="center">5</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">6.&nbsp;Recommendations</td>
-                        <td align="center">5</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.1&nbsp;Type of Foundation</td>
-                        <td align="center">6</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.2&nbsp;Additional Recommendations and
-                            conclusions
-                        </td>
-                        <td align="center">6</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">Tables</td>
-                        <td align="center">7</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bore Hole logs - BH 1</td>
-                        <td align="center">7</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">Figures</td>
-                        <td align="center">8</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grain size Distribution Curves - BH 1</td>
-                        <td align="center">9</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Photos</td>
-                        <td align="center">10</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Annexures</td>
-                        <td align="center">10</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Key Plan</td>
-                        <td align="center">11</td>
-                    </tr>
+                        <tr>
+                            <th style="text-align: center;">Contents</th>
+                            <th>Page Nos.</th>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">1.&nbsp;Introduction</td>
+                            <td align="center">1</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">2.&nbsp;Location of the Project site</td>
+                            <td align="center">1</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">3.&nbsp;Objectives and Scope of Work</td>
+                            <td align="center">1</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.1 Objectives</td>
+                            <td align="center">1</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.2 Scope of Work</td>
+                            <td align="center">1</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.2.1 Field
+                                Investigations
+                            </td>
+                            <td align="center">3</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.2.2 Laboratory
+                                Testing
+                            </td>
+                            <td align="center">3</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.3 Report</td>
+                            <td align="center">2</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">4.&nbsp;Schedule of Investigations</td>
+                            <td align="center">2</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.1&nbsp;Field Investigations
+                            </td>
+                            <td align="center">2</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2&nbsp;Standard Penetration
+                                Test</td>
+                            <td align="center">2</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.3&nbsp;Disturbed /
+                                Representative Soil Samples
+                                (DS/RS)
+                            </td>
+                            <td align="center">3</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.4&nbsp;Ground Topography,
+                                Geology of the Area
+                                and Sub-soil Details
+                            </td>
+                            <td align="center">3</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">5.&nbsp;Results and Discussions</td>
+                            <td align="center">3</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.1&nbsp;Soil Profile and
+                                Classification</td>
+                            <td align="center">3</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.2&nbsp;Standard Penetration
+                                Number</td>
+                            <td align="center">4</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.3&nbsp;Atterberg Limits</td>
+                            <td align="center">4</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.4&nbsp;Specific Gravity</td>
+                            <td align="center">4</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.5&nbsp;Shear Parameters</td>
+                            <td align="center">4</td>
+                        </tr>
+                        <tr style="">
+                            <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.6&nbsp;Free Swell Index</td>
+                            <td align="center">5</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.7&nbsp;Chemical Analysis of
+                                Soil Sample</td>
+                            <td align="center">5</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.8&nbsp;Water Table</td>
+                            <td align="center">5</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">6.&nbsp;Recommendations</td>
+                            <td align="center">5</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.1&nbsp;Type of Foundation</td>
+                            <td align="center">6</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.2&nbsp;Additional
+                                Recommendations and
+                                conclusions
+                            </td>
+                            <td align="center">6</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">Tables</td>
+                            <td align="center">7</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bore Hole logs - BH 1</td>
+                            <td align="center">7</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">Figures</td>
+                            <td align="center">8</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grain size Distribution
+                                Curves - BH 1</td>
+                            <td align="center">9</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Photos</td>
+                            <td align="center">10</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Annexures</td>
+                            <td align="center">10</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Key Plan</td>
+                            <td align="center">11</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -608,6 +627,7 @@
             </div>
         </div>
     </div>
+    
     <div class="page-wrapper">
         <div class="container">
             <div class="page-data">
@@ -691,7 +711,7 @@
             <div class="page-data">
                 <h3>5.0 Conclusions</h3>
                 The following conclusions are made based on the field and laboratory investigations
-                <ol id="additional-recommendations-data" style="list-style-type: upper-roman;"> 
+                <ol id="additional-recommendations-data" style="list-style-type: upper-roman;">
 
                 </ol>
 
