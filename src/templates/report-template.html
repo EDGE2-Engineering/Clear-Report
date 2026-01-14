@@ -2233,9 +2233,9 @@
                     
                     function reRenderChart() {
                         // maintain this order or calling
+                        generateBoreholeLogTables(rr);
                         generateGrainSizeAnalysisSummary(rr);
                         generateGrainSizeAnalysisCharts(rr);
-                        generateAllBhTables(rr);
                     }
                     
                     function toTitleCase(str) {
@@ -2633,7 +2633,7 @@
 </div>
 `;
                                 
-                                function generateAllBhTables(rr) {
+                                function generateBoreholeLogTables(rr) {
                                     let output = "";
                                     
                                     rr.boreholeLogs.forEach((bhLog, bhIndex) => {
