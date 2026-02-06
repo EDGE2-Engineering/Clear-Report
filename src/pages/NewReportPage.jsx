@@ -1231,7 +1231,7 @@ const NewReportPage = () => {
     return (
         <div className="min-h-screen bg-[#F5F1ED] flex flex-col">
             <Helmet>
-                <title>New Report | EDGE2 MTR</title>
+                <title>New Report | EDGE2 Clear Report</title>
             </Helmet>
 
             <Navbar />

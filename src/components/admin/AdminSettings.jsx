@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
-import { UserCog, Lock, Save, Loader2, ShieldCheck, Eye, EyeOff } from 'lucide-react';
+import { UserCog, Lock, Save, Loader2, ShieldCheck, Eye, EyeOff, FileText } from 'lucide-react';
 import { auth } from '@/lib/auth';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs.jsx';
 import AdminUserManager from './AdminUserManager.jsx';
@@ -126,8 +126,8 @@ const AdminSettings = () => {
                     <UserCog className="w-6 h-6" />
                 </div>
                 <div>
-                    <h2 className="text-2xl font-bold text-gray-900">Settings</h2>
-                    <p className="text-gray-500">Manage your account and site preferences</p>
+                    <h2 className="text-xl font-bold text-gray-900">Settings</h2>
+                    {/* <p className="text-gray-500">Manage your account and site preferences</p> */}
                 </div>
             </div>
 
@@ -139,8 +139,8 @@ const AdminSettings = () => {
                             Users
                         </TabsTrigger>
                         <TabsTrigger value="security" className="flex items-center gap-2">
-                            <Lock className="w-4 h-4" />
-                            Others
+                            <FileText className="w-4 h-4" />
+                            Reports
                         </TabsTrigger>
                     </TabsList>
                     <TabsContent value="security" className="mt-0">

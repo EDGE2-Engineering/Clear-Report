@@ -57,7 +57,7 @@ const AdminPage = () => {
     return (
       <>
         <Helmet>
-          <title>Reset Password | EDGE2 MTR</title>
+          <title>Reset Password | EDGE2 Clear Report</title>
         </Helmet>
         <UpdatePassword />
       </>
@@ -68,7 +68,7 @@ const AdminPage = () => {
     return (
       <>
         <Helmet>
-          <title>Admin Login | EDGE2 MTR</title>
+          <title>Admin Login | EDGE2 Clear Report</title>
         </Helmet>
         <AdminLogin onLoginSuccess={handleLoginSuccess} />
       </>
@@ -78,7 +78,7 @@ const AdminPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Helmet>
-        <title>Admin Dashboard | EDGE2 MTR</title>
+        <title>Settings | EDGE2 Clear Report</title>
       </Helmet>
 
       <Navbar />
