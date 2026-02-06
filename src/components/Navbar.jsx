@@ -1,22 +1,31 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Lock, ClipboardCheck } from 'lucide-react';
-import { initialSiteContent } from '@/data/siteContent';
-
-
+import { Menu, X, Lock, ClipboardCheck, LogOut, Settings, User } from 'lucide-react';
+import { auth } from '@/lib/auth';
+import { Button } from '@/components/ui/button.jsx';
+import { useToast } from '@/components/ui/use-toast.js';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [session, setSession] = useState(null);
   const location = useLocation();
-  const content = initialSiteContent;
+  const { toast } = useToast();
 
+  useEffect(() => {
+    const currentSession = auth.getSession();
+    setSession(currentSession);
+  }, [location.pathname]);
+
+  const handleLogout = () => {
+    auth.signOut();
+    toast({ title: "Logged Out", description: "See you next time." });
+  };
 
   const navItems = [
-    { path: '/', label: 'Admin', icon: Lock },
-    { path: '/new-report', label: 'New Report', icon: ClipboardCheck }
-  ];
+    { path: '/new-report', label: 'New Report', icon: ClipboardCheck },
+    { path: '/', label: 'Settings', icon: Settings, adminOnly: true },
+  ].filter(item => !item.adminOnly || (session && session.user && session.user.role === 'admin'));
 
   const isActive = (path) => location.pathname === path;
 
@@ -25,14 +34,12 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center space-x-2">
-            <span className="text-primary">
-              <ClipboardCheck className="w-8 h-8" />
-            </span>
-            <span className="text-xl font-bold text-gray-900 hidden sm:inline-block">
-              {content.global?.siteName || "EDGE2 MTR"}
+            <img src="/edge2-logo.png" alt="EDGE2 Logo" className="w-8 h-auto object-contain" />
+            <span className="text-md font-bold text-gray-900 hidden sm:inline-block">
+              {"Clear Report"}
             </span>
             <span className="text-sm font-bold text-gray-900 sm:hidden">
-              {content.global?.siteName || "EDGE2 MTR"}
+              {"Clear Report"}
             </span>
           </Link>
 
@@ -51,11 +58,26 @@ const Navbar = () => {
               </Link>
             ))}
 
-
+            {session && (
+              <div className="flex items-center gap-4 pl-4 border-l border-gray-100">
+                <div className="flex items-center gap-2 text-xs font-medium text-blue-500 bg-blue-50 px-3 py-1.5 rounded-full border border-gray-100">
+                  <User className="w-3 h-3" />
+                  <span>{session.user.full_name || session.user.username}</span>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleLogout}
+                  className="text-red-600 hover:text-red-700 hover:bg-red-50 h-8 px-3"
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Logout
+                </Button>
+              </div>
+            )}
           </div>
 
           <div className="flex items-center md:hidden gap-4">
-
             <button
               className="text-gray-700"
               onClick={() => setIsOpen(!isOpen)}
@@ -90,6 +112,23 @@ const Navbar = () => {
                   <span className="font-medium">{item.label}</span>
                 </Link>
               ))}
+
+              {session && (
+                <div className="pt-4 mt-4 border-t border-gray-100 space-y-3 px-4">
+                  <div className="flex items-center gap-2 text-sm font-medium text-gray-600">
+                    <User className="w-4 h-4 text-primary" />
+                    <span>{session.user.full_name || session.user.username}</span>
+                  </div>
+                  <Button
+                    variant="outline"
+                    className="w-full text-red-600 border-red-100 hover:bg-red-50 justify-start"
+                    onClick={handleLogout}
+                  >
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Logout
+                  </Button>
+                </div>
+              )}
             </div>
           </motion.div>
         )}

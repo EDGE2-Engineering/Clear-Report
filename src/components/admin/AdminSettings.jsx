@@ -5,8 +5,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
-import { UserCog, Lock, Save, Loader2, ShieldCheck, Eye, EyeOff, Database, Download, Upload, AlertTriangle } from 'lucide-react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { UserCog, Lock, Save, Loader2, ShieldCheck, Eye, EyeOff } from 'lucide-react';
+import { auth } from '@/lib/auth';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs.jsx';
+import AdminUserManager from './AdminUserManager.jsx';
 
 const PasswordField = ({ id, label, value, onChange, show, setShow, placeholder, icon: Icon, required = false }) => (
     <div className="space-y-2">
@@ -37,6 +39,7 @@ const PasswordField = ({ id, label, value, onChange, show, setShow, placeholder,
 const AdminSettings = () => {
     const [currentUsername, setCurrentUsername] = useState('');
     const [currentUserEmail, setCurrentUserEmail] = useState('');
+    const [userRole, setUserRole] = useState('standard');
     const [formData, setFormData] = useState({
         currentPassword: '',
         newPassword: '',
@@ -49,16 +52,16 @@ const AdminSettings = () => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [isFetchingUser, setIsFetchingUser] = useState(true);
-    const fileImportRef = useRef(null);
     const { toast } = useToast();
 
     useEffect(() => {
-        const fetchUser = async () => {
+        const fetchUser = () => {
             setIsFetchingUser(true);
-            const { data: { user } } = await supabase.auth.getUser();
-            if (user) {
-                setCurrentUsername(user.email);
-                setCurrentUserEmail(user.email);
+            const session = auth.getSession();
+            if (session && session.user) {
+                setCurrentUsername(session.user.username);
+                setCurrentUserEmail(session.user.username);
+                setUserRole(session.user.role || 'standard');
             }
             setIsFetchingUser(false);
         };
@@ -82,12 +85,9 @@ const AdminSettings = () => {
 
         try {
             // Verify current password by attempting a sign-in
-            const { error: signInError } = await supabase.auth.signInWithPassword({
-                email: currentUserEmail,
-                password: formData.currentPassword
-            });
+            const { user, error: signInError } = await auth.signIn(currentUserEmail, formData.currentPassword);
 
-            if (signInError) {
+            if (signInError || !user) {
                 toast({ title: "Authentication Failed", description: "Incorrect current password.", variant: "destructive" });
                 setIsLoading(false);
                 return;
@@ -95,11 +95,9 @@ const AdminSettings = () => {
 
             // Update password if new password is provided
             if (formData.newPassword) {
-                const { error: updateError } = await supabase.auth.updateUser({
-                    password: formData.newPassword
-                });
+                const { success, error: updateError } = await auth.updatePassword(formData.newPassword);
 
-                if (updateError) throw updateError;
+                if (updateError || !success) throw updateError || new Error('Failed to update password');
 
                 toast({ title: "Success", description: "Password updated successfully." });
                 setFormData({ currentPassword: '', newPassword: '', confirmPassword: '' });
@@ -115,61 +113,11 @@ const AdminSettings = () => {
         }
     };
 
-    // --- Full Site Backup Logic ---
-    const handleFullBackup = () => {
-        // Collect all local storage keys related to data
-        const data = {
-            products: JSON.parse(localStorage.getItem('edge2mtr_products') || '[]'),
-            siteContent: JSON.parse(localStorage.getItem('edge2mtr_content') || '{}'),
-            pageImages: JSON.parse(localStorage.getItem('edge2mtr_images') || '{}'),
-            blogs: JSON.parse(localStorage.getItem('edge2mtr_blogs') || '[]'),
-            timestamp: new Date().toISOString(),
-            version: '1.0'
-        };
-
-        const dataStr = JSON.stringify(data, null, 2);
-        const blob = new Blob([dataStr], { type: "application/json" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `full_site_backup_${new Date().toISOString().split('T')[0]}.json`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
-
-        toast({ title: "Full Backup Downloaded", description: "Contains products, pages, images, and blogs." });
-    };
-
-    const handleFullRestore = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        if (!window.confirm("CRITICAL WARNING: This will completely WIPE current site data and replace it with the backup. Are you sure?")) {
-            e.target.value = '';
-            return;
-        }
-
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            try {
-                const backup = JSON.parse(event.target.result);
-
-                if (backup.products) localStorage.setItem('edge2mtr_products', JSON.stringify(backup.products));
-                if (backup.siteContent) localStorage.setItem('edge2mtr_content', JSON.stringify(backup.siteContent));
-                if (backup.pageImages) localStorage.setItem('edge2mtr_images', JSON.stringify(backup.pageImages));
-                if (backup.blogs) localStorage.setItem('edge2mtr_blogs', JSON.stringify(backup.blogs));
-
-                toast({ title: "Restore Successful", description: "Site data has been restored. Reloading..." });
-                setTimeout(() => window.location.reload(), 1500);
-
-            } catch (err) {
-                toast({ title: "Restore Failed", description: "Invalid backup file.", variant: "destructive" });
-            }
-        };
-        reader.readAsText(file);
-        e.target.value = '';
-    };
+    const renderSecuritySection = () => (
+        <Card>
+         
+        </Card>
+    );
 
     return (
         <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -178,120 +126,35 @@ const AdminSettings = () => {
                     <UserCog className="w-6 h-6" />
                 </div>
                 <div>
-                    <h2 className="text-2xl font-bold text-gray-900">Security</h2>
-                    <p className="text-gray-500">Manage your security settings</p>
+                    <h2 className="text-2xl font-bold text-gray-900">Settings</h2>
+                    <p className="text-gray-500">Manage your account and site preferences</p>
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
-                {/* Column 1: Profile */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Configure Login Credentials</CardTitle>
-                        <CardDescription style={{ display: 'none' }}>Update your login credentials</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="currentUsername">Username</Label>
-                                {isFetchingUser ? (
-                                    <div className="h-10 w-full bg-gray-100 animate-pulse rounded-md" />
-                                ) : (
-                                    <Input
-                                        id="currentUsername"
-                                        name="currentUsername"
-                                        value={currentUsername}
-                                        readOnly
-                                        disabled
-                                        className="bg-gray-100 text-gray-500 cursor-not-allowed"
-                                    />
-                                )}
-                                <p className='text-xs text-gray-500'>To change your username, please contact the system administrator.</p>
-                            </div>
-                            <div className="pt-4 border-t mt-4">
-                                <PasswordField
-                                    id="currentPassword"
-                                    label="Current Password (Required)"
-                                    value={formData.currentPassword}
-                                    onChange={handleChange}
-                                    show={showCurrentPass}
-                                    setShow={setShowCurrentPass}
-                                    placeholder="Enter your current password"
-                                    icon={Lock}
-                                    required={true}
-                                />
-                            </div>
-                            <PasswordField
-                                id="newPassword"
-                                label="New Password"
-                                value={formData.newPassword}
-                                onChange={handleChange}
-                                show={showNewPass}
-                                setShow={setShowNewPass}
-                                placeholder="Enter your new password"
-                                icon={Lock}
-                            />
-                            <PasswordField
-                                id="confirmPassword"
-                                label="Confirm Password"
-                                value={formData.confirmPassword}
-                                onChange={handleChange}
-                                show={showConfirmPass}
-                                setShow={setShowConfirmPass}
-                                placeholder="Confirm your new password"
-                                icon={ShieldCheck}
-                            />
-                            <Button type="submit" disabled={isLoading || !formData.currentPassword} className="w-full bg-primary hover:bg-primary-dark text-white">
-                                {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />} Save
-                            </Button>
-                        </form>
-                    </CardContent>
-                </Card>
-
-                {/* Column 2: Data Management */}
-                <Card className="h-fit" style={{ display: "none" }}>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <Database className="w-5 h-5" /> Data Management
-                        </CardTitle>
-                        <CardDescription>Backup and restore your entire website content</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                        <div className="space-y-4">
-                            <div className="p-4 bg-blue-50 text-blue-800 rounded-lg text-sm border border-blue-100">
-                                <p className="font-semibold mb-1">Why Backup?</p>
-                                Since this app doesn't use a cloud database yet, all your changes (images, text, products) are stored in your browser.
-                                <strong> Download a backup regularly</strong> to ensure you don't lose data when clearing cache or switching devices.
-                            </div>
-
-                            <Button onClick={handleFullBackup} className="w-full bg-slate-800 hover:bg-slate-900 text-white">
-                                <Download className="w-4 h-4 mr-2" /> Download Full Backup
-                            </Button>
-                        </div>
-
-                        <div className="pt-6 border-t space-y-4">
-                            <h4 className="font-medium text-gray-900">Restore from Backup</h4>
-                            <input
-                                type="file"
-                                ref={fileImportRef}
-                                onChange={handleFullRestore}
-                                accept=".json"
-                                className="hidden"
-                            />
-                            <Button
-                                variant="outline"
-                                onClick={() => fileImportRef.current?.click()}
-                                className="w-full border-dashed border-2 hover:bg-gray-50"
-                            >
-                                <Upload className="w-4 h-4 mr-2" /> Upload Backup File
-                            </Button>
-                            <p className="text-xs text-center text-gray-500">
-                                Warning: This will overwrite current data.
-                            </p>
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
+            {userRole === 'admin' ? (
+                <Tabs defaultValue="security" className="w-full">
+                    <TabsList className="grid w-full grid-cols-2 mb-8">
+                        <TabsTrigger value="users" className="flex items-center gap-2">
+                            <UserCog className="w-4 h-4" />
+                            Users
+                        </TabsTrigger>
+                        <TabsTrigger value="security" className="flex items-center gap-2">
+                            <Lock className="w-4 h-4" />
+                            Others
+                        </TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="security" className="mt-0">
+                        {renderSecuritySection()}
+                    </TabsContent>
+                    <TabsContent value="users" className="mt-0">
+                        <AdminUserManager />
+                    </TabsContent>
+                </Tabs>
+            ) : (
+                <div className="grid grid-cols-1 gap-8">
+                    {renderSecuritySection()}
+                </div>
+            )}
         </div>
     );
 };

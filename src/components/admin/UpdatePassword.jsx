@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Lock, AlertCircle, Loader2, Eye, EyeOff, CheckCircle } from 'lucide-react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { auth } from '@/lib/auth';
 import { useToast } from '@/components/ui/use-toast';
 
 const UpdatePassword = () => {
@@ -33,11 +33,9 @@ const UpdatePassword = () => {
         setIsLoading(true);
 
         try {
-            const { error } = await supabase.auth.updateUser({
-                password: password
-            });
+            const { success, error } = await auth.updatePassword(password);
 
-            if (error) throw error;
+            if (error || !success) throw error || new Error('Failed to update password');
 
             setSuccess(true);
             toast({

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Lock, User, AlertCircle, Loader2, Eye, EyeOff, ShieldCheck } from 'lucide-react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { auth } from '@/lib/auth';
 
 const AdminLogin = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState('');
@@ -19,16 +19,13 @@ const AdminLogin = ({ onLoginSuccess }) => {
     setIsLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: username, // Assuming username input is used for email
-        password: password,
-      });
+      const { user, error } = await auth.signIn(username, password);
 
       if (error) {
         throw error;
       }
 
-      if (data.user) {
+      if (user) {
         onLoginSuccess();
       }
     } catch (err) {
@@ -45,11 +42,11 @@ const AdminLogin = ({ onLoginSuccess }) => {
 
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Lock className="w-8 h-8 text-primary" />
+          <div className="flex items-center justify-center mx-auto mb-4">
+            <img src="/edge2-logo.png" alt="EDGE2 Logo" className="w-20 h-auto object-contain" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Admin Portal</h1>
-          <p className="text-gray-500 mt-2 text-sm">Authorized Access Only</p>
+          <h1 className="text-xl font-bold text-gray-900">Clear Report</h1>
+          <p className="text-gray-500 mt-2 text-sm">Sign in with your username and password</p>
         </div>
 
         {/* Form */}
@@ -63,13 +60,13 @@ const AdminLogin = ({ onLoginSuccess }) => {
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="username">Email</Label>
+            <Label htmlFor="username">Username</Label>
             <div className="relative">
               <User className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
               <Input
                 id="username"
-                type="email"
-                placeholder="Enter email"
+                type="text"
+                placeholder="Enter username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className="pl-10"
@@ -122,7 +119,7 @@ const AdminLogin = ({ onLoginSuccess }) => {
 
           <div className="text-center pt-2">
             <p className="text-xs text-gray-400 flex items-center justify-center gap-1">
-              <ShieldCheck className="w-3 h-3" /> Secure System
+              <ShieldCheck className="w-3 h-3" /> Protected By EDGE2 Engineering Solutions India Pvt. Ltd.
             </p>
           </div>
         </form>

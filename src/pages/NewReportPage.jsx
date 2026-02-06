@@ -1239,8 +1239,8 @@ const NewReportPage = () => {
             <main className="flex-grow container mx-auto px-4 py-8">
                 <div className="w-full">
                     <div className="mb-8">
-                        <h1 className="text-3xl font-bold text-gray-900">Create New Report</h1>
-                        <p className="text-gray-500 mt-2">Enter the site details below to generate a new automated test report.</p>
+                        <h1 className="text-xl font-bold text-gray-900">Create New Report</h1>
+                        {/* <p className="text-gray-500 mt-2">Enter the site details below to generate a new automated test report.</p> */}
                     </div>
 
                     <Card className="shadow-lg border-gray-200">
