@@ -1259,6 +1259,7 @@ const NewReportPage = () => {
                             {/* Right side */}
                             <Button
                                 type="submit"
+                                form="report-form"
                                 size="lg"
                                 className="bg-primary hover:bg-primary-dark text-white min-w-[150px]"
                             >
@@ -1269,7 +1270,7 @@ const NewReportPage = () => {
                     </CardHeader>
 
                     <CardContent className="p-2">
-                        <form onSubmit={handleSubmit} className="space-y-8">
+                        <form id="report-form" onSubmit={handleSubmit} className="space-y-8">
                             <Tabs defaultValue="basic" className="w-full">
                                 <TabsList className="grid w-full grid-cols-8 mb-8">
                                     <TabsTrigger value="basic" className="flex items-center gap-1">
