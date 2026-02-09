@@ -50,7 +50,8 @@ export const auth = {
     signOut() {
         localStorage.removeItem(AUTH_KEY);
         // Force a reload or update state as needed
-        window.location.href = '/';
+        // Use pathname to stay within the application's base directory (important for subpaths/GitHub Pages)
+        window.location.href = window.location.pathname;
     },
 
     /**
