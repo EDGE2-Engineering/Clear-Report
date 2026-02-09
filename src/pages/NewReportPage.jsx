@@ -17,8 +17,9 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs.jsx";
-import { AlertCircle, ListTree, Save, Plus, Trash2, LandPlot, FileText, TestTube, MapPin, ClipboardList, FileCheck, ArrowDownFromLine, Layers, Lightbulb } from 'lucide-react';
+import { AlertCircle, ListTree, Save, Plus, Trash2, LandPlot, FileText, TestTube, MapPin, ClipboardList, FileCheck, ArrowDownFromLine, Layers, Lightbulb, Eye } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
+import ReportPreview from '@/components/ReportPreview';
 import reportTemplateHtml from '@/templates/report-template.html?raw'
 
 
@@ -30,6 +31,7 @@ function fillTemplate(template, data) {
 
 const NewReportPage = () => {
     const { toast } = useToast();
+    const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [formData, setFormData] = useState({
         projectType: '',
         reportId: '',
@@ -1193,33 +1195,45 @@ const NewReportPage = () => {
         }
     };
 
+    const handleValidationError = (validationErrors) => {
+        const errorKeys = Object.keys(validationErrors);
+        const firstErrorKey = errorKeys[0];
+        const firstError = validationErrors[firstErrorKey];
+
+        setActiveTab(firstError.tab);
+
+        toast({
+            title: "Validation Error",
+            description: `Please fill in all mandatory fields. Missing: ${firstError.message}`,
+            variant: "destructive",
+        });
+
+        // Use timeout to allow tab to switch and element to be available in DOM
+        setTimeout(() => {
+            const element = document.getElementById(firstErrorKey);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                element.focus();
+            }
+        }, 100);
+    };
+
+    const handlePreview = (e) => {
+        e.preventDefault();
+        const validationErrors = validate();
+        if (Object.keys(validationErrors).length > 0) {
+            handleValidationError(validationErrors);
+            return;
+        }
+        setIsPreviewOpen(true);
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
         const validationErrors = validate();
-        const errorKeys = Object.keys(validationErrors);
-
-        if (errorKeys.length > 0) {
-            const firstErrorKey = errorKeys[0];
-            const firstError = validationErrors[firstErrorKey];
-
-            setActiveTab(firstError.tab);
-
-            toast({
-                title: "Validation Error",
-                description: `Please fill in all mandatory fields. Missing: ${firstError.message}`,
-                variant: "destructive",
-            });
-
-            // Use timeout to allow tab to switch and element to be available in DOM
-            setTimeout(() => {
-                const element = document.getElementById(firstErrorKey);
-                if (element) {
-                    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    element.focus();
-                }
-            }, 100);
-
+        if (Object.keys(validationErrors).length > 0) {
+            handleValidationError(validationErrors);
             return;
         }
 
@@ -1277,15 +1291,27 @@ const NewReportPage = () => {
                             </div>
 
                             {/* Right side */}
-                            <Button
-                                type="submit"
-                                form="report-form"
-                                size="lg"
-                                className="bg-primary hover:bg-primary-dark text-white min-w-[150px]"
-                            >
-                                <Save className="w-4 h-4 mr-2" />
-                                Generate Report
-                            </Button>
+                            <div className="flex items-center space-x-2">
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="lg"
+                                    onClick={handlePreview}
+                                    className="border-primary text-primary hover:bg-primary hover:text-white transition-colors"
+                                >
+                                    <Eye className="w-4 h-4 mr-2" />
+                                    Preview Report
+                                </Button>
+                                <Button
+                                    type="submit"
+                                    form="report-form"
+                                    size="lg"
+                                    className="bg-primary hover:bg-primary-dark text-white min-w-[150px]"
+                                >
+                                    <Save className="w-4 h-4 mr-2" />
+                                    Generate Report
+                                </Button>
+                            </div>
                         </div>
                     </CardHeader>
 
@@ -3052,6 +3078,13 @@ const NewReportPage = () => {
             </main >
 
             <Footer />
+
+            {isPreviewOpen && (
+                <ReportPreview
+                    formData={formData}
+                    onClose={() => setIsPreviewOpen(false)}
+                />
+            )}
         </div >
     );
 };
