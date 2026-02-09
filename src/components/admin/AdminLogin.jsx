@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Lock, User, AlertCircle, Loader2, Eye, EyeOff, ShieldCheck } from 'lucide-react';
 import { auth } from '@/lib/auth';
+import logo from '@/assets/edge2-logo.png';
 
 const AdminLogin = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState('');
@@ -43,9 +44,9 @@ const AdminLogin = ({ onLoginSuccess }) => {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mx-auto mb-4">
-            <img src="/edge2-logo.png" alt="EDGE2 Logo" className="w-20 h-auto object-contain" />
+            <img src={logo} alt="EDGE2 Logo" className="w-20 h-auto object-contain" />
           </div>
-          <h1 className="text-xl font-bold text-gray-900">Clear Report</h1>
+          <h1 className="text-xl font-bold text-gray-900">Easy Report</h1>
           <p className="text-gray-500 mt-2 text-sm">Sign in with your username and password</p>
         </div>
 

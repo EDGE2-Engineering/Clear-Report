@@ -5,6 +5,7 @@ import { Menu, X, Lock, ClipboardCheck, LogOut, Settings, User } from 'lucide-re
 import { auth } from '@/lib/auth';
 import { Button } from '@/components/ui/button.jsx';
 import { useToast } from '@/components/ui/use-toast.js';
+import logo from '@/assets/edge2-logo.png';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,12 +35,12 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center space-x-2">
-            <img src="/edge2-logo.png" alt="EDGE2 Logo" className="w-8 h-auto object-contain" />
-            <span className="text-md font-bold text-gray-900 hidden sm:inline-block">
-              {"Clear Report"}
+            <img src={logo} alt="EDGE2 Logo" className="w-8 h-auto object-contain" />
+            <span className="text-xl font-bold text-gray-900 hidden md:inline-block">
+              {"Easy Report"}
             </span>
-            <span className="text-sm font-bold text-gray-900 sm:hidden">
-              {"Clear Report"}
+            <span className="text-md font-bold text-gray-900 sm:hidden">
+              {"Easy Report"}
             </span>
           </Link>
 

@@ -1,10 +1,10 @@
-# EDGE2 Clear Report
+# EDGE2 Easy Report
 
-EDGE2 Clear Report is a comprehensive web application for managing and generating geotechnical investigation reports.
+EDGE2 Easy Report is a comprehensive web application for managing and generating geotechnical investigation reports.
 
 ## Pages
 
-- [Clear Report](/): Login page for authenticated access to the application
+- [Easy Report](/): Login page for authenticated access to the application
 - [New Report](/new-report): Create and generate new geotechnical investigation reports
 - [Settings](/): Admin dashboard for managing users and application settings (Admin only)
 

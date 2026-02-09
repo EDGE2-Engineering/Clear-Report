@@ -1252,7 +1252,7 @@ const NewReportPage = () => {
     return (
         <div className="min-h-screen bg-[#F5F1ED] flex flex-col">
             <Helmet>
-                <title>New Report | EDGE2 Clear Report</title>
+                <title>New Report | EDGE2 Easy Report</title>
             </Helmet>
 
             <Navbar />

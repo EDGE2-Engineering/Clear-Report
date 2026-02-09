@@ -1,4 +1,4 @@
-# EDGE2 Clear Report
+# EDGE2 Easy Report
 
 <!-- - Create a Supabase project
 - Run `setup.sql` on Supabase. Go to your Supabase project -> SQL Editor -> Run SQL
