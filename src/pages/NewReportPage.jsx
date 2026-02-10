@@ -1592,6 +1592,7 @@ const NewReportPage = () => {
             handleValidationError(validationErrors);
             return;
         }
+        console.log('Report Form Data:', JSON.stringify(formData, null, 2));
         setIsPreviewOpen(true);
     };
 
