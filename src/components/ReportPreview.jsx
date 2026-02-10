@@ -182,6 +182,7 @@ const ReportPreview = ({ formData, onClose }) => {
     };
 
     const getClientLogo = () => {
+        if (formData.clientImage) return formData.clientImage;
         const clientName = formData.client?.toUpperCase() || '';
         if (clientName.includes("ATC TELECOM")) return "/clients/atc.png";
         if (clientName.includes("INDUS TOWERS")) return "/clients/indus.png";

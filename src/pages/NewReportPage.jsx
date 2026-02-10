@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs.jsx";
-import { AlertCircle, ListTree, Save, Plus, Trash2, LandPlot, FileText, TestTube, MapPin, ClipboardList, FileCheck, ArrowDownFromLine, Layers, Lightbulb, Eye, Zap } from 'lucide-react';
+import { AlertCircle, ListTree, Save, Plus, Trash2, LandPlot, FileText, TestTube, MapPin, ClipboardList, FileCheck, ArrowDownFromLine, Layers, Lightbulb, Eye, Zap, X } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import ReportPreview from '@/components/ReportPreview';
 import reportTemplateHtml from '@/templates/report-template.html?raw'
@@ -139,6 +139,7 @@ const NewReportPage = () => {
             reportId: '',
             projectDetails: 'GBT 40m',
             client: '',
+            clientImage: '',
             clientAddress: '',
             latitude: '',
             longitude: '',
@@ -362,6 +363,20 @@ const NewReportPage = () => {
         };
     };
 
+    const handleClientImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFormData(prev => ({
+                    ...prev,
+                    clientImage: reader.result
+                }));
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     const [formData, setFormData] = useState(getInitialFormData);
     const [sitePhotoPreview, setSitePhotoPreview] = useState(null);
     const [activeTab, setActiveTab] = useState('basic');
@@ -486,71 +501,73 @@ const NewReportPage = () => {
         );
 
         // Populate Direct Shear
-        data.directShearResults = Array.from({ length: 2 }, (_, i) => [
-            {
+        data.directShearResults = Array.from({ length: 2 }, (_, levelIndex) =>
+            Array.from({ length: 2 }, (_, testIndex) => ({
                 shearBoxSize: '6cm x 6cm',
-                depthOfSample: (1.5 + i * 1.5).toFixed(1),
+                depthOfSample: (1.5 + levelIndex * 3.0 + testIndex * 1.5).toFixed(1),
                 cValue: (0.15 + Math.random() * 0.1).toFixed(2),
                 phiValue: (25 + Math.random() * 5).toFixed(0),
                 stressReadings: [
-                    { normalStress: '50', shearStress: '45' },
-                    { normalStress: '100', shearStress: '85' },
-                    { normalStress: '150', shearStress: '125' }
+                    { normalStress: '0.5', shearStress: (0.3 + Math.random() * 0.1).toFixed(2) },
+                    { normalStress: '1.0', shearStress: (0.6 + Math.random() * 0.1).toFixed(2) },
+                    { normalStress: '1.5', shearStress: (0.9 + Math.random() * 0.1).toFixed(2) }
                 ]
-            }
-        ]);
+            }))
+        );
 
         // Populate Point Load Strength (Rock Core)
         data.pointLoadStrength = data.boreholeLogs.map(bh =>
-            bh.slice(0, 1).map(log => ({
+            bh.slice(0, 2).map(log => ({
                 depth: log.depth,
-                readings: [
-                    { loadAtFailure: '4.5', d50: '50', d: '50', ucs: '45' },
-                    { loadAtFailure: '5.2', d50: '50', d: '50', ucs: '52' }
-                ]
+                readings: Array.from({ length: 3 }, () => ({
+                    loadAtFailure: (4 + Math.random() * 5).toFixed(1),
+                    d50: '50',
+                    d: '50',
+                    ucs: (40 + Math.random() * 50).toFixed(0)
+                }))
             }))
         );
 
         // Populate Point Load Strength (Lump)
         data.pointLoadStrengthLump = data.boreholeLogs.map(bh =>
-            bh.slice(0, 1).map(log => ({
+            bh.slice(0, 2).map(log => ({
                 depth: log.depth,
-                readings: [
-                    { loadAtFailure: '3.8', d50: '45', d: '45', w: '40', ucs: '38' }
-                ]
+                readings: Array.from({ length: 3 }, () => ({
+                    loadAtFailure: (3 + Math.random() * 4).toFixed(1),
+                    d50: '45',
+                    d: '45',
+                    w: '40',
+                    ucs: (30 + Math.random() * 40).toFixed(0)
+                }))
             }))
         );
 
         // Populate Foundation in Rock Formations
-        data.foundationRockFormations = [
-            {
-                rows: [
-                    {
-                        rock: 'Granite',
-                        strength: 'Hard',
-                        rqd: '75%',
-                        spacingDiscontinuity: '200mm',
-                        conditionOfDiscontinuity: 'Tight',
-                        gwtCondition: 'Dry',
-                        discontinuityOrientation: 'Horizontal',
-                        rockGrade: 'Grade II',
-                        inferredNetSbp: '2500 kN/m²'
-                    }
-                ]
-            }
-        ];
+        data.foundationRockFormations = Array.from({ length: 2 }, () => ({
+            rows: Array.from({ length: 3 }, (_, i) => ({
+                rock: i === 0 ? 'Granite' : (i === 1 ? 'Gneiss' : 'Schist'),
+                strength: i === 0 ? 'Hard' : 'Medium',
+                rqd: (50 + Math.random() * 40).toFixed(0) + '%',
+                spacingDiscontinuity: (100 + Math.random() * 200).toFixed(0) + 'mm',
+                conditionOfDiscontinuity: 'Tight',
+                gwtCondition: 'Dry',
+                discontinuityOrientation: 'Horizontal',
+                rockGrade: i === 0 ? 'Grade II' : 'Grade III',
+                inferredNetSbp: (2000 + Math.random() * 1000).toFixed(0) + ' kN/m²'
+            }))
+        }));
 
         // Populate Chemical Analysis
-        data.chemicalAnalysis = [
-            {
-                phValue: (7.5 + Math.random() * 1.0).toFixed(1),
-                sulphates: (20 + Math.random() * 30).toFixed(1),
-                chlorides: (50 + Math.random() * 50).toFixed(1),
-                additionalKeys: [
-                    { key: 'Organic Matter', value: '0.5%' }
-                ]
-            }
-        ];
+        data.chemicalAnalysis = Array.from({ length: 2 }, () => ({
+            phValue: (6.5 + Math.random() * 2.0).toFixed(1),
+            sulphates: (20 + Math.random() * 30).toFixed(1),
+            chlorides: (50 + Math.random() * 50).toFixed(1),
+            additionalKeys: [
+                { key: 'Organic Matter', value: (0.2 + Math.random() * 1.0).toFixed(1) + '%' },
+                { key: 'Carbonates', value: (5 + Math.random() * 10).toFixed(0) + ' mg/l' },
+                { key: 'Acidity', value: (1 + Math.random() * 2).toFixed(1) + ' ml' }
+            ]
+        }));
 
         return data;
     };
@@ -590,7 +607,7 @@ const NewReportPage = () => {
         const newErrors = {};
 
         // Basic Info Tab
-        if (!formData.projectType) newErrors.projectType = { message: 'Project Type is required', tab: 'basic' };
+        if (!formData.projectType || formData.projectType === '__other__') newErrors.projectType = { message: 'Project Type is required', tab: 'basic' };
         if (!formData.reportId) newErrors.reportId = { message: 'Report ID is required', tab: 'basic' };
         if (!formData.projectDetails) newErrors.projectDetails = { message: 'Project Details are required', tab: 'basic' };
         if (!formData.client) newErrors.client = { message: 'Client is required', tab: 'basic' };
@@ -1779,29 +1796,45 @@ const NewReportPage = () => {
 
                                             <div className="space-y-2">
                                                 <Label htmlFor="projectType" className={errors.projectType ? "text-red-500" : ""}>Project Type</Label>
-                                                <Select
-                                                    value={formData.projectType}
-                                                    onValueChange={(value) => {
-                                                        handleChange({ target: { name: 'projectType', value } });
-                                                        if (errors.projectType) setErrors(prev => {
-                                                            const newErrors = { ...prev };
-                                                            delete newErrors.projectType;
-                                                            return newErrors;
-                                                        });
-                                                    }}
-                                                >
-                                                    <SelectTrigger id="projectType" className={errors.projectType ? "border-red-500 focus:ring-red-500 focus-visible:ring-red-500" : ""}>
-                                                        <SelectValue placeholder="Select Project Type" />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        <SelectItem value="tower">Tower</SelectItem>
-                                                        <SelectItem value="others">Others</SelectItem>
-                                                    </SelectContent>
-                                                </Select>
+                                                <div className="space-y-2">
+                                                    <Select
+                                                        value={['tower'].includes(formData.projectType) ? formData.projectType : (formData.projectType ? 'others' : '')}
+                                                        onValueChange={(value) => {
+                                                            if (value === 'others') {
+                                                                if (['tower'].includes(formData.projectType) || !formData.projectType) {
+                                                                    handleChange({ target: { name: 'projectType', value: '__other__' } });
+                                                                }
+                                                            } else {
+                                                                handleChange({ target: { name: 'projectType', value } });
+                                                            }
+
+                                                            if (errors.projectType) setErrors(prev => {
+                                                                const newErrors = { ...prev };
+                                                                delete newErrors.projectType;
+                                                                return newErrors;
+                                                            });
+                                                        }}
+                                                    >
+                                                        <SelectTrigger id="projectType" className={errors.projectType ? "border-red-500 focus:ring-red-500 focus-visible:ring-red-500" : ""}>
+                                                            <SelectValue placeholder="Select Project Type" />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                            <SelectItem value="tower">Tower</SelectItem>
+                                                            <SelectItem value="others">Others</SelectItem>
+                                                        </SelectContent>
+                                                    </Select>
+                                                    {(!['tower'].includes(formData.projectType) && formData.projectType) && (
+                                                        <Input
+                                                            value={formData.projectType === '__other__' ? '' : formData.projectType}
+                                                            onChange={handleChange}
+                                                            name="projectType"
+                                                            placeholder="Enter your project type here"
+                                                            className={errors.projectType ? "border-red-500 focus-visible:ring-red-500" : ""}
+                                                        />
+                                                    )}
+                                                </div>
                                                 {errors.projectType && <p className="text-xs text-red-500 mt-1">{errors.projectType.message}</p>}
                                             </div>
-
-
 
                                             <div className="space-y-2">
                                                 <Label htmlFor="reportId" className={errors.reportId ? "text-red-500" : ""}>Report ID</Label>
@@ -1823,7 +1856,7 @@ const NewReportPage = () => {
                                                 {errors.reportId && <p className="text-xs text-red-500 mt-1">{errors.reportId.message}</p>}
                                             </div>
 
-                                            <div className="space-y-2">
+                                            <div className="col-span-full space-y-2">
                                                 <Label htmlFor="projectDetails" className={errors.projectDetails ? "text-red-500" : ""}>Project Details</Label>
                                                 <Input
                                                     id="projectDetails"
@@ -1844,7 +1877,7 @@ const NewReportPage = () => {
                                             </div>
 
                                             <div className="space-y-2 relative">
-                                                <Label htmlFor="client" className={errors.client ? "text-red-500" : ""}>Client</Label>
+                                                <Label htmlFor="client" className={errors.client ? "text-red-500" : ""}>Client Name</Label>
                                                 <Input
                                                     id="client"
                                                     name="client"
@@ -1884,6 +1917,37 @@ const NewReportPage = () => {
                                                     </div>
                                                 )}
                                                 {errors.client && <p className="text-xs text-red-500 mt-1">{errors.client.message}</p>}
+                                                {errors.client && <p className="text-xs text-red-500 mt-1">{errors.client.message}</p>}
+                                            </div>
+
+                                            <div className="space-y-2">
+                                                <Label htmlFor="clientImage">Client Image</Label>
+                                                <div className="flex items-center gap-2">
+                                                    <Input
+                                                        id="clientImage"
+                                                        type="file"
+                                                        accept="image/*"
+                                                        onChange={handleClientImageChange}
+                                                        className="cursor-pointer"
+                                                    />
+                                                    {formData.clientImage && (
+                                                        <div className="relative w-10 h-10 border rounded overflow-hidden shrink-0">
+                                                            <img
+                                                                src={formData.clientImage}
+                                                                alt="Preview"
+                                                                className="w-full h-full object-contain"
+                                                            />
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => setFormData(prev => ({ ...prev, clientImage: '' }))}
+                                                                className="absolute top-0 right-0 bg-red-500 text-white p-0.5 rounded-bl hover:bg-red-600"
+                                                                title="Remove image"
+                                                            >
+                                                                <X size={10} />
+                                                            </button>
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
 
                                             <div className="space-y-2 md:col-span-2">
