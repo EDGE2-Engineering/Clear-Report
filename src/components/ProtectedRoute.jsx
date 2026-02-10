@@ -1,20 +1,14 @@
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { auth } from '@/lib/auth';
+import { useAuth } from 'react-oidc-context';
 import { Loader2 } from 'lucide-react';
 
 const ProtectedRoute = ({ children }) => {
-    const [session, setSession] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const auth = useAuth();
 
-    useEffect(() => {
-        const currentSession = auth.getSession();
-        setSession(currentSession);
-        setLoading(false);
-    }, []);
-
-    if (loading) {
+    // Handle loading state
+    if (auth.isLoading) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-[#F5F1ED]">
                 <Loader2 className="w-8 h-8 animate-spin text-primary" />
@@ -22,7 +16,14 @@ const ProtectedRoute = ({ children }) => {
         );
     }
 
-    if (!session) {
+    // Handle authentication errors
+    if (auth.error) {
+        console.error('Authentication error:', auth.error);
+        return <Navigate to="/" replace />;
+    }
+
+    // Redirect if not authenticated
+    if (!auth.isAuthenticated) {
         return <Navigate to="/" replace />;
     }
 

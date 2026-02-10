@@ -7,45 +7,49 @@ import Footer from '@/components/Footer';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Settings, LogOut, Loader2, UserCog } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useAuth } from 'react-oidc-context';
+import { cognitoConfig } from '@/config';
 
 import AdminSettings from '@/components/admin/AdminSettings';
-import AdminLogin from '@/components/admin/AdminLogin';
-import UpdatePassword from '@/components/admin/UpdatePassword';
 import { useToast } from '@/components/ui/use-toast';
 
-import { auth } from '@/lib/auth';
-
 const AdminPage = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [checkingAuth, setCheckingAuth] = useState(true);
-  const [isPasswordRecovery, setIsPasswordRecovery] = useState(false);
+  const auth = useAuth();
   const navigate = useNavigate();
-
   const { toast } = useToast();
 
   useEffect(() => {
-    // Check active session
-    const session = auth.getSession();
-    if (session && session.user && session.user.role === 'standard') {
-      navigate('/new-report');
-      return;
+    // Redirect standard users to new-report page
+    if (auth.isAuthenticated && auth.user?.profile) {
+      const role = auth.user.profile['custom:role'] || auth.user.profile.role || 'standard';
+      if (role === 'standard') {
+        navigate('/new-report');
+      }
     }
-    setIsAuthenticated(!!session);
-    setCheckingAuth(false);
-  }, []);
+  }, [auth.isAuthenticated, auth.user, navigate]);
 
-  const handleLoginSuccess = () => {
-    setIsAuthenticated(true);
-    toast({ title: "Welcome back", description: "You have successfully logged in." });
-    navigate('/new-report');
+  const handleSignOut = async () => {
+    try {
+      // 1. Remove user from OIDC context
+      await auth.removeUser();
+
+      // 2. Clear all local storage and session storage to remove stale auth data
+      localStorage.clear();
+      sessionStorage.clear();
+
+      // 3. Redirect to Cognito logout endpoint
+      window.location.href = cognitoConfig.getLogoutUrl();
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Even if there's an error, still try to redirect to Cognito logout
+      localStorage.clear();
+      sessionStorage.clear();
+      window.location.href = cognitoConfig.getLogoutUrl();
+    }
   };
 
-  const handleLogout = () => {
-    auth.signOut();
-    toast({ title: "Logged Out", description: "See you next time." });
-  };
-
-  if (checkingAuth) {
+  // Handle loading state
+  if (auth.isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
@@ -53,28 +57,48 @@ const AdminPage = () => {
     );
   }
 
-  if (isPasswordRecovery) {
+  // Handle authentication errors
+  if (auth.error) {
     return (
-      <>
-        <Helmet>
-          <title>Reset Password | EDGE2 Easy Report</title>
-        </Helmet>
-        <UpdatePassword />
-      </>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold text-red-600 mb-2">Authentication Error</h2>
+          <p className="text-gray-600 mb-4">{auth.error.message}</p>
+          <Button onClick={() => auth.signinRedirect()}>Try Again</Button>
+        </div>
+      </div>
     );
   }
 
-  if (!isAuthenticated) {
+  // Show sign-in button if not authenticated
+  if (!auth.isAuthenticated) {
     return (
       <>
         <Helmet>
           <title>Admin Login | EDGE2 Easy Report</title>
         </Helmet>
-        <AdminLogin onLoginSuccess={handleLoginSuccess} />
+        <div className="min-h-screen flex items-center justify-center bg-[#F5F1ED]">
+          <div className="bg-white p-8 rounded-xl shadow-lg max-w-md w-full">
+            <h1 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+              EDGE2 Easy Report
+            </h1>
+            <p className="text-gray-600 mb-6 text-center">
+              Sign in to access the admin dashboard
+            </p>
+            <Button
+              onClick={() => auth.signinRedirect()}
+              className="w-full"
+              size="lg"
+            >
+              Sign in with Cognito
+            </Button>
+          </div>
+        </div>
       </>
     );
   }
 
+  // Authenticated view
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Helmet>
@@ -84,11 +108,6 @@ const AdminPage = () => {
       <Navbar />
 
       <main className="flex-grow container mx-auto px-4 py-12 relative">
-        {/* <div className="flex flex-col mb-8 gap-2 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-          <h1 className="text-xl font-bold text-gray-900">Admin Dashboard</h1>
-          <p className="text-gray-500">Manage your account and security settings</p>
-        </div> */}
-
         <AdminSettings />
       </main>
 

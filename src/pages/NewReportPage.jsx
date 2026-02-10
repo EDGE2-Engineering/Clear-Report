@@ -22,7 +22,7 @@ import { useToast } from '@/components/ui/use-toast';
 import ReportPreview from '@/components/ReportPreview';
 import reportTemplateHtml from '@/templates/report-template.html?raw'
 import { supabase } from '@/lib/customSupabaseClient';
-import { auth } from '@/lib/auth';
+import { useAuth } from 'react-oidc-context';
 
 
 const soilTypes = [
@@ -74,6 +74,7 @@ function fillTemplate(template, data) {
 }
 
 const NewReportPage = () => {
+    const auth = useAuth();
     const { toast } = useToast();
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [clients, setClients] = useState([]);
@@ -1660,18 +1661,23 @@ const NewReportPage = () => {
 
                             {/* Right side */}
                             <div className="flex items-center space-x-2">
-                                {auth.getSession()?.user?.role === 'super_admin' && (
-                                    <Button
-                                        type="button"
-                                        variant="outline"
-                                        size="lg"
-                                        onClick={fillWithRandomData}
-                                        className="border-green-300 text-green-600 hover:bg-green-50 hover:border-green-400 transition-colors"
-                                    >
-                                        <Zap className="w-4 h-4 mr-2" />
-                                        Random Sample Input
-                                    </Button>
-                                )}
+                                {(() => {
+                                    // Get role from Cognito auth
+                                    if (!auth.isAuthenticated || !auth.user?.profile) return false;
+                                    const role = auth.user.profile['custom:role'] || auth.user.profile.role || 'standard';
+                                    return role === 'super_admin';
+                                })() && (
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            size="lg"
+                                            onClick={fillWithRandomData}
+                                            className="border-green-300 text-green-600 hover:bg-green-50 hover:border-green-400 transition-colors"
+                                        >
+                                            <Zap className="w-4 h-4 mr-2" />
+                                            Random Sample Input
+                                        </Button>
+                                    )}
                                 <Button
                                     type="button"
                                     variant="outline"

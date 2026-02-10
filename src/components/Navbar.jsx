@@ -2,31 +2,57 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Lock, ClipboardCheck, LogOut, Settings, User } from 'lucide-react';
-import { auth } from '@/lib/auth';
+import { useAuth } from 'react-oidc-context';
 import { Button } from '@/components/ui/button.jsx';
 import { useToast } from '@/components/ui/use-toast.js';
+import { cognitoConfig } from '@/config';
 import logo from '@/assets/edge2-logo.png';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [session, setSession] = useState(null);
+  const auth = useAuth();
   const location = useLocation();
   const { toast } = useToast();
 
-  useEffect(() => {
-    const currentSession = auth.getSession();
-    setSession(currentSession);
-  }, [location.pathname]);
+  const handleLogout = async () => {
+    try {
+      // 1. Remove user from OIDC context
+      await auth.removeUser();
 
-  const handleLogout = () => {
-    auth.signOut();
-    toast({ title: "Logged Out", description: "See you next time." });
+      // 2. Clear all local storage and session storage to remove stale auth data
+      localStorage.clear();
+      sessionStorage.clear();
+
+      // 3. Redirect to Cognito logout endpoint
+      window.location.href = cognitoConfig.getLogoutUrl();
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Even if there's an error, still try to redirect to Cognito logout
+      localStorage.clear();
+      sessionStorage.clear();
+      window.location.href = cognitoConfig.getLogoutUrl();
+    }
+  };
+
+  // Get user info from Cognito
+  const getUserRole = () => {
+    if (!auth.isAuthenticated || !auth.user?.profile) return 'standard';
+    return auth.user.profile['custom:role'] || auth.user.profile.role || 'standard';
+  };
+
+  const getUserName = () => {
+    if (!auth.isAuthenticated || !auth.user?.profile) return '';
+    // Check for custom Cognito attributes first, then standard attributes
+    return auth.user.profile['custom:full_name'] ||
+      auth.user.profile['custom:name'] ||
+      auth.user.profile.name ||
+      auth.user.profile.email || '';
   };
 
   const navItems = [
     { path: '/new-report', label: 'New Report', icon: ClipboardCheck },
     { path: '/', label: 'Settings', icon: Settings, adminOnly: true },
-  ].filter(item => !item.adminOnly || (session && session.user && session.user.role !== 'standard'));
+  ].filter(item => !item.adminOnly || (auth.isAuthenticated && getUserRole() !== 'standard'));
 
   const isActive = (path) => location.pathname === path;
 
@@ -59,11 +85,11 @@ const Navbar = () => {
               </Link>
             ))}
 
-            {session && (
+            {auth.isAuthenticated && (
               <div className="flex items-center gap-4 pl-4 border-l border-gray-100">
                 <div className="flex items-center gap-2 text-xs font-medium text-blue-500 bg-blue-50 px-3 py-1.5 rounded-full border border-gray-100">
                   <User className="w-3 h-3" />
-                  <span>{session.user.full_name || session.user.username}</span>
+                  <span>{getUserName()}</span>
                 </div>
                 <Button
                   variant="ghost"
@@ -114,11 +140,11 @@ const Navbar = () => {
                 </Link>
               ))}
 
-              {session && (
+              {auth.isAuthenticated && (
                 <div className="pt-4 mt-4 border-t border-gray-100 space-y-3 px-4">
                   <div className="flex items-center gap-2 text-sm font-medium text-gray-600">
                     <User className="w-4 h-4 text-primary" />
-                    <span>{session.user.full_name || session.user.username}</span>
+                    <span>{getUserName()}</span>
                   </div>
                   <Button
                     variant="outline"

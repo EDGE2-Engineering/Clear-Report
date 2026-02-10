@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
 import { UserCog, Lock, Save, Loader2, ShieldCheck, Eye, EyeOff, FileText } from 'lucide-react';
-import { auth } from '@/lib/auth';
+import { useAuth } from 'react-oidc-context';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs.jsx';
 import AdminUserManager from './AdminUserManager.jsx';
 import AdminClientsManager from './AdminClientsManager.jsx';
@@ -38,36 +38,21 @@ const PasswordField = ({ id, label, value, onChange, show, setShow, placeholder,
 );
 
 const AdminSettings = () => {
+    const auth = useAuth();
     const [currentUsername, setCurrentUsername] = useState('');
     const [currentUserEmail, setCurrentUserEmail] = useState('');
     const [userRole, setUserRole] = useState('standard');
-    const [formData, setFormData] = useState({
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: ''
-    });
-
-    const [showCurrentPass, setShowCurrentPass] = useState(false);
-    const [showNewPass, setShowNewPass] = useState(false);
-    const [showConfirmPass, setShowConfirmPass] = useState(false);
-
-    const [isLoading, setIsLoading] = useState(false);
-    const [isFetchingUser, setIsFetchingUser] = useState(true);
     const { toast } = useToast();
 
     useEffect(() => {
-        const fetchUser = () => {
-            setIsFetchingUser(true);
-            const session = auth.getSession();
-            if (session && session.user) {
-                setCurrentUsername(session.user.username);
-                setCurrentUserEmail(session.user.username);
-                setUserRole(session.user.role || 'standard');
-            }
-            setIsFetchingUser(false);
-        };
-        fetchUser();
-    }, []);
+        // Get user info from Cognito
+        if (auth.isAuthenticated && auth.user?.profile) {
+            const profile = auth.user.profile;
+            setCurrentUsername(profile.name || profile.email || '');
+            setCurrentUserEmail(profile.email || '');
+            setUserRole(profile['custom:role'] || profile.role || 'standard');
+        }
+    }, [auth.isAuthenticated, auth.user]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
