@@ -35,6 +35,9 @@
     "react-helmet-async": "^2.0.4",
     "react-oidc-context": "^3.3.0",
     "react-router-dom": "^6.16.0",
+    "@aws-sdk/client-dynamodb": "^3.x",
+    "@aws-sdk/lib-dynamodb": "^3.x",
+    "@aws-sdk/credential-providers": "^3.x",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7"
   },

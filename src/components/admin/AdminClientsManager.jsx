@@ -15,7 +15,8 @@ import {
 } from '@/components/ui/Table.jsx';
 import { useToast } from '@/components/ui/use-toast.js';
 import { Plus, Users, RefreshCcw, Trash2, Loader2, Building2 } from 'lucide-react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { useAuth } from 'react-oidc-context';
+import { dynamoClientsApi } from '@/lib/dynamoClientsApi';
 
 const AdminClientsManager = () => {
     const [clients, setClients] = useState([]);
@@ -27,21 +28,23 @@ const AdminClientsManager = () => {
         email: '',
         phone: ''
     });
+    const auth = useAuth();
     const { toast } = useToast();
 
     const fetchClients = async () => {
         setIsLoading(true);
         try {
-            const { data, error } = await supabase
-                .from('clients')
-                .select('*')
-                .order('created_at', { ascending: false });
-
-            if (error) throw error;
+            const token = auth.user?.id_token; // Use ID Token for Identity Pool exchange
+            if (!token) {
+                console.warn('No ID token available for fetching clients');
+                setIsLoading(false);
+                return;
+            }
+            const data = await dynamoClientsApi.listClients(token);
             setClients(data || []);
         } catch (error) {
             console.error('Error fetching clients:', error);
-            toast({ title: "Error", description: "Failed to fetch clients.", variant: "destructive" });
+            toast({ title: "Error", description: "Failed to fetch clients from DynamoDB.", variant: "destructive" });
         } finally {
             setIsLoading(false);
         }
@@ -61,27 +64,19 @@ const AdminClientsManager = () => {
         setIsSubmitting(true);
 
         try {
-            const newClient = {
-                id: crypto.randomUUID(),
-                ...formData,
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString()
-            };
+            const token = auth.user?.id_token;
+            if (!token) throw new Error('Authentication required');
 
-            const { error } = await supabase
-                .from('clients')
-                .insert([newClient]);
+            await dynamoClientsApi.createClient(formData, token);
 
-            if (error) throw error;
-
-            toast({ title: "Success", description: "Client added successfully." });
+            toast({ title: "Success", description: "Client added to DynamoDB successfully." });
             setFormData({ client_name: '', client_address: '', email: '', phone: '' });
             fetchClients();
         } catch (error) {
             console.error('Error adding client:', error);
             toast({
                 title: "Error",
-                description: error.message || "Failed to add client.",
+                description: error.message || "Failed to add client to DynamoDB.",
                 variant: "destructive"
             });
         } finally {
@@ -93,18 +88,16 @@ const AdminClientsManager = () => {
         if (!confirm("Are you sure you want to delete this client?")) return;
 
         try {
-            const { error } = await supabase
-                .from('clients')
-                .delete()
-                .eq('id', id);
+            const token = auth.user?.id_token;
+            if (!token) throw new Error('Authentication required');
 
-            if (error) throw error;
+            await dynamoClientsApi.deleteClient(id, token);
 
-            toast({ title: "Success", description: "Client deleted successfully." });
+            toast({ title: "Success", description: "Client deleted from DynamoDB successfully." });
             fetchClients();
         } catch (error) {
             console.error('Error deleting client:', error);
-            toast({ title: "Error", description: "Failed to delete client.", variant: "destructive" });
+            toast({ title: "Error", description: "Failed to delete client from DynamoDB.", variant: "destructive" });
         }
     };
 

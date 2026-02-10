@@ -9,6 +9,7 @@ import { Settings, LogOut, Loader2, UserCog } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from 'react-oidc-context';
 import { cognitoConfig } from '@/config';
+import logo from '@/assets/edge2-logo.png';
 
 import AdminSettings from '@/components/admin/AdminSettings';
 import { useToast } from '@/components/ui/use-toast';
@@ -79,8 +80,9 @@ const AdminPage = () => {
         </Helmet>
         <div className="min-h-screen flex items-center justify-center bg-[#F5F1ED]">
           <div className="bg-white p-8 rounded-xl shadow-lg max-w-md w-full">
+            <img src={logo} alt="EDGE2 Logo" className="w-24 h-auto object-contain mx-auto mb-6" />
             <h1 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-              EDGE2 Easy Report
+              Easy Report
             </h1>
             <p className="text-gray-600 mb-6 text-center">
               Sign in to access the admin dashboard
@@ -90,7 +92,7 @@ const AdminPage = () => {
               className="w-full"
               size="lg"
             >
-              Sign in with Cognito
+              Sign in
             </Button>
           </div>
         </div>

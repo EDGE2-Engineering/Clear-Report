@@ -122,7 +122,7 @@ const AdminSettings = () => {
                     <TabsList className="grid w-full grid-cols-3 mb-8">
                         <TabsTrigger value="users" className="flex items-center gap-2">
                             <UserCog className="w-4 h-4" />
-                            Users
+                            Profile
                         </TabsTrigger>
                         <TabsTrigger value="clients" className="flex items-center gap-2">
                             <UserCog className="w-4 h-4" />

@@ -6,14 +6,16 @@
 const region = "us-east-1";
 const userPoolId = `${region}_pu5wLDAOu`;
 const clientId = "60fbnkjist75g6oj50lpkk65p0";
-// Cognito domain prefix (from the hosted UI domain)
+const identityPoolId = "us-east-1:6b4965b8-d36b-4893-b81a-f24a7c99750b";
 const cognitoDomainPrefix = "us-east-1pu5wldaou";
 const domain = `https://${cognitoDomainPrefix}.auth.${region}.amazoncognito.com`;
 
 // Cognito Configuration
 export const cognitoConfig = {
     // User Pool Configuration
-
+    region,
+    userPoolId,
+    identityPoolId,
     // Cognito Domain (for logout and hosted UI)
 
     // OIDC Configuration for react-oidc-context

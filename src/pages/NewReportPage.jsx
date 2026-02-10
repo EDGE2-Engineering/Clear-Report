@@ -1665,7 +1665,7 @@ const NewReportPage = () => {
                                     // Get role from Cognito auth
                                     if (!auth.isAuthenticated || !auth.user?.profile) return false;
                                     const role = auth.user.profile['custom:role'] || auth.user.profile.role || 'standard';
-                                    return role === 'super_admin';
+                                    return role === 'superadmin';
                                 })() && (
                                         <Button
                                             type="button"
