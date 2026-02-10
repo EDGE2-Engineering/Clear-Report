@@ -22,6 +22,7 @@ import { useToast } from '@/components/ui/use-toast';
 import ReportPreview from '@/components/ReportPreview';
 import reportTemplateHtml from '@/templates/report-template.html?raw'
 import { supabase } from '@/lib/customSupabaseClient';
+import { auth } from '@/lib/auth';
 
 
 const soilTypes = [
@@ -1651,16 +1652,18 @@ const NewReportPage = () => {
 
                             {/* Right side */}
                             <div className="flex items-center space-x-2">
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="lg"
-                                    onClick={fillWithRandomData}
-                                    className="border-green-300 text-green-600 hover:bg-green-50 hover:border-green-400 transition-colors"
-                                >
-                                    <Zap className="w-4 h-4 mr-2" />
-                                    Random Sample Input
-                                </Button>
+                                {auth.getSession()?.user?.role === 'super_admin' && (
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="lg"
+                                        onClick={fillWithRandomData}
+                                        className="border-green-300 text-green-600 hover:bg-green-50 hover:border-green-400 transition-colors"
+                                    >
+                                        <Zap className="w-4 h-4 mr-2" />
+                                        Random Sample Input
+                                    </Button>
+                                )}
                                 <Button
                                     type="button"
                                     variant="outline"
@@ -1685,7 +1688,7 @@ const NewReportPage = () => {
                                     type="submit"
                                     form="report-form"
                                     size="lg"
-                                    className="bg-primary hover:bg-primary-dark text-white min-w-[150px]"
+                                    className="hidden bg-primary hover:bg-primary-dark text-white min-w-[150px]"
                                 >
                                     <Save className="w-4 h-4 mr-2" />
                                     Gen
