@@ -416,6 +416,7 @@ const NewReportPage = () => {
             surveyDate: new Date().toISOString().split('T')[0],
             groundWaterTable: 'Not Encountered',
             recommendations: 'Based on the investigation, isolated foundation is recommended. Protective drainage should be provided. Fill material should be well compacted.',
+            depthOfFoundation: '1.5',
         };
 
         // Populate Survey Report
