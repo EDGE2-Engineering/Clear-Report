@@ -22,11 +22,24 @@ resource "aws_cognito_user_pool" "main" {
     attribute_data_type      = "String"
     developer_only_attribute = false
     mutable                  = true
-    name                     = "email"
+    name                     = "user_name"
     required                 = true
 
     string_attribute_constraints {
       min_length = 7
+      max_length = 256
+    }
+  }
+
+  schema {
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = true
+    name                     = "role"
+    required                 = false
+
+    string_attribute_constraints {
+      min_length = 1
       max_length = 256
     }
   }
@@ -56,6 +69,19 @@ resource "aws_cognito_user_pool_client" "client" {
   callback_urls                        = var.callback_urls
   logout_urls                          = var.logout_urls
   supported_identity_providers         = ["COGNITO"]
+}
+
+resource "aws_cognito_user" "admin" {
+  user_pool_id = aws_cognito_user_pool.main.id
+  username     = "admin"
+
+  attributes = {
+    email          = var.admin_email
+    email_verified = true
+    "custom:role" = "admin"
+  }
+
+  password = var.admin_password
 }
 
 # --- Cognito Identity Pool ---
