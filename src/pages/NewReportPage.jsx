@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -17,12 +18,23 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs.jsx";
-import { AlertCircle, ListTree, Save, Plus, Trash2, LandPlot, FileText, TestTube, MapPin, ClipboardList, FileCheck, ArrowDownFromLine, Layers, Lightbulb, Eye, Zap, X } from 'lucide-react';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { AlertCircle, ListTree, Save, Plus, Trash2, LandPlot, FileText, TestTube, MapPin, ClipboardList, FileCheck, ArrowDownFromLine, Layers, Lightbulb, Eye, Zap, X, Loader2 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import ReportPreview from '@/components/ReportPreview';
 import reportTemplateHtml from '@/templates/report-template.html?raw'
-import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from 'react-oidc-context';
+import { dynamoClientsApi } from '@/lib/dynamoClientsApi';
+import { dynamoReportsApi } from '@/lib/dynamoReportsApi';
 
 
 const soilTypes = [
@@ -75,28 +87,49 @@ function fillTemplate(template, data) {
 
 const NewReportPage = () => {
     const auth = useAuth();
+    const location = useLocation();
     const { toast } = useToast();
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
     const [clients, setClients] = useState([]);
     const [filteredClients, setFilteredClients] = useState([]);
     const [showClientSuggestions, setShowClientSuggestions] = useState(false);
     const [activeSoilField, setActiveSoilField] = useState(null);
     const [filteredSoilTypes, setFilteredSoilTypes] = useState(soilTypes);
     const [showSoilSuggestions, setShowSoilSuggestions] = useState(false);
+    const [saveConfirmation, setSaveConfirmation] = useState({ isOpen: false, isGenerating: false });
 
     useEffect(() => {
         const fetchClients = async () => {
-            const { data, error } = await supabase
-                .from('clients')
-                .select('*')
-                .order('client_name');
-
-            if (!error && data) {
-                setClients(data);
+            try {
+                const token = auth.user?.id_token;
+                if (!token) return;
+                const data = await dynamoClientsApi.listClients(token);
+                if (data) {
+                    setClients(data);
+                }
+            } catch (error) {
+                console.error('Error fetching clients:', error);
             }
         };
-        fetchClients();
-    }, []);
+        if (auth.isAuthenticated) {
+            fetchClients();
+        }
+    }, [auth.isAuthenticated, auth.user]);
+
+    // Load report data from navigation state if editing
+    useEffect(() => {
+        if (location.state?.editReport) {
+            const reportData = location.state.editReport;
+            setFormData(reportData);
+            toast({
+                title: "Report Loaded",
+                description: `Editing report: ${reportData.projectDetails || reportData.reportId}`,
+            });
+            // Clear the state to avoid re-loading on subsequent renders if not needed
+            // However, in HashRouter it might be tricky, keeping it for now.
+        }
+    }, [location.state, toast]);
 
     const handleClientSearch = (e) => {
         const value = e.target.value;
@@ -1597,8 +1630,33 @@ const NewReportPage = () => {
         setIsPreviewOpen(true);
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSaveOnly = async () => {
+        const validationErrors = validate();
+        if (Object.keys(validationErrors).length > 0) {
+            handleValidationError(validationErrors);
+            return;
+        }
+
+        try {
+            const token = auth.user?.id_token;
+            if (!token) throw new Error('Authentication required');
+
+            // Check if report already exists
+            const existing = await dynamoReportsApi.getReport(formData.reportId, token);
+            if (existing) {
+                setSaveConfirmation({ isOpen: true, isGenerating: false });
+                return;
+            }
+
+            await executeSave(false);
+        } catch (error) {
+            console.error('Save error:', error);
+            toast({ title: "Error", description: "Failed to save report: " + error.message, variant: "destructive" });
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        if (e) e.preventDefault();
 
         const validationErrors = validate();
         if (Object.keys(validationErrors).length > 0) {
@@ -1606,30 +1664,56 @@ const NewReportPage = () => {
             return;
         }
 
-        // console.log('Form Data JSON:', JSON.stringify(formData, null, 2));
+        try {
+            const token = auth.user?.id_token;
+            if (!token) throw new Error('Authentication required');
 
-        // Simulating API call/submission
-        toast({
-            title: "Report Created",
-            description: "The new report has been successfully generated.",
-            className: "bg-green-50 border-green-200 text-green-900",
-        });
+            // Check if report already exists
+            const existing = await dynamoReportsApi.getReport(formData.reportId, token);
+            if (existing) {
+                setSaveConfirmation({ isOpen: true, isGenerating: true });
+                return;
+            }
 
-        htmlContent = reportTemplateHtml;
-        // console.log(htmlContent);
+            await executeSave(true);
+        } catch (error) {
+            console.error('Submit error:', error);
+            toast({ title: "Error", description: "Failed to generate report: " + error.message, variant: "destructive" });
+        }
+    };
 
-        const data = {
-            reportRequestJson: JSON.stringify(formData)
-        };
-        const filledHtml = fillTemplate(htmlContent, data);
+    const executeSave = async (isGenerating) => {
+        try {
+            const token = auth.user?.id_token;
+            if (!token) throw new Error('Authentication required');
 
-        // console.log(filledHtml);
-        console.log(formData);
+            setIsSaving(true);
+            await dynamoReportsApi.createReport(formData, token);
 
-        const blob = new Blob([filledHtml], { type: 'text/html' });
-        const url = URL.createObjectURL(blob);
-        window.open(url, '_blank');
+            toast({
+                title: isGenerating ? "Report Generated" : "Report Saved",
+                description: isGenerating ? "Report saved and PDF generated successfully." : "The report data has been successfully saved to the database.",
+                className: "bg-green-50 border-green-200 text-green-900",
+            });
 
+            if (isGenerating) {
+                const currentHtmlContent = reportTemplateHtml;
+                const data = {
+                    reportRequestJson: JSON.stringify(formData)
+                };
+                const filledHtml = fillTemplate(currentHtmlContent, data);
+
+                const blob = new Blob([filledHtml], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                window.open(url, '_blank');
+            }
+        } catch (error) {
+            console.error('Execute Save error:', error);
+            toast({ title: "Error", description: "Failed to process report: " + error.message, variant: "destructive" });
+        } finally {
+            setIsSaving(false);
+            setSaveConfirmation({ isOpen: false, isGenerating: false });
+        }
     };
 
     return (
@@ -1699,13 +1783,25 @@ const NewReportPage = () => {
                                     Preview Report
                                 </Button>
                                 <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="lg"
+                                    onClick={handleSaveOnly}
+                                    disabled={isSaving}
+                                    className="border-primary text-primary hover:bg-primary/5 transition-colors"
+                                >
+                                    {isSaving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
+                                    Save Report
+                                </Button>
+                                <Button
                                     type="submit"
                                     form="report-form"
                                     size="lg"
+                                    disabled={isSaving}
                                     className="hidden bg-primary hover:bg-primary-dark text-white min-w-[150px]"
                                 >
-                                    <Save className="w-4 h-4 mr-2" />
-                                    Gen
+                                    {isSaving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <FileCheck className="w-4 h-4 mr-2" />}
+                                    Generate Report
                                 </Button>
                             </div>
                         </div>
@@ -3580,6 +3676,30 @@ const NewReportPage = () => {
                     onClose={() => setIsPreviewOpen(false)}
                 />
             )}
+            {/* Overwrite Confirmation Dialog */}
+            <AlertDialog open={saveConfirmation.isOpen} onOpenChange={(isOpen) => !isOpen && setSaveConfirmation({ isOpen: false, isGenerating: false })}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle className="flex items-center text-red-600">
+                            <AlertCircle className="w-5 h-5 mr-2" />
+                            Overwrite Existing Report?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            A report with the ID <span className="font-semibold text-gray-900">{formData.reportId}</span> already exists.
+                            Saving will overwrite the existing data. Are you sure you want to continue?
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={() => executeSave(saveConfirmation.isGenerating)}
+                            className="bg-red-600 hover:bg-red-700 text-white"
+                        >
+                            Yes, Overwrite
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div >
     );
 };

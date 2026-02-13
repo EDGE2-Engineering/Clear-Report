@@ -109,7 +109,7 @@ const AdminPage = () => {
 
       <Navbar />
 
-      <main className="flex-grow container mx-auto px-4 py-12 relative">
+      <main className="flex-grow px-4 py-12 relative">
         <AdminSettings />
       </main>
 

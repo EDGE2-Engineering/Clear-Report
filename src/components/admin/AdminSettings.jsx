@@ -10,6 +10,7 @@ import { useAuth } from 'react-oidc-context';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs.jsx';
 import AdminUserManager from './AdminUserManager.jsx';
 import AdminClientsManager from './AdminClientsManager.jsx';
+import AdminReportsManager from './AdminReportsManager.jsx';
 
 const PasswordField = ({ id, label, value, onChange, show, setShow, placeholder, icon: Icon, required = false }) => (
     <div className="space-y-2">
@@ -106,7 +107,7 @@ const AdminSettings = () => {
     );
 
     return (
-        <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="w-full space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex items-center space-x-4">
                 <div className="h-12 w-12 bg-primary/10 rounded-full flex items-center justify-center text-primary">
                     <UserCog className="w-6 h-6" />
@@ -118,7 +119,7 @@ const AdminSettings = () => {
             </div>
 
             {userRole !== 'standard' ? (
-                <Tabs defaultValue="security" className="w-full">
+                <Tabs defaultValue="reports" className="w-full">
                     <TabsList className="grid w-full grid-cols-3 mb-8">
                         <TabsTrigger value="users" className="flex items-center gap-2">
                             <UserCog className="w-4 h-4" />
@@ -128,13 +129,13 @@ const AdminSettings = () => {
                             <UserCog className="w-4 h-4" />
                             Clients
                         </TabsTrigger>
-                        <TabsTrigger value="security" className="flex items-center gap-2">
+                        <TabsTrigger value="reports" className="flex items-center gap-2">
                             <FileText className="w-4 h-4" />
                             Reports
                         </TabsTrigger>
                     </TabsList>
-                    <TabsContent value="security" className="mt-0">
-                        {renderSecuritySection()}
+                    <TabsContent value="reports" className="mt-0">
+                        <AdminReportsManager />
                     </TabsContent>
                     <TabsContent value="users" className="mt-0">
                         <AdminUserManager />
