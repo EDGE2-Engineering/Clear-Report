@@ -59,9 +59,22 @@ fun AppNavigation() {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable("dashboard") {
-                DashboardScreen(reports = listOf(
-                    Report(reportNumber = "REP-01", clientId = "C1", date = "2024-02-15", status = "Draft")
-                ))
+                DashboardScreen(
+                    reports = listOf(
+                        Report(reportId = "REP-01", clientName = "Example Client", surveyDate = "2024-02-15", status = "Draft")
+                    ),
+                    onCreateReport = { navController.navigate("create_report") }
+                )
+            }
+            composable("create_report") {
+                com.easyreport.app.ui.screens.NewReportScreen(
+                    onSave = { report ->
+                        // In a real app, we'd use a ViewModel and Repository here
+                        println("Saving report: ${report.reportId}")
+                        navController.popBackStack()
+                    },
+                    onCancel = { navController.popBackStack() }
+                )
             }
             composable("reports") {
                 // Reports List

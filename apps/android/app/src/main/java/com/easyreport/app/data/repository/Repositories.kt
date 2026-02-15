@@ -18,8 +18,8 @@ interface ClientRepository {
 class MockReportRepository : ReportRepository {
     override fun getReports(): Flow<List<Report>> = flow {
         emit(listOf(
-            Report(reportNumber = "REP-001", clientId = "C1", date = "2024-02-15", status = "Completed"),
-            Report(reportNumber = "REP-002", clientId = "C2", date = "2024-02-16", status = "Draft")
+            Report(reportId = "REP-001", clientName = "Prestige Constructions", surveyDate = "2024-02-15", status = "Completed"),
+            Report(reportId = "REP-002", clientName = "Brigade Group", surveyDate = "2024-02-16", status = "Draft")
         ))
     }
 
