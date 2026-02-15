@@ -230,55 +230,65 @@ const AdminReportsManager = () => {
                     <table className="w-full">
                         <thead className="bg-gray-50 border-b">
                             <tr>
-                                <th className="text-left py-3 px-4 font-semibold text-sm text-gray-600">ID</th>
-                                <th className="text-left py-3 px-4 font-semibold text-sm text-gray-600">Project Name</th>
-                                <th className="text-left py-3 px-4 font-semibold text-sm text-gray-600">Client</th>
-                                <th className="text-left py-3 px-4 font-semibold text-sm text-gray-600">Type</th>
-                                <th className="text-left py-3 px-4 font-semibold text-sm text-gray-600">Site</th>
-                                <th className="text-left py-3 px-4 font-semibold text-sm text-gray-600">Date</th>
-                                <th className="text-right py-3 px-4 font-semibold text-sm text-gray-600">Actions</th>
+                                <th className="text-left py-3 px-4 font-semibold text-sm text-gray-600">Report Details</th>
+                                <th className="text-right py-3 px-4 font-semibold text-sm text-gray-600 w-[120px]">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {isLoading ? (
                                 <tr>
-                                    <td colSpan="7" className="py-12 text-center">
+                                    <td colSpan="2" className="py-12 text-center">
                                         <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto" />
                                         <p className="mt-2 text-gray-500 text-sm">Loading reports...</p>
                                     </td>
                                 </tr>
                             ) : filteredReports.length > 0 ? (
                                 filteredReports.map((report) => (
-                                    <tr key={report.id} className="border-b hover:bg-gray-50 transition-colors text-sm">
-                                        <td className="py-3 px-4 font-mono text-[10px] text-gray-400">
-                                            {report.reportId || report.id}
-                                        </td>
+                                    <tr key={report.id} className="border-b hover:bg-gray-50 transition-colors">
                                         <td className="py-3 px-4">
-                                            <span className="text-gray-800 font-medium truncate max-w-[150px] inline-block" title={report.projectDetails}>
-                                                {report.projectDetails || 'Untitled'}
-                                            </span>
-                                        </td>
-                                        <td className="py-3 px-4">
-                                            <span className="text-gray-600 truncate max-w-[120px] inline-block" title={report.client}>
-                                                {report.client || '-'}
-                                            </span>
-                                        </td>
-                                        <td className="py-3 px-4 text-gray-500 text-xs">
-                                            {report.projectType || '-'}
-                                        </td>
-                                        <td className="py-3 px-4">
-                                            <div className="flex items-center text-gray-550 text-xs">
-                                                <MapPin className="w-3 h-3 mr-1 text-primary/60" />
-                                                <span className="truncate max-w-[120px]">{report.siteName || '-'}</span>
+                                            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-700">
+                                                <p className="font-medium text-gray-900 text-base">
+                                                    {report.projectDetails || 'Untitled'}
+                                                </p>
+
+                                                <div className='w-full'>
+                                                    
+                                                </div>
+                                                
+
+                                                <div className="flex items-center gap-1">
+                                                    <span className="font-semibold text-gray-900">ID:</span>
+                                                    <span className="text-gray-600">{report.reportId || report.id}</span>
+                                                </div>
+
+                                                <div className="flex items-center gap-1">
+                                                    <span className="font-semibold text-gray-900">Client:</span>
+                                                    <span className="text-gray-600">{report.client || '-'}</span>
+                                                </div>
+
+                                                <div className="flex items-center gap-1">
+                                                    <span className="font-semibold text-gray-900">Project Type:</span>
+                                                    <span className="text-gray-600">{report.projectType || '-'}</span>
+                                                </div>
+
+                                                <div className="flex items-center gap-1">
+                                                    <span className="font-semibold text-gray-900">Project Site:</span>
+                                                    <div className="flex items-center text-gray-600">
+                                                        <MapPin className="w-3 h-3 mr-1 text-primary/60" />
+                                                        <span>{report.siteName || '-'}</span>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex items-center gap-1">
+                                                    <span className="font-semibold text-gray-900">Created On:</span>
+                                                    <div className="flex items-center text-gray-600">
+                                                        <Calendar className="w-3 h-3 mr-1" />
+                                                        {report.created_at ? new Date(report.created_at).toLocaleDateString() : '-'}
+                                                    </div>
+                                                </div>
                                             </div>
                                         </td>
-                                        <td className="py-3 px-4 text-xs text-gray-500 min-w-[90px]">
-                                            <div className="flex items-center">
-                                                <Calendar className="w-3 h-3 mr-1" />
-                                                {report.created_at ? new Date(report.created_at).toLocaleDateString() : '-'}
-                                            </div>
-                                        </td>
-                                        <td className="py-3 px-4 text-right">
+                                        <td className="py-3 px-4 text-right align-center">
                                             <div className="flex justify-end space-x-2">
                                                 <Button
                                                     variant="ghost"
@@ -302,7 +312,7 @@ const AdminReportsManager = () => {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="7" className="py-12 text-center text-gray-500">
+                                    <td colSpan="2" className="py-12 text-center text-gray-500">
                                         <FileText className="w-12 h-12 text-gray-200 mx-auto mb-3" />
                                         {searchTerm ? 'No reports found matching your search.' : 'No reports found.'}
                                     </td>

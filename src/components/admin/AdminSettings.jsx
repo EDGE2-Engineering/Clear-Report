@@ -8,7 +8,6 @@ import { useToast } from '@/components/ui/use-toast';
 import { UserCog, Lock, Save, Loader2, ShieldCheck, Eye, EyeOff, FileText } from 'lucide-react';
 import { useAuth } from 'react-oidc-context';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs.jsx';
-import AdminUserManager from './AdminUserManager.jsx';
 import AdminClientsManager from './AdminClientsManager.jsx';
 import AdminReportsManager from './AdminReportsManager.jsx';
 
@@ -119,11 +118,8 @@ const AdminSettings = () => {
             </div>
 
             <Tabs defaultValue="reports" className="w-full">
-                <TabsList className="grid w-full grid-cols-3 mb-8">
-                    <TabsTrigger value="users" className="flex items-center gap-2">
-                        <UserCog className="w-4 h-4" />
-                        Profile
-                    </TabsTrigger>
+                <TabsList className="grid w-full grid-cols-2 mb-8">
+                    {/* Profile tab removed */}
                     <TabsTrigger value="clients" className="flex items-center gap-2">
                         <UserCog className="w-4 h-4" />
                         Clients
@@ -136,9 +132,7 @@ const AdminSettings = () => {
                 <TabsContent value="reports" className="mt-0">
                     <AdminReportsManager />
                 </TabsContent>
-                <TabsContent value="users" className="mt-0">
-                    <AdminUserManager />
-                </TabsContent>
+                {/* Profile tab content removed */}
                 <TabsContent value="clients" className="mt-0">
                     <AdminClientsManager />
                 </TabsContent>

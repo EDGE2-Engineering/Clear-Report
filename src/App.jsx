@@ -5,6 +5,8 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { Toaster } from '@/components/ui/toaster';
 import AdminPage from '@/pages/AdminPage';
 import NewReportPage from '@/pages/NewReportPage';
+import DeviceRestriction from '@/components/DeviceRestriction';
+
 function App() {
   return (
     <HelmetProvider>
@@ -14,22 +16,24 @@ function App() {
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
           <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
         </Helmet>
-        <div className="min-h-screen bg-[#F5F1ED]">
-          <Routes>
-            <Route path="/" element={<AdminPage />} />
-            <Route
-              path="/new-report"
-              element={
-                <ProtectedRoute>
-                  <NewReportPage />
-                </ProtectedRoute>
-              }
-            />
-            {/* Redirect old admin route to root */}
-            <Route path="/admin" element={<Navigate to="/" replace />} />
-          </Routes>
-          <Toaster />
-        </div>
+        <DeviceRestriction>
+          <div className="min-h-screen bg-[#F5F1ED]">
+            <Routes>
+              <Route path="/" element={<AdminPage />} />
+              <Route
+                path="/new-report"
+                element={
+                  <ProtectedRoute>
+                    <NewReportPage />
+                  </ProtectedRoute>
+                }
+              />
+              {/* Redirect old admin route to root */}
+              <Route path="/admin" element={<Navigate to="/" replace />} />
+            </Routes>
+            <Toaster />
+          </div>
+        </DeviceRestriction>
       </Router>
     </HelmetProvider >
   );
