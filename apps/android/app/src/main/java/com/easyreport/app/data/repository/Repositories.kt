@@ -1,29 +1,35 @@
 package com.easyreport.app.data.repository
 
+import com.easyreport.app.data.local.ClientDao
+import com.easyreport.app.data.local.ReportDao
 import com.easyreport.app.data.models.Client
 import com.easyreport.app.data.models.Report
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
 interface ReportRepository {
     fun getReports(): Flow<List<Report>>
-    suspend fun createReport(report: Report)
+    suspend fun getReportById(id: String): Report?
+    suspend fun saveReport(report: Report)
+    suspend fun deleteReport(report: Report)
 }
 
 interface ClientRepository {
     fun getClients(): Flow<List<Client>>
+    suspend fun saveClient(client: Client)
+    suspend fun updateClient(client: Client)
+    suspend fun deleteClient(client: Client)
 }
 
-// Mock Implementation for initial UI development
-class MockReportRepository : ReportRepository {
-    override fun getReports(): Flow<List<Report>> = flow {
-        emit(listOf(
-            Report(reportId = "REP-001", clientName = "Prestige Constructions", surveyDate = "2024-02-15", status = "Completed"),
-            Report(reportId = "REP-002", clientName = "Brigade Group", surveyDate = "2024-02-16", status = "Draft")
-        ))
-    }
+class LocalReportRepository(private val reportDao: ReportDao) : ReportRepository {
+    override fun getReports(): Flow<List<Report>> = reportDao.getAllReports()
+    override suspend fun getReportById(id: String): Report? = reportDao.getReportById(id)
+    override suspend fun saveReport(report: Report) = reportDao.insertReport(report)
+    override suspend fun deleteReport(report: Report) = reportDao.deleteReport(report)
+}
 
-    override suspend fun createReport(report: Report) {
-        // Mock save
-    }
+class LocalClientRepository(private val clientDao: ClientDao) : ClientRepository {
+    override fun getClients(): Flow<List<Client>> = clientDao.getAllClients()
+    override suspend fun saveClient(client: Client) = clientDao.insertClient(client)
+    override suspend fun updateClient(client: Client) = clientDao.updateClient(client)
+    override suspend fun deleteClient(client: Client) = clientDao.deleteClient(client)
 }

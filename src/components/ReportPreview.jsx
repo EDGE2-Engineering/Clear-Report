@@ -380,7 +380,7 @@ const ReportPreview = ({ formData, onClose }) => {
 
                     <div className="grid grid-cols-[3fr_1fr] gap-4 text-left">
                         <div className="text-[13px]">
-                            <p><span className="text-[#800000]">Registered Office and Laboratory:</span><br />
+                            <p><span className="text-[#800000] text-sm">Registered Office and Laboratory:</span><br />
                                 EDGE2 Engineering Solutions India Pvt. Ltd.<br />
                                 ISO 9001:2015 Certified<br />
                                 (Certificate No: IN12701A)<br />

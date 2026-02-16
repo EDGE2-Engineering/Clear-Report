@@ -1,5 +1,6 @@
 package com.easyreport.app.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,7 +15,8 @@ import com.easyreport.app.data.models.Report
 @Composable
 fun DashboardScreen(
     reports: List<Report>,
-    onCreateReport: () -> Unit
+    onCreateReport: () -> Unit,
+    onReportClick: (Report) -> Unit
 ) {
     Scaffold(
         floatingActionButton = {
@@ -29,7 +31,7 @@ fun DashboardScreen(
             
             LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 items(reports) { report ->
-                    ReportItem(report)
+                    ReportItem(report, onClick = { onReportClick(report) })
                 }
             }
         }
@@ -37,9 +39,9 @@ fun DashboardScreen(
 }
 
 @Composable
-fun ReportItem(report: Report) {
+fun ReportItem(report: Report, onClick: () -> Unit) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().clickable { onClick() },
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(12.dp)) {

@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.google.devtools.ksp' version '1.9.24-1.0.20'
 }
 
 android {
@@ -57,7 +58,16 @@ dependencies {
     implementation 'androidx.compose.material3:material3'
     implementation 'androidx.navigation:navigation-compose:2.7.5'
     
-    // Auth - AWS Amplify (simplified for now)
+    // Local Storage - Room
+    def room_version = "2.6.1"
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    ksp "androidx.room:room-compiler:$room_version"
+
+    // Gson for JSON conversion
+    implementation 'com.google.code.gson:gson:2.10.1'
+
+    // Auth - AWS Amplify (kept for structure, but unused as per request)
     implementation 'com.amplifyframework:aws-auth-cognito:2.14.0'
     implementation 'com.amplifyframework:aws-api:2.14.0'
 
