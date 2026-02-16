@@ -26,8 +26,12 @@ jobs:
         run: chmod +x gradlew
         working-directory: apps/android
 
+      - name: Verify Gradle version
+        run: ./gradlew --version
+        working-directory: apps/android
+
       - name: Build Debug APK
-        run: ./gradlew clean assembleDebug
+        run: ./gradlew clean assembleDebug --stacktrace
         working-directory: apps/android
 
       - name: Upload APK artifact

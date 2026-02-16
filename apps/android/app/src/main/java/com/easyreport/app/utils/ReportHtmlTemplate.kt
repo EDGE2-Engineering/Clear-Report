@@ -99,6 +99,7 @@ object ReportHtmlTemplate {
                         display: inline-block;
                     }
                 </style>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
             </head>
             <body>
                 <!-- Page 1: Front Page -->
@@ -204,6 +205,7 @@ object ReportHtmlTemplate {
                 ${generateBoreholeLogs(report)}
                 ${generateDirectShearResults(report)}
                 ${generateSBCDetails(report)}
+                ${generateGrainSizeAnalysis(report)}
                 ${generateSitePhotos(report)}
                 ${generateRecommendations(report)}
             </body>
@@ -598,6 +600,137 @@ object ReportHtmlTemplate {
                 </div>
             </div>
         """.trimIndent()
+    }
+
+    private fun generateGrainSizeAnalysis(report: Report): String {
+        if (report.grainSizeAnalysis.isEmpty()) return ""
+        
+        val html = StringBuilder()
+        
+        // Section 7.0 Summary Page
+        html.append("""
+            <div class="page-wrapper">
+                <h2><span class="section-num">7.0</span> GRAIN SIZE ANALYSIS</h2>
+                <p>Grain size analysis was carried out on selected soil samples to determine the particle size distribution. The analysis results are presented in the following pages.</p>
+                
+                <h3 style="font-size: 10pt; color: #666; margin-bottom: 5px;">Table 7.0: Summary of Grain Size Analysis</h3>
+                <table>
+                    <thead>
+                        <tr style="background: #f2f2f2;">
+                            <th>BH No.</th>
+                            <th>Analyzed Depths (m)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${report.grainSizeAnalysis.mapIndexed { i, bh -> 
+                            val depths = bh.filter { it.depth.isNotEmpty() }.joinToString(", ") { it.depth }
+                            "<tr><td>BH ${i + 1}</td><td>${depths.ifEmpty { "-" }}</td></tr>"
+                        }.joinToString("")}
+                    </tbody>
+                </table>
+                
+                <div class="footer">
+                    <span>Grain Size Summary</span>
+                    <span>Report Ref: ${report.reportId}</span>
+                </div>
+            </div>
+        """.trimIndent())
+        
+        // Individual BH Grain Size Charts
+        report.grainSizeAnalysis.forEachIndexed { i, bhData ->
+            if (bhData.any { it.depth.isNotEmpty() }) {
+                val bhName = "BH ${i + 1}"
+                html.append("""
+                    <div class="page-wrapper">
+                        <h3>GRAIN SIZE ANALYSIS - $bhName</h3>
+                        <table style="font-size: 7.5pt; margin-bottom: 20px;">
+                            <thead>
+                                <tr style="background: #f2f2f2;">
+                                    <th rowspan="2">Depth (m)</th>
+                                    <th colspan="9">Sieve Size (% passing)</th>
+                                </tr>
+                                <tr style="background: #f2f2f2;">
+                                    <th>4.750</th><th>2.360</th><th>1.180</th><th>0.600</th><th>0.425</th><th>0.300</th><th>0.150</th><th>0.075</th><th>Pan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${bhData.map { row ->
+                                    """
+                                    <tr>
+                                        <td>${row.depth}</td>
+                                        <td>${row.sieve1}</td><td>${row.sieve2}</td><td>${row.sieve3}</td>
+                                        <td>${row.sieve4}</td><td>${row.sieve5}</td><td>${row.sieve6}</td>
+                                        <td>${row.sieve7}</td><td>${row.sieve8}</td><td>${row.sieve9}</td>
+                                    </tr>
+                                    """.trimIndent()
+                                }.joinToString("")}
+                            </tbody>
+                        </table>
+                        
+                        <div style="height: 350px; width: 100%; position: relative;">
+                            <canvas id="chart-$i"></canvas>
+                        </div>
+                        
+                        <script>
+                            (function() {
+                                const ctx = document.getElementById('chart-$i').getContext('2d');
+                                const datasets = [];
+                                ${bhData.mapIndexed { idx, row ->
+                                    """
+                                    datasets.push({
+                                        label: 'Depth ${row.depth}m',
+                                        data: [
+                                            { x: 4.750, y: ${row.sieve1.toDoubleOrNull() ?: "null"} },
+                                            { x: 2.360, y: ${row.sieve2.toDoubleOrNull() ?: "null"} },
+                                            { x: 1.180, y: ${row.sieve3.toDoubleOrNull() ?: "null"} },
+                                            { x: 0.600, y: ${row.sieve4.toDoubleOrNull() ?: "null"} },
+                                            { x: 0.425, y: ${row.sieve5.toDoubleOrNull() ?: "null"} },
+                                            { x: 0.300, y: ${row.sieve6.toDoubleOrNull() ?: "null"} },
+                                            { x: 0.150, y: ${row.sieve7.toDoubleOrNull() ?: "null"} },
+                                            { x: 0.075, y: ${row.sieve8.toDoubleOrNull() ?: "null"} }
+                                        ].filter(p => p.y !== null),
+                                        borderColor: 'hsl(${idx * 137.5}, 70%, 50%)',
+                                        tension: 0.3,
+                                        fill: false
+                                    });
+                                    """.trimIndent()
+                                }.joinToString("")}
+                                
+                                new Chart(ctx, {
+                                    type: 'line',
+                                    data: { datasets: datasets },
+                                    options: {
+                                        responsive: true,
+                                        maintainAspectRatio: false,
+                                        animation: false,
+                                        scales: {
+                                            x: {
+                                                type: 'logarithmic',
+                                                title: { display: true, text: 'Sieve Size (mm)' },
+                                                min: 0.01,
+                                                max: 10
+                                            },
+                                            y: {
+                                                beginAtZero: true,
+                                                max: 100,
+                                                title: { display: true, text: 'Percentage Passing (%)' }
+                                            }
+                                        }
+                                    }
+                                });
+                            })();
+                        </script>
+                        
+                        <div class="footer">
+                            <span>$bhName Grain Size Analysis</span>
+                            <span>Report Ref: ${report.reportId}</span>
+                        </div>
+                    </div>
+                """.trimIndent())
+            }
+        }
+        
+        return html.toString()
     }
 
     private fun generateRecommendationRows(report: Report): String {
