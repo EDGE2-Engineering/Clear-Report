@@ -11,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import com.easyreport.app.data.models.*
+import com.easyreport.app.utils.PdfReportGenerator
+import androidx.compose.ui.platform.LocalContext
 import java.util.*
 import java.text.SimpleDateFormat
 
@@ -44,6 +46,8 @@ fun NewReportScreen(
     var report by remember { mutableStateOf(initialReport) }
     var selectedTab by remember { mutableIntStateOf(0) }
     var showRandomDataDialog by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    val pdfGenerator = remember { PdfReportGenerator(context) }
     
     val tabs = listOf(
         "Basic", "Site", "Survey", "Borehole", "Lab", 
@@ -63,6 +67,9 @@ fun NewReportScreen(
                 actions = {
                     IconButton(onClick = { showRandomDataDialog = true }) {
                         Icon(Icons.Default.Build, contentDescription = "Random Sample Data")
+                    }
+                    IconButton(onClick = { pdfGenerator.generateReport(report) }) {
+                        Icon(Icons.Default.Share, contentDescription = "Generate Report")
                     }
                     IconButton(onClick = { onSave(report) }) {
                         Icon(Icons.Default.Check, contentDescription = "Save")
